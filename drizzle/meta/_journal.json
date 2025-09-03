@@ -8,6 +8,13 @@
       "when": 1756920739701,
       "tag": "0000_cuddly_wilson_fisk",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1756928794666,
+      "tag": "0001_first_red_ghost",
+      "breakpoints": true
     }
   ]
 }

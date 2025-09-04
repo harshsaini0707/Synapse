@@ -1,41 +1,28 @@
-// middleware.ts
+// src/middleware.ts
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
-import { jwtVerify } from "jose"; 
 
 export default withAuth(
-  async function middleware(req) {
+  function middleware(req) {
+    const { pathname } = req.nextUrl;
     const token = req.nextauth.token;
-    
-    //  Verify custom JWT using jose (Edge Runtime compatible)
-    if (token?.jwt) {
-      try {
-        const { payload } = await jwtVerify(
-          token.jwt as string,
-          new TextEncoder().encode(process.env.NEXTAUTH_SECRET!) //  Encode secret as bytes
-        );
-        
-        console.log("Decoded custom JWT:", payload);
-      } catch (error) {
-        console.error("JWT verification failed:", error);
-      }
+
+    const publicRoutes = ["/", "/signin"];
+
+    if (publicRoutes.includes(pathname)) {
+      return NextResponse.next();
     }
 
-    
-    const { pathname } = req.nextUrl;
-
-    // Protect admin routes
-    if (pathname.startsWith("/admin") && !token) {
-      return NextResponse.redirect(new URL("/", req.url));
+    if (!token) {
+      return NextResponse.redirect(new URL("/signin", req.url));
     }
 
     return NextResponse.next();
   },
   {
     callbacks: {
-      authorized: ({ token }) => {
-        return !!token; // Allow access if token exists
-      },
+      authorized: () => true, 
+     //This callback determines whether a user is authorized to access the matched route. (As we manullay adding routes)
     },
   }
 );

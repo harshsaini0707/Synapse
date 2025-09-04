@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { db } from "@/lib/index";
 import * as schema from "@/lib/db/schema";
-import { SignJWT } from "jose"; 
+import jwt from "jsonwebtoken";
 
 export const handler = NextAuth({
   providers: [
@@ -22,7 +22,7 @@ export const handler = NextAuth({
           where: (u, { eq }) => eq(u.email, user.email!),
         });
 
-        // Create new user if not exist
+      
         if (!dbUser) {
           await db.insert(schema.users).values({
             userName: user.name!,
@@ -35,16 +35,15 @@ export const handler = NextAuth({
           });
         }
 
-        
         if (dbUser) {
-          //  Create JWT using jose (Edge Runtime compatible)
-          const token = await new SignJWT({ userId: dbUser.id })
-            .setProtectedHeader({ alg: "HS256" })
-            .setIssuedAt()
-            .setExpirationTime("7d")
-            .sign(new TextEncoder().encode(process.env.NEXTAUTH_SECRET!));
+          // Create JWT with jsonwebtoken
+          const token = jwt.sign(
+            { userId: dbUser.id },
+            process.env.NEXTAUTH_SECRET!,
+            { expiresIn: "7d" }
+          );
 
-          user.jwt = token;
+          user.jwt = token; // <-- attach to user
         }
 
         return true;

@@ -1,5 +1,8 @@
-import { boolean, timestamp, uuid, varchar, integer, pgTable, uniqueIndex } from "drizzle-orm/pg-core";
+import { boolean, timestamp, uuid, varchar, integer, pgTable, uniqueIndex, vector, PgVectorConfig } from "drizzle-orm/pg-core";
 
+
+
+// user table
 export const users = pgTable("users" , 
     {
     id:uuid("id").primaryKey().defaultRandom(),
@@ -17,3 +20,57 @@ export const users = pgTable("users" ,
     uniqueIndex("user_email_idx").on(table.email),
 ]
 )
+
+
+//video table
+
+export const videos =  pgTable("videos" , {
+
+    id :  uuid("id").primaryKey().defaultRandom(),
+    user_id : uuid("user_id").references(()=>users.id),
+    video_id : varchar("viedo_id" , {length : 256}).notNull().unique(),
+    title :  varchar("title" , {length :  800}).notNull(),
+    thumbnail :  varchar("thumbnail" , {length :  2000}).notNull(),
+    duration: varchar("duration", { length: 50 }),
+    transcript: varchar("transcript", { length: 10485700 }).notNull(),
+    embedding_done : boolean().default(false),
+    created_at: timestamp("created_at", { precision: 0 }).defaultNow().notNull(),
+    updated_at: timestamp("updated_at", { precision: 0 }),
+
+},
+(table)=>[
+    uniqueIndex("viedo_id_Idx").on(table.video_id)
+])
+
+
+// Transriptchunks
+
+export const transcriptChunks = pgTable(
+  "transcript_chunks",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    video_id: uuid("video_id").references(() => videos.id),
+    chunk_index: integer().notNull(),
+    content: varchar("content", { length: 10000 }).notNull(),
+
+    embedding: vector({name : "embedding" ,dimensions :  768}  as PgVectorConfig<number>).notNull(), 
+
+    created_at: timestamp("created_at", { precision: 0 }).defaultNow().notNull(),
+  }
+);
+
+
+
+// Video Chapters table
+export const videoChapters = pgTable(
+  "video_chapters",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    video_id: uuid("video_id").references(() => videos.id),
+    title: varchar("title", { length: 500 }).notNull(),
+    timestamp: varchar("timestamp", { length: 20 }), 
+    description: varchar("description", { length: 7000 }).notNull(), 
+    created_at: timestamp("created_at", { precision: 0 }).defaultNow().notNull(),
+    updated_at: timestamp("updated_at", { precision: 0 }),
+  }
+);

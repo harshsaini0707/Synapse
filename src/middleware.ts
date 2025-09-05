@@ -7,6 +7,10 @@ export default withAuth(
     const { pathname } = req.nextUrl;
     const token = req.nextauth.token;
 
+  //  console.log(token?.id);
+  //console.log(req);
+    
+
     const publicRoutes = ["/", "/signin"];
 
     if (publicRoutes.includes(pathname)) {

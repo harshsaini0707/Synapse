@@ -5,6 +5,7 @@
       "name": "synapse",
       "dependencies": {
         "@distube/ytdl-core": "^4.16.12",
+        "@google/generative-ai": "^0.24.1",
         "@langchain/community": "^0.3.54",
         "@langchain/core": "^0.3.73",
         "@langchain/google-genai": "^0.2.17",

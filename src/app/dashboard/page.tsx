@@ -6,7 +6,7 @@ const DashBoard = () => {
     const{data : session  , status ,  update} =  useSession();
 
     console.log("data");
-    console.log(session);
+    console.log(session?.user);
 
 
     console.log("----staurs");

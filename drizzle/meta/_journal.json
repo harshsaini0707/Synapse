@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1756920739701,
-      "tag": "0000_cuddly_wilson_fisk",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1756928794666,
-      "tag": "0001_first_red_ghost",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1757054843584,
-      "tag": "0002_fine_ricochet",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1757055158631,
-      "tag": "0003_jazzy_mulholland_black",
+      "when": 1757094262557,
+      "tag": "0000_perfect_ken_ellis",
       "breakpoints": true
     }
   ]

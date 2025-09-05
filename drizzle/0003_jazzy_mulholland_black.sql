@@ -1,1 +1,0 @@
-ALTER TABLE "videos" ALTER COLUMN "transcript" SET DATA TYPE varchar(10485700);

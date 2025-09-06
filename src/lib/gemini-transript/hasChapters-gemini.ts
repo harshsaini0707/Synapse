@@ -33,7 +33,7 @@ export async  function hasChapterEmbeddingAndHighlights(chapaters : chapters[] ,
 
 const chapterEmbedding: number[] = await embeddingModel.embedQuery(chpt.title);
 
-// Create a quoted vector literal string and cast to ::vector
+// Create a quoted vector literal string and cast to ::vector (::vector tells Interpret this string as a vector type.)
 const chapterEmbeddingLiteral = `'[${chapterEmbedding.join(",")}]'::vector`;
 
 const topChunks = await db.select()
@@ -65,7 +65,7 @@ const topChunks = await db.select()
 }
 
 
-async function generateSummary(textSumamrize : string , chapterTitle : string) :Promise<string>{
+export async function generateSummary(textSumamrize : string , chapterTitle : string) :Promise<string>{
 
     const model = new ChatGoogleGenerativeAI({
         model : "gemini-2.5-flash-lite",

@@ -1,19 +1,29 @@
-import {  NextResponse } from "next/server";
+import {  NextRequest, NextResponse } from "next/server";
 import {YoutubeLoader}  from "@langchain/community/document_loaders/web/youtube"
 import play from "play-dl";
 import { db } from "@/lib";
 import {  videos } from "@/lib/db/schema";
 import { createEmbedding } from "@/lib/gemini-transript/embedding";
 import { hasChapterEmbeddingAndHighlights } from "@/lib/gemini-transript/hasChapters-gemini";
+import { summarizeNoChapters } from "@/lib/gemini-transript/noChapters-gemini";
 
-export async function fetchSingleTranscript(){
+export async function POST(req : NextRequest){
     try {
-           const id = "70daf988-ae43-4ec0-9020-f2ae09da4ad6";
+           //const id = "70daf988-ae43-4ec0-9020-f2ae09da4ad6";
 
-            const viedoId  = "Gfr50f6ZBvo"
-           
-       // const {ytUrl :  string} =  await  req.json();
-       const ytUrl =  "https://www.youtube.com/watch?v=Gfr50f6ZBvo" as string
+            const viedoId  = "1tRTWwZ5DIc"
+
+        const userId = req.headers.get("x-user-id");
+         if (!userId) {
+      return NextResponse.json(
+        { message: "Unauthorized User" },
+        { status: 401 }
+      );
+    }
+
+        const { ytUrl } = await req.json();
+
+      // const ytUrl =  "https://www.youtube.com/watch?v=1tRTWwZ5DIc&t=6s" as string
         
         if(!ytUrl){
             return NextResponse.json(
@@ -23,14 +33,14 @@ export async function fetchSingleTranscript(){
         }
          
 
-       if(!id){
+       if(!userId){
         return NextResponse.json(
             {message :"Unauthorized User"},
             {status :  401}
         )
        }
        const user = await db.query.users.findFirst({
-        where : (users , {eq} ) => eq(users.id , id)
+        where : (users , {eq} ) => eq(users.id , userId)
        })
 
        if(!user){
@@ -69,7 +79,7 @@ export async function fetchSingleTranscript(){
        const details = info.video_details;
 
           const enterDataInVideoTable = await db.insert(videos).values({
-                user_id : id ,
+                user_id : userId ,
                 video_id : viedoId,
                 title : details?.title ?? "No Title",
                 thumbnail : details?.thumbnails.at(-1)?.url ?? "",
@@ -99,12 +109,12 @@ const chapaters = details.chapters?.map((c)=> ({
 //console.log(chapaters);
 
 
-if(chapaters.length > 0){
+if(chapaters.length > 0 ){
     
 await hasChapterEmbeddingAndHighlights(chapaters , viedoId);
 
 }else{
-    console.log("Nooooo chaptersssssss!!!");
+  await summarizeNoChapters(transcriptText , details?.durationRaw ,  viedoId);
     
 }
 
@@ -114,10 +124,8 @@ await hasChapterEmbeddingAndHighlights(chapaters , viedoId);
     } catch (error) {
         console.log(error);
         return NextResponse.json(
-            {error:"Failed to fetch the youtube transcript try another url"},
+            {error:"Failed to fetch the youtube transcript try another url , Internal Server Error"},
             {status :  500}
         )
     }
 }
-
-fetchSingleTranscript();

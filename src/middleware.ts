@@ -6,7 +6,7 @@ export default withAuth(
   function middleware(req) {
     const { pathname } = req.nextUrl;
     const token = req.nextauth.token;
-
+    
   //  console.log(token?.id);
   //console.log(req);
     
@@ -21,7 +21,11 @@ export default withAuth(
       return NextResponse.redirect(new URL("/signin", req.url));
     }
 
-    return NextResponse.next();
+    const response = NextResponse.next();
+    response.headers.set("x-user-id", token?.id as string);
+    return response;
+
+    
   },
   {
     callbacks: {

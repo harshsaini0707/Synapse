@@ -1,22 +1,28 @@
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { db } from "@/lib";
+import { videoChapters } from "@/lib/db/schema";
 
-export async function summarizeNoChapters(transcript : string, totalDuration: string) {
 
+export async function summarizeNoChapters(
+  transcript: string,
+  totalDuration: string,
+  video_id: string
+) {
   const llm = new ChatGoogleGenerativeAI({
     model: "gemini-2.5-flash-lite",
     temperature: 0.3,
-    apiKey:process.env.GEMINI_API_KEY!
+    apiKey: process.env.GEMINI_API_KEY!,
   });
 
-
+  // Split transcript into chunks
   const splitter = new RecursiveCharacterTextSplitter({
-    chunkSize: 6100,   
-    chunkOverlap: 500, 
+    chunkSize: 3000,
+    chunkOverlap: 500,
   });
   const chunks = await splitter.splitText(transcript);
 
-  
+  // Summarize each chunk
   const chunkSummaries: string[] = [];
   for (const chunk of chunks) {
     const res = await llm.invoke([
@@ -32,39 +38,39 @@ export async function summarizeNoChapters(transcript : string, totalDuration: st
     chunkSummaries.push(res.content as string);
   }
 
-  // Combine chunk summaries and ask LLM to create chapters
+  //  Combine summaries for final chapter generation
   const combinedSummary = chunkSummaries.join(" ");
 
   const prompt = `
-You are an intelligent assistant that summarizes YouTube transcripts.
+You are an expert video analyst. Your task is to analyze the provided transcript and generate topical chapters.
 
-Video duration: ${totalDuration}
+Video total duration: ${totalDuration}
 
 Instructions:
-1. Split the transcript summary into some chapters based on topics and considering the duration ${totalDuration}.
-2. Assign a title to each chapter.
-3. Estimate the starting timestamp (hh:mm:ss) for each chapter based on the video duration.
-4. Write a concise number of  sentence summary for each chapter according to duration of viedo ${totalDuration}.
-5. Output must be a valid JSON array in this format:
+1. Divide the transcript into 5–8 logical chapters.
+2. Each chapter must have a descriptive title.
+3. Each chapter must have a 2–3 sentence summary.
+4. Do NOT include timestamps .
+5. Output must be ONLY a valid JSON array (no text or markdown).
+
+Format:
 [
-  { "timestamp": "00:00", "title": "Chapter 1 Title", "summary": "..." },
-  { "timestamp": "02:05", "title": "Chapter 2 Title", "summary": "..." }
+  { "title": "Chapter 1 Title", "summary": "..." },
+  { "title": "Chapter 2 Title", "summary": "..." }
 ]
 
-Transcript Summary:
+Transcript:
 ${combinedSummary}
 `;
 
+  //  Generate chapters with LLM
   const chaptersRes = await llm.invoke([
     { role: "system", content: "You are a helpful assistant for summarizing YouTube transcripts." },
     { role: "user", content: prompt },
   ]);
 
-  // 5️⃣ Parse LLM output as JSON
-    // 5️⃣ Parse LLM output as JSON
   let chapters;
   try {
-    // Clean LLM output to strip code fences and extra junk
     const cleaned = (chaptersRes.content as string)
       .replace(/```json/g, "")
       .replace(/```/g, "")
@@ -72,11 +78,21 @@ ${combinedSummary}
 
     chapters = JSON.parse(cleaned);
   } catch (e) {
-    console.warn("LLM did not return valid JSON, fallback to a single chapter");
-   
+    console.warn("LLM did not return valid JSON. Falling back to one summary.");
+
   }
 
+  // Insert into DB
+  const inserted = await db.insert(videoChapters).values(
+    chapters.map((ch: any) => ({
+      video_id,
+      title: ch.title,
+      description: ch.summary,
+      timestamp: null, 
+    }))
+  ).returning();
 
-  console.log(chapters);
-   // array of objects { timestamp, title, summary }
+  console.log(" Inserted chapters:", inserted);
+
+  return inserted;
 }

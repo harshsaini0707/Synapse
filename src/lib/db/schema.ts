@@ -89,3 +89,14 @@ export const chatHistory = pgTable("chatHistory" , {
     created_at : timestamp("created_at").defaultNow().notNull()
 
 })
+
+export const summary = pgTable("summary" , {
+  id :  uuid("id").primaryKey().defaultRandom(),
+  video_id :  varchar("video_id" , {length :  256}).references(()=>videos.video_id)
+  .notNull()
+  .unique(),
+  quick_summary :  varchar("quick_summary" , {length : 10000}),
+  detailed_summary : varchar("detailed_summary" , {length :  500000}),
+  created_at : timestamp("created_at" , {precision : 0}).defaultNow().notNull(),
+  updated_at : timestamp("updated_at" , {precision :0 })
+})

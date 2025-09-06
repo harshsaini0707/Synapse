@@ -1,3 +1,4 @@
+import { time } from "console";
 import { boolean, timestamp, uuid, varchar, integer, pgTable, uniqueIndex, vector, PgVectorConfig } from "drizzle-orm/pg-core";
 
 
@@ -74,3 +75,17 @@ export const videoChapters = pgTable(
     updated_at: timestamp("updated_at", { precision: 0 }),
   }
 );
+
+
+//Chat History
+
+export const chatHistory = pgTable("chatHistory" , {
+  
+    id : uuid("id").primaryKey().defaultRandom(),
+    user_id : uuid("user_id").references(()=> users.id),
+    video_id : varchar("video_id" , {length :  256}).references(()=>videos.video_id),
+    question : varchar("question" , {length : 5000}),
+    answer : varchar("answer" , {length :  10000}),
+    created_at : timestamp("created_at").defaultNow().notNull()
+
+})

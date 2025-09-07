@@ -100,3 +100,4 @@ export const summary = pgTable("summary" , {
   created_at : timestamp("created_at" , {precision : 0}).defaultNow().notNull(),
   updated_at : timestamp("updated_at" , {precision :0 })
 })
+

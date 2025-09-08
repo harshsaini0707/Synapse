@@ -1,5 +1,6 @@
 import { time } from "console";
 import { create } from "domain";
+import { relations } from "drizzle-orm";
 import { boolean, timestamp, uuid, varchar, integer, pgTable, uniqueIndex, vector, PgVectorConfig } from "drizzle-orm/pg-core";
 
 
@@ -25,7 +26,6 @@ export const users = pgTable("users" ,
 
 
 //video table
-
 export const videos =  pgTable("videos" , {
 
     id :  uuid("id").primaryKey().defaultRandom(),
@@ -162,3 +162,62 @@ export const userAnswers = pgTable("user_answers", {
   is_correct: boolean("is_correct").default(false), // pre-computed for fast analytics
   created_at: timestamp("created_at", { precision: 0 }).defaultNow().notNull(),
 });
+
+
+
+//----------------------Relations-------------------------
+
+// Quiz has many questions
+export const quizRelation = relations(quiz , ({many})=>({
+  questions : many(quizQuestion)
+}))
+
+// Question belongs to Quiz and has many options
+
+export const  quizQuestionRelations = relations(quizQuestion , ({one ,  many}) =>({
+
+  quiz : one(quiz , {
+    fields : [quizQuestion.quiz_id],
+    references:[quiz.id]
+  }),
+  options : many(quizOptions)
+}) )
+
+
+//options belong to Question
+export const quizOptionRelations = relations(quizOptions ,  ({one}) =>({
+  question: one(quizQuestion ,{
+    fields : [quizOptions.question_id],
+    references:[quizQuestion.id]
+  } )
+}));
+
+// Quiz attempt belongs to User and Quiz
+export const userQuizAttemptsRelations = relations(userQuizAttempts, ({ one, many }) => ({
+  user: one(users, {
+    fields: [userQuizAttempts.user_id],
+    references: [users.id],
+  }),
+  quiz: one(quiz, {
+    fields: [userQuizAttempts.quiz_id],
+    references: [quiz.id],
+  }),
+  answers: many(userAnswers),
+}));
+
+
+// User answer belongs to attempt, question, option
+export const userAnswersRelations = relations(userAnswers, ({ one }) => ({
+  attempt: one(userQuizAttempts, {
+    fields: [userAnswers.attempt_id],
+    references: [userQuizAttempts.id],
+  }),
+  question: one(quizQuestion, {
+    fields: [userAnswers.question_id],
+    references: [quizQuestion.id],
+  }),
+  option: one(quizOptions, {
+    fields: [userAnswers.selected_option_id],
+    references: [quizOptions.id],
+  }),
+}));

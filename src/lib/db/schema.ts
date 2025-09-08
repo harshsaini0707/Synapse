@@ -1,4 +1,5 @@
 import { time } from "console";
+import { create } from "domain";
 import { boolean, timestamp, uuid, varchar, integer, pgTable, uniqueIndex, vector, PgVectorConfig } from "drizzle-orm/pg-core";
 
 
@@ -101,3 +102,63 @@ export const summary = pgTable("summary" , {
   updated_at : timestamp("updated_at" , {precision :0 })
 })
 
+//Quiz
+
+export const quiz = pgTable("quiz" , {
+  id : uuid("id").primaryKey().notNull(),
+  video_id : varchar("video_id" , {length :  256}).references(()=>videos.video_id),
+  difficulty :  varchar("difficulty" , {length :  256}).notNull(),
+  created_at : timestamp("created_at" , {precision : 0}).defaultNow().notNull(),
+  updated_at : timestamp("updated_at" ,{precision : 0})
+})
+
+//Quiz question
+export const quizQuestion = pgTable("quizQuestion", {
+  id : uuid("id").primaryKey().defaultRandom(),
+  quiz_id : uuid("quiz_id").references(()=>quiz.id).notNull(),
+  question_text : varchar("question_id" , {length : 3000}).notNull(),
+  type :  varchar("type" , {length :  50}).notNull(), //mcq or fill_up
+  correct_option_id :  uuid("correct_option_id").notNull(),
+  explanation: varchar("explanation", { length: 5000 }),
+  created_at : timestamp("created_at" , {precision : 0}).defaultNow().notNull(),
+} ,
+(table)=>[
+  uniqueIndex("correct_option").on(table.correct_option_id),
+]
+ )
+
+//options
+export const quizOptions = pgTable("quizOptions" , {
+  id : uuid("id").primaryKey().notNull(),
+  question_id : uuid("question_id").references(()=>quizQuestion.id).notNull(),
+  option_text : varchar("option_text" , {length :  3000}).notNull(),
+  created_at : timestamp("created_at" , {precision : 0}).defaultNow().notNull(),
+  
+})
+
+// User Quiz Attempts (overall quiz attempt)
+export const userQuizAttempts = pgTable("user_quiz_attempts", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  user_id: uuid("user_id").references(() => users.id).notNull(),
+  quiz_id: uuid("quiz_id").references(() => quiz.id).notNull(),
+  score: integer("score"),
+  completed: boolean("completed").default(false),
+  created_at: timestamp("created_at", { precision: 0 }).defaultNow().notNull(),
+  updated_at: timestamp("updated_at", { precision: 0 }),
+});
+
+// User Answers (for each question in an attempt)
+export const userAnswers = pgTable("user_answers", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  attempt_id: uuid("attempt_id")
+    .references(() => userQuizAttempts.id)
+    .notNull(),
+  question_id: uuid("question_id")
+    .references(() => quizQuestion.id)
+    .notNull(),
+  selected_option_id: uuid("selected_option_id").references(
+    () => quizOptions.id
+  ), // user’s chosen option
+  is_correct: boolean("is_correct").default(false), // pre-computed for fast analytics
+  created_at: timestamp("created_at", { precision: 0 }).defaultNow().notNull(),
+});

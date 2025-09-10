@@ -64,10 +64,10 @@ const Firstimpression = () => {
           with <FlipWords words={words} />
         </p>
 
-        <p className="text-lg md:text-xl max-w-3xl mx-auto text-gray-800 dark:text-gray-200 italic mb-12">
+        <p className="text-lg md:text-xl max-w-4xl mx-auto text-gray-800 dark:text-gray-200 italic mb-12">
           Stop watching, start mastering. Transform videos into interactive
           lessons with AI tutors, flashcards, quizzes, and collaborative study
-          spaces.
+          spaces , web based interactive learning and much more.
         </p>
 
        
@@ -85,12 +85,14 @@ const Firstimpression = () => {
 
       
         <div className="max-w-4xl mx-auto  px-4  py-10 ">
-          <div className="aspect-w-16 aspect-h-9 rounded-2xl overflow-hidden shadow-xl">
+          <div className="aspect-w-16 aspect-h-9 border-8 border-green-500 rounded-xl overflow-hidden shadow-xl ">
             <iframe
               src="https://www.youtube.com/embed/dQw4w9WgXcQ"
               title="Demo Video"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
+              allowTransparency
+              
               className="w-full h-96"
             ></iframe>
           </div>

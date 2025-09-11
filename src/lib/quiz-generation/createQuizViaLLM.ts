@@ -20,7 +20,7 @@ export async  function createQuizViaLLM(paragraph :  string ,  difficulty :  str
 const prompt = `
 You are an expert quiz generator AI.
 
-From the following transcript text, generate **3–5 quiz questions** of difficulty level: "${difficulty}".
+From the following transcript text, generate **2 quiz questions** of difficulty level: "${difficulty}".
 Mix **MCQs** and **Fill-in-the-blank** types.
 
 ### Rules:

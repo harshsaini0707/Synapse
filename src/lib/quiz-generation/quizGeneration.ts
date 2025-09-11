@@ -4,7 +4,7 @@ import { transcriptChunks } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { createQuizViaLLM } from "./createQuizViaLLM";
 import { saveToDB } from "./saveQuizsToDb";
-import { log } from "node:console";
+
 
 type QuizQuestionType = {
     question_text: string;
@@ -51,6 +51,8 @@ export async function generateQuizFromTranscript(video_id : string  ,   difficul
 
             const quiz = await createQuizViaLLM(combineText , difficulty);
 
+//console.log(quiz);
+
            let paredQuestions : QuizQuestionType[]  = [];
            try {
               const cleanOutput = (quiz  as string) 
@@ -68,7 +70,7 @@ export async function generateQuizFromTranscript(video_id : string  ,   difficul
       //  console.log(allQuestion);
 
 
-        console.log(allQuestion);
+        //console.log(allQuestion);
         
        await saveToDB(video_id ,  difficulty , allQuestion);
         
@@ -81,4 +83,4 @@ export async function generateQuizFromTranscript(video_id : string  ,   difficul
        ) 
     }
 }
-generateQuizFromTranscript("Gfr50f6ZBvo" , "easy")
+generateQuizFromTranscript("1tRTWwZ5DIc" , "easy")

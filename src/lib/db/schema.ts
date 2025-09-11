@@ -118,7 +118,7 @@ export const quizQuestion = pgTable("quizQuestion", {
   quiz_id : uuid("quiz_id").references(()=>quiz.id).notNull(),
   question_text : varchar("question_text" , {length : 3000}).notNull(),
   type :  varchar("type" , {length :  50}).notNull(), //mcq or fill_up
-  correct_option_id :  uuid("correct_option_id").notNull(),
+  correct_option_id :  uuid("correct_option_id"),
   explanation: varchar("explanation", { length: 5000 }),
   created_at : timestamp("created_at" , {precision : 0}).defaultNow().notNull(),
 } 

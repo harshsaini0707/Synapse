@@ -3,6 +3,16 @@ import { db } from "..";
 import { transcriptChunks } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { createQuizViaLLM } from "./createQuizViaLLM";
+import { saveToDB } from "./saveQuizsToDb";
+import { log } from "node:console";
+
+type QuizQuestionType = {
+    question_text: string;
+    type: string;
+    options: string[];
+    correct_option_index: number;
+    explanation: string;
+};
 
 
 
@@ -31,19 +41,23 @@ export async function generateQuizFromTranscript(video_id : string  ,   difficul
             )
         }
 
-        const allQuestion : [] = [];
+        const allQuestion : QuizQuestionType[] = [];
         const windowSize = 3;
         const step =2;
 
-        for(let i = 0 ; i<chunks.length ; i++){
+        for(let i = 0 ; i<chunks.length ; i+=step){
             const windowChunks = chunks.slice(i ,  i+windowSize);
             const combineText = windowChunks.map(c => c.content).join();
 
             const quiz = await createQuizViaLLM(combineText , difficulty);
 
-           let paredQuestions : []  = [];
+           let paredQuestions : QuizQuestionType[]  = [];
            try {
-            paredQuestions  = JSON.parse(quiz as string)
+              const cleanOutput = (quiz  as string) 
+    .replace(/```json/g, "")
+    .replace(/```/g, "")
+    .trim();
+            paredQuestions  = JSON.parse(cleanOutput as string)
            } catch (error) {
               console.error("Failed to parse LLM output:", quiz);
         continue;  // skip the window
@@ -51,7 +65,12 @@ export async function generateQuizFromTranscript(video_id : string  ,   difficul
         allQuestion.push(...paredQuestions)
         }
 
+      //  console.log(allQuestion);
+
+
         console.log(allQuestion);
+        
+       await saveToDB(video_id ,  difficulty , allQuestion);
         
         
         
@@ -62,4 +81,4 @@ export async function generateQuizFromTranscript(video_id : string  ,   difficul
        ) 
     }
 }
-generateQuizFromTranscript("1tRTWwZ5DIc" , "hard")
+generateQuizFromTranscript("Gfr50f6ZBvo" , "easy")

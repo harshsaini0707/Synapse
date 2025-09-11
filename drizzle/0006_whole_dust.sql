@@ -1,0 +1,1 @@
+ALTER TABLE "quizQuestion" RENAME COLUMN "question_id" TO "question_text";

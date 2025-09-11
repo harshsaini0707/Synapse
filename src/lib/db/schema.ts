@@ -105,7 +105,7 @@ export const summary = pgTable("summary" , {
 //Quiz
 
 export const quiz = pgTable("quiz" , {
-  id : uuid("id").primaryKey().notNull(),
+  id : uuid("id").primaryKey(),
   video_id : varchar("video_id" , {length :  256}).references(()=>videos.video_id),
   difficulty :  varchar("difficulty" , {length :  256}).notNull(),
   created_at : timestamp("created_at" , {precision : 0}).defaultNow().notNull(),
@@ -116,20 +116,17 @@ export const quiz = pgTable("quiz" , {
 export const quizQuestion = pgTable("quizQuestion", {
   id : uuid("id").primaryKey().defaultRandom(),
   quiz_id : uuid("quiz_id").references(()=>quiz.id).notNull(),
-  question_text : varchar("question_id" , {length : 3000}).notNull(),
+  question_text : varchar("question_text" , {length : 3000}).notNull(),
   type :  varchar("type" , {length :  50}).notNull(), //mcq or fill_up
   correct_option_id :  uuid("correct_option_id").notNull(),
   explanation: varchar("explanation", { length: 5000 }),
   created_at : timestamp("created_at" , {precision : 0}).defaultNow().notNull(),
-} ,
-(table)=>[
-  uniqueIndex("correct_option").on(table.correct_option_id),
-]
+} 
  )
 
 //options
 export const quizOptions = pgTable("quizOptions" , {
-  id : uuid("id").primaryKey().notNull(),
+  id : uuid("id").primaryKey(),
   question_id : uuid("question_id").references(()=>quizQuestion.id).notNull(),
   option_text : varchar("option_text" , {length :  3000}).notNull(),
   created_at : timestamp("created_at" , {precision : 0}).defaultNow().notNull(),

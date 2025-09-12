@@ -37,7 +37,7 @@ export async function POST(req :  NextRequest) {
         }
         const newQuizData = await generateQuizFromTranscript(video_id , difficulty);
 
-
+        
 
     } catch (error) {
         console.log(error);

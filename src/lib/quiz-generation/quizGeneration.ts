@@ -83,4 +83,4 @@ export async function generateQuizFromTranscript(video_id : string  ,   difficul
        ) 
     }
 }
-generateQuizFromTranscript("1tRTWwZ5DIc" , "easy")
+//generateQuizFromTranscript("1tRTWwZ5DIc" , "easy")

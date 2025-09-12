@@ -75,9 +75,21 @@ export async function saveToDB(
       }
     });
 
+    const quizzs = await db.query.quiz.findFirst(({
+      where: eq(quiz?.id , quiz_id),
+      with:{
+        questions:{
+          with : {
+            options : true
+          }
+        }
+      }
+    }))
+
     return NextResponse.json(
       {
         message: `Quiz saved for video ${video_id} with ${allQuestion.length} questions.`,
+        data : quizzs
       },
       { status: 200 }
     );

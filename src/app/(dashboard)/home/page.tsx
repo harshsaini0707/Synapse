@@ -1,8 +1,12 @@
+"use client"
+
 import { HoverBorderGradientDemo } from '@/components/AIButton/Button';
-import React from 'react';
-import { Link as LinkIcon, Send } from 'lucide-react';
+import React, { useState } from 'react';
+import { Link as LinkIcon, Send ,History  } from 'lucide-react';
+import { CardHoverEffectDemo } from '@/components/HistoryCards/Historycars';
 
 const Home = () => {
+  const [query , setQuery ] =  useState("")
   return (
     <div className="min-h-screen w-full relative">
       {/* Emerald Void Background */}
@@ -15,34 +19,53 @@ const Home = () => {
 
 {/* ----------------MAIN CODE START--------- */}
       {/* Main Content */}
-      <div className="flex flex-col h-screen relative z-10 px-8 md:px-16 py-12 gap-12 justify-center items-center">
+      <div className="flex flex-col min-h-screen relative z-10 px-8 md:px-16 pt-10 pb-12 gap-12 items-center">
         {/* Info & Search Section */}
         <div className="flex flex-col mt-10 gap-6 text-center max-w-2xl">
           <HoverBorderGradientDemo />
 
-          <h1 className="text-gray-200 poppins-bold text-3xl md:text-5xl">
+          <h1 className="text-gray-200 poppins-bold text-xl md:text-5xl">
             Experience Synapse AI Tutor
           </h1>
 
-          <p className="text-gray-500 poppins-regular text-lg md:text-xl">
+          <p className="text-gray-500 poppins-regular text-md md:text-xl">
             Transform any YouTube video into smart, interactive learning experiences <br />
             that wire knowledge straight to your synapses.
           </p>
 
-          <div className="flex items-center gap-3 bg-black border-1 border-gray-700 rounded-lg py-3 px-4 shadow-md w-full md:w-auto">
-            <LinkIcon className="text-gray-400 w-6 h-6" />
-            <input
-              type="text"
-              placeholder="Paste YouTube link here and start learning..."
-              className="flex-1 bg-transparent outline-none text-gray-300 px-2"
-            />
-            <Send className="text-gray-400 w-6 h-6 cursor-pointer" />
-          </div>
+          <div className="flex items-center gap-3 bg-black border border-gray-800 rounded-lg py-2 px-4 shadow-md w-full md:w-auto">
+  <LinkIcon className="text-gray-400 w-6 h-6" />
+  <input
+    type="text"
+    value={query}
+    onChange={(e) => setQuery(e.target.value)}
+    placeholder="Paste YouTube link here and start learning..."
+    className="flex-1 bg-transparent outline-none text-blue-400 px-2"
+  />
+  <button
+     type='button'
+     title='query'
+    disabled={query.trim() === ''}
+    className={`p-2 rounded-md transition-all duration-200 ${
+      query.trim() === ''
+        ? 'bg-transparent text-white cursor-not-allowed'
+        : 'bg-gray-300 text-black hover:bg-gray-400 hover:cursor-pointer active:scale-95'
+    }`}
+  >
+    <Send className="w-5 h-5" />
+  </button>
+</div>
+
         </div>
 
         {/* Placeholder for recent videos or components */}
-        <div className="flex-1 w-full mt-12">
-          {/* Add recent videos or other components here */}
+        <div className=" flex flex-col w-full mt-8 mx-auto ">
+         
+        <div className='flex  items-center gap-2 px-8 '> <History className='text-white '/>  <h1 className='text-white poppins-semibold text-xl'> Recent</h1></div>
+        <div >
+          <CardHoverEffectDemo/>
+        </div>
+         
         </div>
       </div>
 

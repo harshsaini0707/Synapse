@@ -65,9 +65,9 @@ export const Logo = () => (
     <motion.span
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="font-medium text-black dark:text-white"
+      className="poppins-medium text-black dark:text-white"
     >
-      Acet Labs
+      Synapse
     </motion.span>
   </a>
 );

@@ -170,3 +170,8 @@ body {
     }
   }
 }
+::selection {
+  background-color: #04c85f; /* green background */
+  color: #ffffff;            /* white text */
+
+}

@@ -9,7 +9,7 @@ import { summarizeNoChapters } from "@/lib/gemini-transript/noChapters-gemini";
 
 export async function POST(req : NextRequest){
     try {
-           //const id = "70daf988-ae43-4ec0-9020-f2ae09da4ad6";
+           
 
             const viedoId  = "1tRTWwZ5DIc"
 

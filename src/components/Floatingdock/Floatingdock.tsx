@@ -5,6 +5,7 @@ import { FloatingDock } from "../ui/floating-dock";
 import { useState } from "react";
 import Chat from "../Chat/Chat";
 import Summary from "../Summary/Summary";
+import Quiz from "../Quiz/Quiz";
 
 export function FloatingDockDemo() {
   const [activeTab, setActiveTab] = useState("Summary");
@@ -54,7 +55,7 @@ export function FloatingDockDemo() {
       <div className="w-full  bg-[#08090A]  min-h-[85vh]">
         {activeTab === "Summary" && <Summary/>}
         {activeTab === "Chat" && <Chat/>}
-        {activeTab === "Quiz" && <div className="text-white">❓ Quiz Component here</div>}
+        {activeTab === "Quiz" && <Quiz/>}
         {activeTab === "Flashcards" && <div className="text-white">🃏 Flashcards Component here</div>}
       </div>
     </div>

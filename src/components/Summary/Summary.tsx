@@ -22,14 +22,14 @@ const Summary = () => {
         </div>
 
         <div className="flex flex-row gap-5">
-          <button className="poppins-semibold hover:scale-105 duration-200 text-black border border-gray-600 bg-white/95 px-4 py-3 flex items-center gap-2 rounded-2xl">
+          <button className="hover:scale-105 duration-200 text-black border border-gray-600 bg-white/95 px-4 py-3 flex items-center gap-2 rounded-2xl">
             <LoaderThreeDemo />
-            <h1>Quick Summary</h1>
+            <h1 className='font-mono'>Quick Summary</h1>
           </button>
 
-          <button className="poppins-semibold hover:scale-105 duration-200 text-black border border-gray-600 bg-white/95 px-4 py-3 flex items-center gap-2 rounded-2xl">
+          <button className="hover:scale-105 duration-200 text-black border border-gray-600 bg-white/95 px-4 py-3 flex items-center gap-2 rounded-2xl">
             <NotebookTabs className="animate-bounce text-gray-900" />
-            <h1>Detailed Summary</h1>
+            <h1 className='font-mono'>Detailed Summary</h1>
           </button>
         </div>
       </div>

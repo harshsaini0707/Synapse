@@ -96,7 +96,7 @@ const FloatingDockDesktop = ({
       onMouseMove={(e) => mouseX.set(e.pageX)}
       onMouseLeave={() => mouseX.set(Infinity)}
       className={cn(
-        "mx-auto hidden h-10 items-end gap-3 rounded-3xl bg-black border-1 border-gray-850 p-2  md:flex dark:bg-neutral-900",
+        "mx-auto hidden h-8 items-end gap-3 rounded-3xl bg-black border-1 border-gray-850 p-1  md:flex dark:bg-neutral-900",
         className,
       )}
     >
@@ -112,54 +112,36 @@ function IconContainer({
   title,
   icon,
   href,
+  onClick,
 }: {
   mouseX: MotionValue;
   title: string;
   icon: React.ReactNode;
   href: string;
+  onClick?: () => void;
 }) {
   let ref = useRef<HTMLDivElement>(null);
 
   let distance = useTransform(mouseX, (val) => {
     let bounds = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
-
     return val - bounds.x - bounds.width / 2;
   });
 
-  // Scale and float effects
   let scaleTransform = useTransform(distance, [-150, 0, 150], [1, 1.2, 1]);
-  let yTransform = useTransform(distance, [-150, 0, 150], [0, -15, 0]); // Float up effect
-  
-  let scale = useSpring(scaleTransform, {
-    mass: 0.1,
-    stiffness: 150,
-    damping: 12,
-  });
+  let yTransform = useTransform(distance, [-150, 0, 150], [0, -8, 0]);
 
-  let y = useSpring(yTransform, {
-    mass: 0.1,
-    stiffness: 150,
-    damping: 12,
-  });
-
-  const [hovered, setHovered] = useState(false);
+  let scale = useSpring(scaleTransform, { mass: 0.1, stiffness: 150, damping: 12 });
+  let y = useSpring(yTransform, { mass: 0.1, stiffness: 150, damping: 12 });
 
   return (
-    <a href={href}>
+    <a href={href} onClick={(e) => { e.preventDefault(); onClick?.(); }}>
       <motion.div
         ref={ref}
         style={{ scale, y }}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        className="flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-gray-200 dark:bg-neutral-800 transition-colors hover:bg-gray-300 dark:hover:bg-neutral-700 shadow-lg hover:shadow-xl transition-shadow"
+        className="flex items-center justify-center gap-1 px-3 rounded-md bg-transparent transition-colors hover:py-1 hover:bg-[radial-gradient(circle_at_50%_42%,#04170bb5,#000000)]"
       >
-        <div className="w-5 h-5 flex items-center justify-center flex-shrink-0">
-          {icon}
-        </div>
-        
-        <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300 whitespace-nowrap">
-          {title}
-        </span>
+        <div className="w-4 h-4 flex items-center justify-center">{icon}</div>
+        <span className="text-sm font-medium whitespace-nowrap">{title}</span>
       </motion.div>
     </a>
   );

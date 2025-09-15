@@ -56,7 +56,7 @@ const transcript = [
   const ytlink = `https://www.youtube.com/embed/${id}`;
 
   return (
-    <div className="flex min-h-screen bg-[#09090B] text-white border border-gray-800">
+    <div className="flex min-h-screen fixed bg-[#09090B] text-white border border-gray-800">
       {/* Left: Video + Transcript */}
       <div className="w-[45%] flex-1 pt-4 px-4 ">
         {/* YouTube Embed */}
@@ -78,7 +78,7 @@ const transcript = [
             <Clock size={12} /> <span className="text-sm">{`Highlights (${transcript.length})`} </span>
           </div>
         </div>
-        <div className="flex max-h-[48vh] overflow-y-scroll flex-col gap-1 border-1 rounded-sm border-gray-800 bg-[radial-gradient(circle_at_0%_0%,#04170b9c,#000000)] " 
+        <div className="flex max-h-[42vh] overflow-y-scroll flex-col gap-1 border-1 rounded-sm border-gray-800 bg-[radial-gradient(circle_at_0%_0%,#04170b9c,#000000)] " 
              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
 
           {
@@ -105,7 +105,7 @@ const transcript = [
       </div>
 
       {/* Right: Features */}
-     <div className="w-[55%] flex flex-col p-6">
+     <div className="w-[55%] flex pt-2 flex-col ">
   <FloatingDockDemo />  {/* occupies top 20% */}
   <div>
     

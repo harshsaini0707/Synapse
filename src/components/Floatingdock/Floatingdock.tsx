@@ -1,20 +1,62 @@
+"use client";
+
 import { IconHome, IconNewSection, IconTerminal2 } from "@tabler/icons-react";
 import { FloatingDock } from "../ui/floating-dock";
+import { useState } from "react";
+import Chat from "../Chat/Chat";
+import Summary from "../Summary/Summary";
 
 export function FloatingDockDemo() {
+  const [activeTab, setActiveTab] = useState("Summary");
+
   const links = [
-    { title: "Summary", icon: <IconHome className="h-full w-full text-neutral-500 dark:text-neutral-300" />, href: "#" },
-    { title: "Chat", icon: <IconTerminal2 className="h-full w-full text-neutral-500 dark:text-neutral-300" />, href: "#" },
-    { title: "Quiz", icon: <IconNewSection className="h-full w-full text-neutral-500 dark:text-neutral-300" />, href: "#" },
-    { title: "Flashcards", icon: <img src="https://assets.aceternity.com/logo-dark.png" width={20} height={20} alt="Logo" />, href: "#" },
+    {
+      title: "Summary",
+      icon: <IconHome className={`h-full w-full ${activeTab === "Summary" ? "text-white poppins-extrabold bg-green-500 p-0.5  rounded-sm " : "text-neutral-500 dark:text-neutral-300"}`} />,
+      href: "#",
+    },
+    {
+      title: "Chat",
+      icon: <IconTerminal2 className={`h-full w-full ${activeTab === "Chat" ? "text-white poppins-extrabold bg-green-500 p-0.5  rounded-sm" : "text-neutral-500 dark:text-neutral-300"}`} />,
+      href: "#",
+    },
+    {
+      title: "Quiz",
+      icon: <IconNewSection className={`h-full w-full ${activeTab === "Quiz" ? "text-white poppins-extrabold  bg-green-500 p-0.5  rounded-sm" : "text-neutral-500 dark:text-neutral-300"}`} />,
+      href: "#",
+    },
+    {
+      title: "Flashcards",
+      icon: (
+        <img
+          src="https://assets.aceternity.com/logo-dark.png"
+          width={20}
+          height={20}
+          alt="Logo"
+          className={`${activeTab === "Flashcards" ? "filter brightness-150 poppins-extrabold  bg-green-500 p-0.5  rounded-sm" : ""}`}
+        />
+      ),
+      href: "#",
+    },
   ];
 
   return (
-  
-      <div className="flex  items-center justify-center">
-        <FloatingDock items={links}  />
+    <div className="flex flex-col items-center justify-center gap-4">
+   
+      <FloatingDock
+        items={links.map((link) => ({
+          ...link,
+          onClick: () => setActiveTab(link.title),
+        }))}
+      />
+
+      {/* Render selected component below */}
+      <div className="w-full  bg-[#08090A]  min-h-[85vh]">
+        {activeTab === "Summary" && <Summary/>}
+        {activeTab === "Chat" && <Chat/>}
+        {activeTab === "Quiz" && <div className="text-white">❓ Quiz Component here</div>}
+        {activeTab === "Flashcards" && <div className="text-white">🃏 Flashcards Component here</div>}
       </div>
-     
-    
+    </div>
   );
 }

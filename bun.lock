@@ -33,6 +33,7 @@
         "react": "19.1.0",
         "react-dom": "19.1.0",
         "react-element-to-jsx-string": "^17.0.1",
+        "react-spinner": "^0.2.7",
         "react-youtube": "^10.1.0",
         "srt-parser-2": "^1.2.3",
         "tailwind-merge": "^3.3.1",
@@ -1340,6 +1341,8 @@
     "react-is": ["react-is@16.13.1", "", {}, "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ=="],
 
     "react-reconciler": ["react-reconciler@0.31.0-rc-935180c7e0-20240524", "", { "dependencies": { "scheduler": "0.25.0-rc-935180c7e0-20240524" }, "peerDependencies": { "react": "19.0.0-rc-935180c7e0-20240524" } }, "sha512-qM2ilapJ/g050GdXEzy3SzbkGhw7Odda6Js6w/3sVBYcdbFYyfsJp5b/Y/o6v7hISAa2e1HNQ7sus/p4u8XD0Q=="],
+
+    "react-spinner": ["react-spinner@0.2.7", "", { "peerDependencies": { "react": ">=0.12.1" } }, "sha512-9bIDWGIumXpM7xcas/qpikRZp7AGP1uehgxwTTj/5DL6SwWHMTLfuioYgX7bdeMgOiVEMvOgLyXU3fYKQc16IA=="],
 
     "react-use-measure": ["react-use-measure@2.1.7", "", { "peerDependencies": { "react": ">=16.13", "react-dom": ">=16.13" }, "optionalPeers": ["react-dom"] }, "sha512-KrvcAo13I/60HpwGO5jpW7E9DfusKyLPLvuHlUyP5zqnmAPhNc6qTRjUQrdTADl0lpPpDVU2/Gg51UlOGHXbdg=="],
 

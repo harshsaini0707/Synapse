@@ -21,6 +21,7 @@
     "@supabase/supabase-js": "^2.56.1",
     "@tabler/icons-react": "^3.34.1",
     "@tailwindcss/line-clamp": "^0.4.4",
+    "@tanstack/react-query": "^5.89.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cobe": "^0.6.4",
@@ -48,7 +49,8 @@
     "three-globe": "^2.44.0",
     "youtube-transcript": "^1.2.1",
     "youtube-transcript-api": "^3.0.6",
-    "youtubei.js": "^15.0.1"
+    "youtubei.js": "^15.0.1",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@auth/drizzle-adapter": "^1.10.0",

@@ -37,7 +37,7 @@ const Home = () => {
     setVideoId(id as string);
 
     console.log(id);
-    //if(id) router.push(`/video/${id}`)
+    if(id) router.push(`/video/${id}`)
    
     
   }

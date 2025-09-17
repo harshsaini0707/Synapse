@@ -2,7 +2,7 @@ import {  NextRequest, NextResponse } from "next/server";
 import {YoutubeLoader}  from "@langchain/community/document_loaders/web/youtube"
 import play from "play-dl";
 import { db } from "@/lib";
-import {  videos } from "@/lib/db/schema";
+import {  videoChapters, videos } from "@/lib/db/schema";
 import { createEmbedding } from "@/lib/gemini-transript/embedding";
 import { hasChapterEmbeddingAndHighlights } from "@/lib/gemini-transript/hasChapters-gemini";
 import { summarizeNoChapters } from "@/lib/gemini-transript/noChapters-gemini";
@@ -11,8 +11,8 @@ export async function POST(req : NextRequest){
     try {
            
 
-            const viedoId  = "1tRTWwZ5DIc"
-
+           // const viedoId  = "1tRTWwZ5DIc"
+        const {videoId}  = await req.json();
         const userId = req.headers.get("x-user-id");
          if (!userId) {
       return NextResponse.json(
@@ -21,9 +21,9 @@ export async function POST(req : NextRequest){
       );
     }
 
-        const { ytUrl } = await req.json();
+        // const { ytUrl } = await req.json();
 
-      // const ytUrl =  "https://www.youtube.com/watch?v=1tRTWwZ5DIc&t=6s" as string
+      const ytUrl =  `https://www.youtube.com/watch?v=${videoId}` as string
         
         if(!ytUrl){
             return NextResponse.json(
@@ -33,12 +33,6 @@ export async function POST(req : NextRequest){
         }
          
 
-       if(!userId){
-        return NextResponse.json(
-            {message :"Unauthorized User"},
-            {status :  401}
-        )
-       }
        const user = await db.query.users.findFirst({
         where : (users , {eq} ) => eq(users.id , userId)
        })
@@ -54,7 +48,7 @@ export async function POST(req : NextRequest){
         {
             where : (videos , {eq , and}  ) =>
                 and(
-                    eq(videos.video_id ,  viedoId) , 
+                    eq(videos.video_id ,  videoId) , 
                     eq(videos.embedding_done , true)
                 ),
         }
@@ -63,7 +57,16 @@ export async function POST(req : NextRequest){
 
        if(alreadyHaveViedo){
         console.log('Aleady have data');
-        return;
+
+        const chapters = await db.query.videoChapters.findMany({
+            where : (videoChapters , {eq}) =>(
+                eq(videoChapters.video_id , videoId)
+            )
+        })
+        return NextResponse.json({
+            data : alreadyHaveViedo ,
+            chapters : chapters
+        })
        }
        
 
@@ -80,7 +83,7 @@ export async function POST(req : NextRequest){
 
           const enterDataInVideoTable = await db.insert(videos).values({
                 user_id : userId ,
-                video_id : viedoId,
+                video_id : videoId,
                 title : details?.title ?? "No Title",
                 thumbnail : details?.thumbnails.at(-1)?.url ?? "",
                 duration : details?.durationRaw ?? "",
@@ -90,7 +93,7 @@ export async function POST(req : NextRequest){
         ).returning();
 
         //embedding
-       await  createEmbedding(transcriptText , viedoId);
+       await  createEmbedding(transcriptText , videoId);
 
 
    
@@ -111,10 +114,10 @@ const chapaters = details.chapters?.map((c)=> ({
 
 if(chapaters.length > 0 ){
     
-await hasChapterEmbeddingAndHighlights(chapaters , viedoId);
+await hasChapterEmbeddingAndHighlights(chapaters , videoId);
 
 }else{
-  await summarizeNoChapters(transcriptText , details?.durationRaw ,  viedoId);
+  await summarizeNoChapters(transcriptText , details?.durationRaw ,  videoId);
     
 }
 

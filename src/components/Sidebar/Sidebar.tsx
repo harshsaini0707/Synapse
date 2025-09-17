@@ -8,11 +8,13 @@ import {
   IconUserBolt,
 } from "@tabler/icons-react";
 import { motion } from "motion/react";
-import { useSession } from "next-auth/react";
+
 import Image from "next/image";
+import { useUserStore } from "@/store/userStore";
 
 export function SidebarDemo() {
-  const { data: session } = useSession();
+
+  const user = useUserStore((state) => state.user)
   const [open, setOpen] = useState(false);
 
   const links = [
@@ -39,11 +41,11 @@ export function SidebarDemo() {
         <div>
           <SidebarLink
             link={{
-              label: `${session?.user?.name || "Guest"}`,
+              label: `${user?.name || " "}`,
               href: "#",
               icon: (
                 <Image
-                  src={session?.user?.image || "/default-avatar.png"}
+                  src={user?.image || "/default-avatar.png"}
                   alt="Avatar"
                   width={28}
                   height={28}

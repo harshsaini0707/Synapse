@@ -27,7 +27,7 @@ export const HoverEffect = ({
     >
       {items.map((item, idx) => (
         <Link
-          href={`/learn/${item.id}`} // <-- sends ID to learn page
+          href={`/video/${item.id}`} // <-- sends ID to learn page
           key={item.id}
           className="relative group block h-full w-full border-2 shadow-7xl border-gray-900 rounded-md overflow-hidden hover:scale-102 hover:border-gray-800 transition-transform duration-220"
           onMouseEnter={() => setHoveredIndex(idx)}

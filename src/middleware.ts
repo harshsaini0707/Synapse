@@ -18,7 +18,7 @@ export default withAuth(
     }
 
     if (!token) {
-      return NextResponse.redirect(new URL("/signin", req.url));
+      return NextResponse.redirect(new URL("/", req.url));
     }
 
     const response = NextResponse.next();

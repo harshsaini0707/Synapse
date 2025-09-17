@@ -4,9 +4,43 @@ import { HoverBorderGradientDemo } from '@/components/AIButton/Button';
 import React, { useState } from 'react';
 import { Link as LinkIcon, Send ,History  } from 'lucide-react';
 import { CardHoverEffectDemo } from '@/components/HistoryCards/Historycars';
+import { useRouter } from 'next/navigation';
+
+const getVideoIdFromUrl = (url : string) : string | null => {
+try {
+  const parsedUrl = new URL(url);
+
+   // Case 1: Standard link https://www.youtube.com/watch?v=abcd1234
+    if (parsedUrl.hostname.includes("youtube.com")) {
+      return parsedUrl.searchParams.get("v");
+    }
+  
+     // Case 2: Short link https://youtu.be/abcd1234
+    if (parsedUrl.hostname === "youtu.be") {
+      return parsedUrl.pathname.slice(1); // remove leading "/"
+    }
+
+    return null;
+} catch (error) {
+  return null;
+}
+} 
 
 const Home = () => {
-  const [query , setQuery ] =  useState("")
+  const router = useRouter();
+  const [link , setLink ] =  useState("")
+  const [videoId ,  setVideoId] = useState("")
+
+
+  const handleExtract = () =>{
+    const id  = getVideoIdFromUrl(link);
+    setVideoId(id as string);
+
+    console.log(id);
+    //if(id) router.push(`/video/${id}`)
+   
+    
+  }
   return (
     <div className="min-h-screen w-full relative">
       {/* Emerald Void Background */}
@@ -37,17 +71,18 @@ const Home = () => {
   <LinkIcon className="text-gray-400 w-6 h-6" />
   <input
     type="text"
-    value={query}
-    onChange={(e) => setQuery(e.target.value)}
+    value={link}
+    onChange={(e) => setLink(e.target.value)}
     placeholder="Paste YouTube link here and start learning..."
     className="flex-1 bg-transparent outline-none text-blue-400 px-2"
   />
   <button
      type='button'
      title='query'
-    disabled={query.trim() === ''}
+    disabled={link.trim() === ''}
+    onClick={handleExtract}
     className={`p-2 rounded-md transition-all duration-200 ${
-      query.trim() === ''
+      link.trim() === ''
         ? 'bg-transparent text-white cursor-not-allowed'
         : 'bg-gray-300 text-black hover:bg-gray-400 hover:cursor-pointer active:scale-95'
     }`}

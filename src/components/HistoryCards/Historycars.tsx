@@ -20,32 +20,32 @@ export const projects = [
     image: "https://i.ytimg.com/vi/Gfr50f6ZBvo/maxresdefault.jpg",
   },
    {
-    id: "1tRTWwZ5DIc",
+    id: "1tRTdtdvWwZ5DIc",
     title: "The INSANE Rise of NVIDIA: From Bankruptcy to $4 Trillion? | Business case study @NVIDIA",
     image: "https://i.ytimg.com/vi/1tRTWwZ5DIc/maxresdefault.jpg",
   },
   {
-    id: "abcd1234",
+    id: "abyaguhcd1234",
     title: "Demis Hassabis: DeepMind - AI, Superintelligence & the Future of Humanity | Lex Fridman Podcast #299",
     image: "https://i.ytimg.com/vi/Gfr50f6ZBvo/maxresdefault.jpg",
   },
    {
-    id: "1tRTWwZ5DIc",
+    id: "1cvaybtRTWwZ5DIc",
     title: "The INSANE Rise of NVIDIA: From Bankruptcy to $4 Trillion? | Business case study @NVIDIA",
     image: "https://i.ytimg.com/vi/1tRTWwZ5DIc/maxresdefault.jpg",
   },
   {
-    id: "abcd1234",
+    id: "abcd1xxvay234",
     title: "Demis Hassabis: DeepMind - AI, Superintelligence & the Future of Humanity | Lex Fridman Podcast #299",
     image: "https://i.ytimg.com/vi/Gfr50f6ZBvo/maxresdefault.jpg",
   },
    {
-    id: "1tRTWwZ5DIc",
+    id: "1tRTWxvyuhijokwZ5DIc",
     title: "The INSANE Rise of NVIDIA: From Bankruptcy to $4 Trillion? | Business case study @NVIDIA",
     image: "https://i.ytimg.com/vi/1tRTWwZ5DIc/maxresdefault.jpg",
   },
   {
-    id: "abcd1234",
+    id: "abcayuijkd1234",
     title: "Demis Hassabis: DeepMind - AI, Superintelligence & the Future of Humanity | Lex Fridman Podcast #299",
     image: "https://i.ytimg.com/vi/Gfr50f6ZBvo/maxresdefault.jpg",
   },

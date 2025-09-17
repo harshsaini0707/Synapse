@@ -2,8 +2,15 @@ import React, { useState } from 'react'
 import { Brain, Send } from 'lucide-react';
 import { CardSpotlightDemo } from '../Chatcard/Chatcard';
 import { LoaderFiveDemo } from '../Loader/Loader';
+import { useSession } from 'next-auth/react';
+import { useUserStore } from '@/store/userStore';
 
 const Chat = () => {
+  const {data : session} =  useSession();
+  const username =  useUserStore((state) => state.user?.name)
+ 
+  console.log(session?.user);
+  
   const [query , setQuery]  = useState("")
   return (
     <div className='flex flex-col gap-10 items-center justify-center '>
@@ -21,7 +28,7 @@ const Chat = () => {
                   
                  </div>
             <div className='flex flex-col gap-2 items-center justify-center'>
-                <h1 className='poppins-bold  text-3xl text-green-600'>Hello,Rohit</h1>
+                <h1 className='poppins-bold  text-3xl text-green-600'>{`Hello, ${username || " "}`}</h1>
                 <h1 className='text-gray-300 text-md'>Ask me Anything about this video ans clear your all doubts...</h1>
             </div>
         </div>

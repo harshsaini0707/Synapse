@@ -122,6 +122,14 @@ await hasChapterEmbeddingAndHighlights(chapaters , videoId);
 }
 
        
+const finalChapters = await db.query.videoChapters.findMany({
+    where : (videoChapters , {eq}) => eq(videoChapters.video_id ,  videoId)
+})
+
+return NextResponse.json({
+    videoInfo : enterDataInVideoTable ,
+    chapters : finalChapters
+})
   
           
     } catch (error) {

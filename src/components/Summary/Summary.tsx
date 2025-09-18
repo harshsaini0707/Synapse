@@ -1,8 +1,12 @@
 import { Brain, NotebookTabs } from 'lucide-react'
 import React from 'react'
 import { LoaderThreeDemo } from '../Loadertunder/Loadertunder'
+import { useVideoStore } from '@/store/videoStore'
 
 const Summary = () => {
+  const videoId =  useVideoStore((state)=>state.videoId);
+
+  
   return (
     <div className="flex flex-col justify-center items-center gap-38 ">
   

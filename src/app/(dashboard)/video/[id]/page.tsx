@@ -4,7 +4,8 @@ import { FloatingDockDemo } from "@/components/Floatingdock/Floatingdock";
 import { useFetchChapters } from "@/hooks/fetchChapater";
 import YouTube, { YouTubeProps } from "react-youtube";
 import { Clock } from "lucide-react";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
+import { useVideoStore } from "@/store/videoStore";
 
 
 type Chapters = {
@@ -21,6 +22,12 @@ video_id : string
 export default function VideoPage({ params }: { params: { id: string } }) {
   // unwrap params using React.use()
       const { id } = params;
+
+      const setVideoId =  useVideoStore((state)=>state.setVideoId);
+  
+      useEffect(()=>{
+        setVideoId(id)
+      },[id ,setVideoId])
   
       const {isLoading ,  isError , data} = useFetchChapters(id);
 

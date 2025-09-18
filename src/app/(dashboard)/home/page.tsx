@@ -29,12 +29,12 @@ try {
 const Home = () => {
   const router = useRouter();
   const [link , setLink ] =  useState("")
-  const [videoId ,  setVideoId] = useState("")
+ // const [videoId ,  setVideoId] = useState("")
 
 
   const handleExtract = () =>{
     const id  = getVideoIdFromUrl(link);
-    setVideoId(id as string);
+  //  setVideoId(id as string);
 
     console.log(id);
     if(id) router.push(`/video/${id}`)

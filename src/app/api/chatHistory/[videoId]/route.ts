@@ -22,7 +22,7 @@ export async function GET(req:  NextRequest ,
                 {status :  401}
             )
         }
-        const videoId = params.videoId;
+        const videoId = await  params.videoId;
         if(!videoId){
             return NextResponse.json(
                 {message : "Video Id required!!"},

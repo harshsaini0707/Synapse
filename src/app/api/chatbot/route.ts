@@ -2,7 +2,7 @@ import { db } from "@/lib";
 import { chatHistory, transcriptChunks } from "@/lib/db/schema";
 import { TaskType } from "@google/generative-ai";
 import { ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
-import { sql } from "drizzle-orm";
+import { desc, sql } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -51,6 +51,20 @@ export async function POST(req: NextRequest) {
 
     const context = topChunks.map((ch) => ch.content).join("\n");
 
+    //previous chat
+    const previousChat = await db.select({
+      question :  chatHistory.question,
+      answer : chatHistory.answer
+    })
+    .from(chatHistory)
+    .where(sql `user_id = ${userId} AND video_id = ${videoId}`)
+    .orderBy(desc(chatHistory.created_at))
+    .limit(5);
+
+    const memoryContext = previousChat.map((c)=> `User : ${c.question}\n AI:${c.answer}`)
+    .reverse()
+    .join("\n\n")
+
     //  LLM call
     const llm = new ChatGoogleGenerativeAI({
       model: "gemini-2.5-flash-lite",
@@ -67,6 +81,10 @@ You are an advanced AI assistant developed by Harsh Saini at Synapse, designed t
 Your entire knowledge comes ONLY from the provided "Context from video transcript."  
 You must follow these strict rules:
 
+Knowledge comes ONLY from:
+- Transcript context
+- Previous chat history
+
 1. **Strictly Adhere to Context**  
    - Answer the user's question using ONLY the given transcript context.  
    - Do not use outside knowledge or assumptions.  
@@ -79,7 +97,8 @@ You must follow these strict rules:
    - Provide clear, helpful, and structured answers that guide the user through the video’s content.  
 
 4. **Answer Only**  
-   - Do not greet, introduce yourself, or add filler.  
+   - Do not greet, introduce yourself, or add filler. 
+   - Answer using ONLY transcript + memory context. 
    - Output must be the pure answer only.  
 
 5. **Expand When Too Short**  
@@ -96,6 +115,9 @@ Remember: Never hallucinate. Never go beyond the transcript context.
     role: "user",
     content: `Context from video transcript:
 ${context}
+
+Previous Chat History:
+${memoryContext || "No previous chat history."}
 
 User Question: ${query}`,
   },

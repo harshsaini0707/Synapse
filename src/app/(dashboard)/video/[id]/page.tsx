@@ -7,36 +7,30 @@ import { Clock } from "lucide-react";
 import React, { useEffect, useRef } from "react";
 import { useVideoStore } from "@/store/videoStore";
 
-
 type Chapters = {
-  created_at :  string , 
-  description :  string,
-  id :  string,
-timestamp : string
-title : string
-updated_at : string | null
-video_id : string
-  
-}
+  created_at: string;
+  description: string;
+  id: string;
+  timestamp: string;
+  title: string;
+  updated_at: string | null;
+  video_id: string;
+};
 
 export default function VideoPage({ params }: { params: { id: string } }) {
-  // unwrap params using React.use()
-      const { id } = params;
+  // unwrap params
+  const { id } = params;
 
-      const setVideoId =  useVideoStore((state)=>state.setVideoId);
-  
-      useEffect(()=>{
-        setVideoId(id)
-      },[id ,setVideoId])
-  
-      const {isLoading ,  isError , data} = useFetchChapters(id);
+  const setVideoId = useVideoStore((state) => state.setVideoId);
 
-      console.log(data);
-      if(isLoading) console.log("load ho raha hai!!");
+  useEffect(() => {
+    setVideoId(id);
+  }, [id, setVideoId]);
 
-      const ytlink = `https://www.youtube.com/embed/${id}`;
+  const { isLoading, isError, data } = useFetchChapters(id);
 
-  
+  if (isLoading) console.log("load ho raha hai!!");
+
   const playerRef = useRef<any>(null);
 
   // Convert timestamp string "hh:mm:ss" or "mm:ss" to seconds
@@ -70,74 +64,72 @@ export default function VideoPage({ params }: { params: { id: string } }) {
   };
 
   return (
-    <div className="flex min-h-screen fixed bg-[#09090B] text-white border border-gray-800">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-[#09090B] text-white border border-gray-800 fixed">
       {/* Left: Video + Transcript */}
-      <div className="w-[45%] flex-1 pt-4 px-4 ">
+      <div className="w-full lg:w-[45%] flex-1 pt-4 px-4">
         {/* YouTube Embed */}
-       <YouTube
-          videoId={id}
-          opts={opts}
-          ref={playerRef}
-        />
-    
+        <YouTube videoId={id} opts={opts} ref={playerRef} />
 
         {/* Highlights Section */}
-        <div className=" my-2 border-1 border-gray-800 bg-[#18181A] rounded-md">
-          <div className="flex m-0.5 p-0.5 rounded-sm items-center  justify-center gap-2 max-fit-full  bg-[radial-gradient(circle_at_50%_42%,#04170bb5,#000000)]  ">
-            <Clock size={12} /><span className="text-sm">Highlights {data?  `(${data?.length})` : " "}</span>
+        <div className="my-2 border border-gray-800 bg-[#18181A] rounded-md">
+          <div className="flex m-0.5 p-0.5 rounded-sm items-center justify-center gap-2 bg-[radial-gradient(circle_at_50%_42%,#04170bb5,#000000)]">
+            <Clock size={12} />
+            <span className="text-sm">
+              Highlights {data ? `(${data?.length})` : " "}
+            </span>
           </div>
         </div>
-        <div className="flex max-h-[42vh] overflow-y-scroll flex-col gap-1 border-1 rounded-sm border-gray-800 bg-[radial-gradient(circle_at_0%_0%,#04170b9c,#000000)] " 
-             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-
-          {
-            data?.map((item : Chapters , index : number)=>(
-              <div 
+        <div
+          className="flex max-h-[42vh] overflow-y-auto flex-col gap-1 border rounded-sm border-gray-800 bg-[radial-gradient(circle_at_0%_0%,#04170b9c,#000000)]"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+          {data?.map((item: Chapters, index: number) => (
+            <div
               key={item.id}
               onClick={() => onCardClick(item.timestamp)}
-
-              className="flex gap-1 flex-col cursor-pointer border-1 border-gray-900 p-4 m-2 rounded-md">
-                <div className="flex gap-2 cursor-pointer items-center">
-                  <h1 className="border-1 border-gray-800  bg-gray-800  py-1 px-2 font-bold rounded-sm text-sm ">{index +1}.</h1>
-                { item?.timestamp ? <h1 className="border-1 border-gray-800  bg-gray-800  py-1 px-2 rounded-sm text-sm">{item?.timestamp}</h1> :<h1 className="poppins-bold mt-1 text-md">{item?.title}</h1> }
-                </div>
-                 {
-                  item?.timestamp &&
-                   <div>
-                  
+              className="flex gap-1 flex-col cursor-pointer border border-gray-900 p-4 m-2 rounded-md"
+            >
+              <div className="flex gap-2 cursor-pointer items-center">
+                <h1 className="border border-gray-800 bg-gray-800 py-1 px-2 font-bold rounded-sm text-sm">
+                  {index + 1}.
+                </h1>
+                {item?.timestamp ? (
+                  <h1 className="border border-gray-800 bg-gray-800 py-1 px-2 rounded-sm text-sm">
+                    {item?.timestamp}
+                  </h1>
+                ) : (
+                  <h1 className="poppins-bold mt-1 text-md">{item?.title}</h1>
+                )}
+              </div>
+              {item?.timestamp && (
+                <div>
                   <h1 className="poppins-bold">{item?.title}</h1>
                 </div>
-                 }
-                <div>
-                  <h1 className="text-gray-400 poppins-regular text-sm">{item?.description}</h1>
+              )}
+              <div>
+                <h1 className="text-gray-400 poppins-regular text-sm">
+                  {item?.description}
+                </h1>
 
-
-{item?.timestamp &&
-                   <h1 className="flex items-center text-gray-400 mt-3">
-  <span className="flex-grow border-t border-gray-700"></span>
-  <span className="px-2 text-sm font-mono bg-transparent">Play this part</span>
-  <span className="flex-grow border-t border-gray-700"></span>
-</h1>
-}
-
-                </div>
-
-
+                {item?.timestamp && (
+                  <h1 className="flex items-center text-gray-400 mt-3">
+                    <span className="flex-grow border-t border-gray-700"></span>
+                    <span className="px-2 text-sm font-mono bg-transparent">
+                      Play this part
+                    </span>
+                    <span className="flex-grow border-t border-gray-700"></span>
+                  </h1>
+                )}
               </div>
-            ))
-          }
-
+            </div>
+          ))}
         </div>
       </div>
 
       {/* Right: Features */}
-     <div className="w-[55%] flex pt-2 flex-col ">
-  <FloatingDockDemo />  {/* occupies top 20% */}
-  <div>
-    
-  </div>
-</div>
-
+      <div className="w-full lg:w-[55%] flex pt-2 flex-col">
+        <FloatingDockDemo />
+      </div>
     </div>
   );
 }

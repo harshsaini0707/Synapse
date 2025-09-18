@@ -1,61 +1,177 @@
-import React, { useState } from 'react'
-import { Brain, Send } from 'lucide-react';
-import { CardSpotlightDemo } from '../Chatcard/Chatcard';
-import { LoaderFiveDemo } from '../Loader/Loader';
-import { useUserStore } from '@/store/userStore';
-import Homechat from '../Chatcard/homeChat';
-import { useChatHistory } from '@/hooks/chatHistory';
-import { useQueryClient } from '@tanstack/react-query';
-
+"use client";
+import React, { useState, useRef, useEffect } from "react";
+import { Send, User, Bot } from "lucide-react";
+import { useUserStore } from "@/store/userStore";
+import { useVideoStore } from "@/store/videoStore";
+import Homechat from "../Chatcard/homeChat";
+import { useChatHistory } from "@/hooks/chatHistory";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
 type Chat = {
-  
-answer :  string,
-created_at : string,
-id: string,
-question : string
-}
-const Chat = () => {
+  answer: string;
+  created_at: string;
+  id: string;
+  question: string;
+};
 
-
-  const {isLoading , isError , data}  =  useChatHistory();
-
-  const [query , setQuery]  = useState("")
-  return (
-   <div>
-  {(!data || data.length == 0) &&   <Homechat/>}
-
-  <div>
-      {data?.map((ele : Chat)=>(
-        <div>
-          <h1>You =----- {ele?.question}</h1>
-          <h2>AI: {ele?.answer}</h2>
-        </div>
-      ))}
+// Skeleton Loader Component
+const ChatSkeleton = () => (
+  <div className="space-y-4 animate-pulse p-4">
+    <div className="flex items-center justify-end">
+      <div className="w-2/3 h-12 bg-gray-700 rounded-2xl"></div>
+    </div>
+    <div className="flex items-center justify-start">
+      <div className="w-3/4 h-16 bg-gray-800 rounded-2xl"></div>
+    </div>
   </div>
-      <div className='flex items-center w-full max-w-4xl p-2 rounded-4xl border border-gray-800 bg-[#121010] shadow-sm'>
+);
+
+const Chat = () => {
+  const userId = useUserStore((state) => state.user?.id);
+  const videoId = useVideoStore((state) => state.videoId);
+
+  const { isLoading, isError, data } = useChatHistory();
+  const queryClient = useQueryClient();
+
+  const [query, setQuery] = useState("");
+
+  // scroll ref
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [data, isLoading, isError]);
+
+  const askQuestion = useMutation({
+    mutationFn: async (question: string) => {
+      const res = await axios.post(
+        "/api/chatbot",
+        { query: question, videoId },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-user-id": userId,
+          },
+        }
+      );
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["chatHistory"] });
+      setTimeout(scrollToBottom, 100);
+    },
+  });
+
+  const handleSend = () => {
+    const trimmedQuery = query.trim();
+    if (!trimmedQuery) return;
+    askQuestion.mutate(trimmedQuery);
+    setQuery("");
+    setTimeout(scrollToBottom, 50);
+  };
+
+  return (
+    <div className="relative flex flex-col w-full h-full">
+      {/* Chat Window */}
+      <div className="flex-grow w-full max-w-4xl mx-auto overflow-y-auto space-y-4 pr-2 pb-24">
+        {isLoading && <ChatSkeleton />}
+
+        {isError && !isLoading && (
+          <div className="text-red-400 text-center p-4">
+            Failed to load chat history.
+          </div>
+        )}
+
+        {(!data || data.length === 0) &&
+          !askQuestion.isPending &&
+          !isLoading &&
+          !isError && <Homechat />}
+
+        {!isLoading &&
+          !isError &&
+          data?.map((ele: Chat) => (
+            <div key={ele.id} className="space-y-4">
+              {/* User Message */}
+              <div className="flex justify-end">
+                <div className="max-w-[80%] md:max-w-[70%] p-3 rounded-2xl rounded-br-lg bg-blue-600 text-white shadow-lg">
+                  <div className="flex items-start gap-2.5">
+                    <p className="break-words">{ele.question}</p>
+                    <User className="h-4 w-4 mt-1 flex-shrink-0" />
+                  </div>
+                </div>
+              </div>
+              {/* AI Message */}
+              <div className="flex justify-start">
+                <div className="max-w-[80%] md:max-w-[70%] p-3 rounded-2xl rounded-bl-lg bg-gray-800 text-white shadow-lg">
+                  <div className="flex items-start gap-2.5">
+                    <Bot className="h-5 w-5 mt-0.5 text-green-400 flex-shrink-0" />
+                    <p className="break-words">{ele.answer}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+
+        {askQuestion.isPending && (
+          <div className="space-y-4">
+            {/* User Message */}
+            <div className="flex justify-end">
+              <div className="max-w-[80%] md:max-w-[70%] p-3 rounded-2xl rounded-br-lg bg-blue-600 text-white shadow-lg">
+                <div className="flex items-start gap-2.5">
+                  <p className="break-words">{askQuestion.variables}</p>
+                  <User className="h-4 w-4 mt-1 flex-shrink-0" />
+                </div>
+              </div>
+            </div>
+            {/* AI Loading */}
+            <div className="flex justify-start">
+              <div className="max-w-lg p-3 rounded-2xl rounded-bl-lg bg-gray-800 text-white shadow-lg flex items-center gap-2">
+                <Bot className="h-5 w-5 text-green-400" />
+                <span className="animate-pulse text-gray-300">
+                  Thinking...
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* auto-scroll anchor */}
+        <div ref={messagesEndRef} />
+      </div>
+
+      {/* Floating Input */}
+      <div className="sticky bottom-0 left-0 right-0 bg-[#09090B] p-2">
+        <div className="flex items-center w-full max-w-4xl mx-auto p-2 rounded-2xl border border-gray-700 bg-[#121010] shadow-md">
           <input
             type="text"
             value={query}
-            onChange={(e)=>setQuery(e.target.value)}
-            className='flex-grow bg-transparent outline-none px-3 placeholder-gray-400'
-            placeholder='Ask and learn anything...'
+            onChange={(e) => setQuery(e.target.value)}
+            className="flex-grow bg-transparent outline-none px-3 placeholder-gray-500 text-white"
+            placeholder="Ask and learn anything..."
+            onKeyDown={(e) =>
+              e.key === "Enter" &&
+              !e.shiftKey &&
+              (e.preventDefault(), handleSend())
+            }
+            disabled={askQuestion.isPending}
           />
-          <button 
-          
-          title='ask question'
-          disabled={query.trim() === ''}
-          className={`p-2  ${
-            query.trim() === '' ? `bg-transparent ` :
-            `bg-white text-black rounded-xl `
-          } `}>
-             <Send className='h-5 w-5' />
+          <button
+            title="query"
+            onClick={handleSend}
+            disabled={!query.trim() || askQuestion.isPending}
+            className="p-2 ml-2 flex-shrink-0 rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed enabled:bg-white enabled:text-black enabled:hover:bg-gray-200"
+          >
+            <Send className="h-5 w-5" />
           </button>
         </div>
+      </div>
+    </div>
+  );
+};
 
-   </div>
-
-  )
-}
-
-export default Chat
+export default Chat;

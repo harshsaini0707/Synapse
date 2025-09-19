@@ -3,7 +3,6 @@ import { chatHistory } from "@/lib/db/schema";
 import { and, eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
-
 type  Params = {
     params :{
         videoId : string;

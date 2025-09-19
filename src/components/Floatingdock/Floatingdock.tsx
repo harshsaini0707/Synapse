@@ -43,7 +43,6 @@ export function FloatingDockDemo() {
 
   return (
     <div className="flex flex-col items-center justify-center gap-4">
-   
       <FloatingDock
         items={links.map((link) => ({
           ...link,
@@ -51,12 +50,17 @@ export function FloatingDockDemo() {
         }))}
       />
 
-      {/* Render selected component below */}
-      <div className="w-full  bg-[#08090A]  min-h-[85vh]">
-        {activeTab === "Summary" && <Summary/>}
-        {activeTab === "Chat" && <Chat/>}
-        {activeTab === "Quiz" && <Quiz/>}
-        {activeTab === "Flashcards" && <div className="text-white">🃏 Flashcards Component here</div>}
+      {/* ONLY CHANGE: Added h-full to container */}
+      <div className="
+        w-full bg-[#08090A] h-full
+        min-h-[40vh] md:min-h-[85vh]
+      ">
+        {activeTab === "Summary" && <Summary />}
+        {activeTab === "Chat" && <Chat />}
+        {activeTab === "Quiz" && <Quiz />}
+        {activeTab === "Flashcards" && (
+          <div className="text-white p-4">🃏 Flashcards Component here</div>
+        )}
       </div>
     </div>
   );

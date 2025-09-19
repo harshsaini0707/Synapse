@@ -64,7 +64,8 @@ export default function VideoPage({ params }: { params: { id: string } }) {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen bg-[#09090B] text-white border border-gray-800 fixed">
+    // ONLY CHANGE: Removed 'fixed' from className
+    <div className="flex flex-col lg:flex-row min-h-screen bg-[#09090B] text-white border border-gray-800">
       {/* Left: Video + Transcript */}
       <div className="w-full lg:w-[45%] flex-1 pt-4 px-4">
         {/* YouTube Embed */}
@@ -79,10 +80,8 @@ export default function VideoPage({ params }: { params: { id: string } }) {
             </span>
           </div>
         </div>
-        <div
-          className="flex max-h-[42vh] overflow-y-auto flex-col gap-1 border rounded-sm border-gray-800 bg-[radial-gradient(circle_at_0%_0%,#04170b9c,#000000)]"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-        >
+
+        <div className="flex max-h-[42vh] scrollable-container overflow-y-auto flex-col gap-1 border rounded-sm border-gray-800 bg-[radial-gradient(circle_at_0%_0%,#04170b9c,#000000)]">
           {data?.map((item: Chapters, index: number) => (
             <div
               key={item.id}

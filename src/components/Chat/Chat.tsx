@@ -76,9 +76,13 @@ const Chat = () => {
   };
 
   return (
-    <div className="relative flex flex-col w-full h-full">
+    // ONLY CHANGES: Added h-full and flex flex-col, made input area absolute
+    <div className="relative h-full flex flex-col">
       {/* Chat Window */}
-      <div className="flex-grow w-full max-w-4xl mx-auto overflow-y-auto space-y-4 pr-2 pb-24">
+      <div className="
+        flex-1 w-full max-w-4xl mx-auto space-y-4 pr-2 pb-24
+        overflow-y-auto
+      ">
         {isLoading && <ChatSkeleton />}
 
         {isError && !isLoading && (
@@ -144,8 +148,8 @@ const Chat = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Floating Input */}
-      <div className="sticky bottom-0 left-0 right-0 bg-[#09090B] p-2">
+      {/* Floating Input - CHANGED: Made it absolute positioned */}
+      <div className="absolute bottom-0 left-0 right-0 bg-[#09090B] p-2 border-t border-gray-700">
         <div className="flex items-center w-full max-w-4xl mx-auto p-2 rounded-2xl border border-gray-700 bg-[#121010] shadow-md">
           <input
             type="text"

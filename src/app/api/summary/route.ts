@@ -68,23 +68,43 @@ export async function POST(req: NextRequest) {
 
     const chunks = await splitter.splitText(video.transcript);
 
-    // summarize chunks in parallel
-    const chunkSummaries: string[] = await Promise.all(
-      chunks.map(async (ch) => {
-        const res = await llm.invoke([
-          { role: "system", content: `You summarize transcript chunks concisely.` },
-          { role: "user", content: `Summarize this transcript chunk in 4–5 sentences:\n\n${ch}` },
-        ]);
+    // summarize chunks in parallel -> due ti limit 
+    // const chunkSummaries: string[] = await Promise.all(
+    //   chunks.map(async (ch) => {
+    //     const res = await llm.invoke([
+    //       { role: "system", content: `You summarize transcript chunks concisely.` },
+    //       { role: "user", content: `Summarize this transcript chunk in 4–5 sentences:\n\n${ch}` },
+    //     ]);
 
-        if (typeof res.content === "string") {
-          return res.content;
-        } else {
-          return (res.content as Array<{ type: string; text: string }>)
-            .map((c) => (c.type === "text" ? c.text : ""))
-            .join("\n");
-        }
-      })
-    );
+    //     if (typeof res.content === "string") {
+    //       return res.content;
+    //     } else {
+    //       return (res.content as Array<{ type: string; text: string }>)
+    //         .map((c) => (c.type === "text" ? c.text : ""))
+    //         .join("\n");
+    //     }
+    //   })
+    // );
+
+    const chunkSummaries: string[] = [];
+for (const ch of chunks) {
+  const res = await llm.invoke([
+    { role: "system", content: `You summarize transcript chunks concisely.` },
+    { role: "user", content: `Summarize this transcript chunk in 4–5 sentences:\n\n${ch}` },
+  ]);
+
+  let text = "";
+  if (typeof res.content === "string") {
+    text = res.content;
+  } else {
+    text = (res.content as Array<{ type: string; text: string }>)
+      .map((c) => (c.type === "text" ? c.text : ""))
+      .join("\n");
+  }
+  chunkSummaries.push(text);
+
+}
+
 
     // combine summaries
     const combinedSummary: string = chunkSummaries.join(" ");
@@ -94,18 +114,18 @@ export async function POST(req: NextRequest) {
         ? `🎯 You are an expert content summarizer. Generate a **detailed, engaging summary** of this YouTube video. 
 Format it in a way that's visually appealing and easy to read:
 1. Use **headers and subheaders** with emojis (## 📖 Topic Name).
-2. Break content into **7–8 key bullet points**.
-3. For each key point, write **3–5 sentences** with important keywords in **bold**.
+2. Break content into **9–10 key bullet points**.
+3. For each key point, write **6–7 sentences** with important keywords in **bold**.
 4. Add relevant emojis 🔑✨🚀 to make it fun.
 5. After each section, add a 📌 **Tip** or 💡 **Note**.
 6. Make it look like a friendly ChatGPT-style answer.`
         : `⚡ You are an expert content summarizer. Generate a **quick, engaging summary** of this YouTube video. 
 Format it in a way that's visually appealing:
 1. Use **headers/subheaders** with emojis (### 🎬 Main Idea).
-2. Include **3–4 main points** only.
-3. For each point, write **2–3 sentences** with bold highlights for key words.
+2. Include **4–5 main points** only.
+3. For each point, write **3–4 sentences** with bold highlights for key words.
 4. Use emojis 🎯🔥🌱 to keep it engaging.
-5. Keep the total length within **8–9 lines per subheader**.`;
+5. Keep the total length within **9–10 lines per subheader**.`;
 
 
     // final summary generation

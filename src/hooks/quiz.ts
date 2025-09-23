@@ -1,16 +1,19 @@
 import { useUserStore } from "@/store/userStore";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import axios from "axios";
 
 
 
-const getQuizs =  async (videoId : string , difficulty :string , userId?: string ) =>{
-   
-     if (!userId) throw new Error("User not logged in");
+const getQuizs =  async (video_id : string ,difficulty :string ) =>{
+     const userId = useUserStore.getState().user?.id; 
+  if (!userId) throw new Error("User not logged in");
+
     try {
 
-        const response =  await axios.post("/api/quiz",{
-            videoId,
+        console.log("   "+difficulty);
+        
+
+        const response =  await axios.post(`/api/quiz/${video_id}`,{
             difficulty
         },{
             headers:{
@@ -19,32 +22,38 @@ const getQuizs =  async (videoId : string , difficulty :string , userId?: string
             }
         })
         
-        console.log(response.data);
+       // console.log(response.data);
         return response.data
         
     } catch (error) {
         console.log("Error while requesting for quiz!!" , error);
-        
+          throw error;
     }
 }
 
-export function useQuiz(videoId : string  | null,  difficulty :"quick" | "detailed"){
-      const userId = useUserStore((state)=>state.user?.id);
-   
+export function useQuiz( video_id: string | null , difficulty :"easy" | "hard" | undefined,
+     options?: Omit<UseQueryOptions<any>, "queryKey" | "queryFn"> //allow everything from UseQueryOptions, except queryKey and queryFn.(already defined)
+){
     
-    if(!videoId || !difficulty){
-        throw new Error ("Required Data is missing !!");
-    }
+   if ( !difficulty) {
+  return useQuery({
+    queryKey: ["quiz", "disabled"],
+    queryFn: async () => null,
+    enabled: false,
+  });
+}
+
 
 
     return useQuery({
-        queryKey : ["quiz" ,  videoId ,  difficulty],
-        queryFn:()=>getQuizs(videoId , difficulty , userId),
-        enabled : !!videoId && !!difficulty ,
-         staleTime: Infinity, 
-       gcTime: Infinity,
-       retry:  100,
-       
+        queryKey : ["quiz" ,  difficulty],
+        queryFn: () => getQuizs(video_id! ,difficulty!), // only called if enabled
+        enabled: !!difficulty && (options?.enabled ?? false),
+        staleTime: Infinity, 
+        gcTime: Infinity,
+        retry:  100,
+      
+        ...options
 
     })
 }

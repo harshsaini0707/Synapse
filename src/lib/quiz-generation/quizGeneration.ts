@@ -42,8 +42,8 @@ export async function generateQuizFromTranscript(video_id : string  ,   difficul
         }
 
         const allQuestion : QuizQuestionType[] = [];
-        const windowSize = 3;
-        const step =2;
+        const windowSize = 10;
+        const step =8;
 
         for(let i = 0 ; i<chunks.length ; i+=step){
             const windowChunks = chunks.slice(i ,  i+windowSize);
@@ -72,7 +72,7 @@ export async function generateQuizFromTranscript(video_id : string  ,   difficul
 
         //console.log(allQuestion);
         
-       await saveToDB(video_id ,  difficulty , allQuestion);
+     return  await saveToDB(video_id ,  difficulty , allQuestion);
         
         
         

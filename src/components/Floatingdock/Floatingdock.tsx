@@ -8,7 +8,7 @@ import Summary from "../Summary/Summary";
 import Quiz from "../Quiz/Quiz";
 
 export function FloatingDockDemo() {
-  const [activeTab, setActiveTab] = useState("Chat");
+  const [activeTab, setActiveTab] = useState("Quiz");
 
   const links = [
     {

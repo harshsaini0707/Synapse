@@ -31,7 +31,7 @@ export async function POST(req :  NextRequest) {
 
         if(quizExists){
             return NextResponse.json(
-                {data : quizExists , message : "Quizs alreadt present in db!!"} ,
+                {data : quizExists , message : "Quizs already present in db!!"} ,
                 {status :  200}
             )
         }

@@ -1,12 +1,23 @@
-import React from "react";
+import React, { use, useState } from "react";
 import {
   BookOpenCheck,
   TestTubeDiagonal,
   FlaskConical,
   GraduationCap,
 } from "lucide-react";
+import { useVideoStore } from "@/store/videoStore";
+import { useQuiz } from "@/hooks/quiz";
 
 const Quiz = () => {
+  const [difficulty , setDifficulty] =  useState<"quick" | "detailed">();
+  const videoId = useVideoStore((state) => state.videoId);
+  const[triggeredFetch , setTriggerFetch] =  useState(false);
+
+  const { data, isLoading, isError } = useQuiz(videoId, difficulty!, {
+    enabled: triggerFetch && !!difficulty && !!videoId, // only fetch when triggered
+  });
+  
+
   return (
     <div className="flex flex-col md:flex-row mt-20 items-center justify-center gap-3">
       {/* Basic Quiz */}
@@ -25,7 +36,10 @@ const Quiz = () => {
           Quick brush-up  with fundamental concepts and key points.
         </p>
 
-        <button className="flex font-mono items-center justify-center gap-2 bg-white/98 text-black rounded-md px-2 py-2 hover:scale-105 duration-200 transition">
+        <button
+        onClick={()=>setDifficulty('quick')}
+        
+        className="flex font-mono items-center justify-center gap-2 bg-white/98 text-black rounded-md px-2 py-2 hover:scale-105 duration-200 transition">
           <TestTubeDiagonal className="h-5 w-5" />
           Attempt Basic Quiz
         </button>
@@ -47,7 +61,9 @@ const Quiz = () => {
         Tackle advanced concepts with strategic reasoning and applied knowledge.
         </p>
 
-        <button className="flex font-mono items-center justify-center gap-2 bg-white/98 text-black rounded-md px-2 py-2 hover:scale-105 duration-200 transition">
+        <button 
+        onClick={()=>setDifficulty('detailed')}
+        className="flex font-mono items-center justify-center gap-2 bg-white/98 text-black rounded-md px-2 py-2 hover:scale-105 duration-200 transition">
           <FlaskConical className="h-5 w-5 " />
           Attempt Advance Quiz
         </button>

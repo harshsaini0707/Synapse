@@ -30,7 +30,7 @@ const Quiz = () => {
 if(isFetching) return <div>Fetching....</div>
 
  
- if(!data) { return (<div className="flex flex-col md:flex-row mt-20 items-center justify-center gap-3">
+ if(!attemptingQuiz || !data) { return (<div className="flex flex-col md:flex-row mt-20 items-center justify-center gap-3">
       {/* Basic Quiz */}
       <div className="flex flex-col gap-4 border rounded-xl border-gray-700 p-4 w-80 shadow-md hover:shadow-lg transition">
         <div className="flex items-center justify-between gap-3">
@@ -88,7 +88,7 @@ if(isFetching) return <div>Fetching....</div>
     </div>)
 }
 
-if( data) {
+if(attemptingQuiz && data) {
   return <Quizquestions questions ={data} difficulty={difficulty} />
 }
 

@@ -1,4 +1,7 @@
+"use client"
 import { useQuizStore } from "@/store/quizStore";
+import { useVideoStore } from "@/store/videoStore";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 interface QuizOption {
@@ -21,6 +24,9 @@ interface QuizProps {
 }
 
 const Quizquestions: React.FC<QuizProps> = ({ questions, difficulty }) => {
+
+    const video_id = useVideoStore((state) => state.videoId)
+    const router = useRouter()
   const {
     setTotalQuestions,
     incrementAnswered,
@@ -29,6 +35,8 @@ const Quizquestions: React.FC<QuizProps> = ({ questions, difficulty }) => {
     showExplanations,
     setAnswer,
     setShowExplanation,
+    resetAttemptingQuiz,
+    setAttemptingQuiz 
   } = useQuizStore();
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -62,28 +70,36 @@ const Quizquestions: React.FC<QuizProps> = ({ questions, difficulty }) => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-4 bg-gray-900 text-white rounded-md shadow-md">
+    <div className="max-w-3xl mx-auto p-4 border-1 border-gray-600 text-white rounded-md shadow-md">
       {/* Header */}
-      <div className="flex justify-between items-center mb-4">
-        <button onClick={goPrevious} disabled={currentIndex === 0} className="px-3 py-1 border rounded">
-          Previous
+      <div className="flex justify-between items-center mb-4 ">
+        <button  
+        onClick={
+            ()=>{
+            resetAttemptingQuiz(); 
+            setAttemptingQuiz(false);
+            router.push(`/video/${video_id}`);
+            }
+        }
+        className="px-2 py-1 cursor-pointer text-sm border border-gray-500 rounded-md bg-[#050505] hover:bg-[#282424] transition-all  duration-400">
+          Return
         </button>
-        <h2 className="text-lg font-semibold">{difficulty} Quiz</h2>
-        <span className="border-red-500 border-1 py-1 px-2 rounded-md text-red-500 font-mono">
+        <h2 className="text-md font-semibold">{difficulty?.toUpperCase()} Quiz</h2>
+        <span className="border-red-500 text-sm border-1 py-1 px-2 rounded-md text-red-500 font-mono">
           {currentQuestion.type.toUpperCase()}
         </span>
-        <span>
+        <span className="text-neutral-400 font-sans">
           Question {currentIndex + 1} of {questions.length}
         </span>
       </div>
 
       {/* Progress */}
       <div className="h-2 w-full bg-gray-700 rounded mb-4">
-        <div className="h-2 bg-pink-500 rounded" style={{ width: `${progress}%` }} />
+        <div className="h-2 bg-green-500 rounded" style={{ width: `${progress}%` }} />
       </div>
 
       {/* Question */}
-      <h3 className="mb-4 text-lg">{currentQuestion.question_text}</h3>
+      <h3 className="mb-4 text-md font-medium">{currentQuestion.question_text}</h3>
 
       {/* Options */}
       <div className="flex flex-col gap-2 mb-4">
@@ -91,11 +107,11 @@ const Quizquestions: React.FC<QuizProps> = ({ questions, difficulty }) => {
           const isSelected = selectedOption === option.id;
           const correct = isCorrect(option.id);
 
-          let optionClass = "border p-3 rounded cursor-pointer hover:bg-gray-800 transition";
+          let optionClass = "border p-3 rounded cursor-pointer border-1 border-gray-700 hover:bg-[#111113] transition-all  duration-400";
           if (selectedOption) {
-            if (isSelected && correct) optionClass += " bg-green-600 border-green-500";
-            if (isSelected && !correct) optionClass += " bg-red-700 border-red-500";
-            if (!isSelected && correct && showExplanation) optionClass += " bg-green-600 border-green-500";
+            if (isSelected && correct) optionClass += " bg-[#0B1C14] border-green-500";
+            if (isSelected && !correct) optionClass += " bg-[#f97a6757] border-red-500";
+            if (!isSelected && correct && showExplanation) optionClass += " bg-[#0B1C14] border-green-500";
           }
 
           return (
@@ -116,15 +132,20 @@ const Quizquestions: React.FC<QuizProps> = ({ questions, difficulty }) => {
 
       {/* Explanation */}
       {showExplanation && (
-        <div className="bg-gray-800 p-3 rounded mb-4">
-          <strong>Explanation:</strong>
-          <p>{currentQuestion.explanation}</p>
+        <div className="bg-[#040504] p-3 border-1 border-gray-600 rounded-md mb-4 ">
+          <strong className="font-extrabold">Explanation:</strong>
+          <p className="font-bold">{currentQuestion.explanation}</p>
         </div>
       )}
 
       {/* Navigation */}
       <div className="flex justify-end gap-2">
-        <button onClick={goPrevious} disabled={currentIndex === 0} className="px-4 py-2 bg-white text-black rounded hover:bg-gray-200 transition">
+        <button
+        
+        onClick={goPrevious} disabled={currentIndex === 0}
+        
+        
+         className="px-4 py-2 bg-white text-black rounded hover:bg-gray-200 transition">
           Previous
         </button>
         <button onClick={() => setShowExplanation(currentQuestion.id, true)} className="px-4 py-2 bg-white text-black rounded hover:bg-gray-200 transition">

@@ -22,8 +22,8 @@ const getQuizs =  async (video_id : string ,difficulty :string ) =>{
             }
         })
         
-       // console.log(response.data);
-        return response.data
+    //  console.log(response.data?.data?.questions);
+        return response.data?.data?.questions;
         
     } catch (error) {
         console.log("Error while requesting for quiz!!" , error);

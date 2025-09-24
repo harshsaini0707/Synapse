@@ -7,13 +7,16 @@ import {
 } from "lucide-react";
 import { useQuiz } from "@/hooks/quiz";
 import { useParams } from "next/navigation";
+import { useQuizStore } from "@/store/quizStore";
+import Quizquestions from "../Quizquestions/Quizquestions";
 
 const Quiz = () => {
   const [difficulty , setDifficulty] =  useState<"easy" | "hard">();
  const params = useParams();
 
- console.log(params.id);
+ //console.log(params.id);
  const video_id  = params.id as string
+ const {setAttemptingQuiz ,  attemptingQuiz} =  useQuizStore();
  
   const { data, isFetching, isError , refetch } = useQuiz(video_id ,difficulty, {
     enabled: false, // only fetch when triggered
@@ -22,11 +25,12 @@ const Quiz = () => {
   useEffect(()=>{
     if(difficulty) refetch();
   },[difficulty])
-  console.log(data?.data);
-  
 
-  return (
-    <div className="flex flex-col md:flex-row mt-20 items-center justify-center gap-3">
+  
+if(isFetching) return <div>Fetching....</div>
+
+ 
+ if(!data) { return (<div className="flex flex-col md:flex-row mt-20 items-center justify-center gap-3">
       {/* Basic Quiz */}
       <div className="flex flex-col gap-4 border rounded-xl border-gray-700 p-4 w-80 shadow-md hover:shadow-lg transition">
         <div className="flex items-center justify-between gap-3">
@@ -46,6 +50,7 @@ const Quiz = () => {
         <button
         onClick={()=>{
           setDifficulty("easy")
+          setAttemptingQuiz(true)
         }}
         
         className="flex font-mono items-center justify-center gap-2 bg-white/98 text-black rounded-md px-2 py-2 hover:scale-105 duration-200 transition">
@@ -73,14 +78,22 @@ const Quiz = () => {
         <button 
         onClick={()=>{
           setDifficulty("hard")
+          setAttemptingQuiz(true)
         }}
         className="flex font-mono items-center justify-center gap-2 bg-white/98 text-black rounded-md px-2 py-2 hover:scale-105 duration-200 transition">
           <FlaskConical className="h-5 w-5 " />
           Attempt Advance Quiz
         </button>
       </div>
-    </div>
-  );
+    </div>)
+}
+
+if( data) {
+  return <Quizquestions questions ={data} difficulty={difficulty} />
+}
+
+    
+
 };
 
 export default Quiz;

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 type QuizStore = {
   totalQuestions: number;
@@ -59,6 +59,7 @@ export const useQuizStore = create<QuizStore>()(
     }),
     {
       name: "quiz-store",
+      storage: createJSONStorage(() => sessionStorage),
     }
   )
 );

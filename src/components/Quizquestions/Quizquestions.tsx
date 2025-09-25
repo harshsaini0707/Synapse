@@ -3,7 +3,7 @@ import { useQuizStore } from "@/store/quizStore";
 import { useVideoStore } from "@/store/videoStore";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-
+import { ArrowLeft , BadgeQuestionMark } from 'lucide-react';
 interface QuizOption {
   id: string;
   option_text: string;
@@ -81,8 +81,8 @@ const Quizquestions: React.FC<QuizProps> = ({ questions, difficulty }) => {
             router.push(`/video/${video_id}`);
             }
         }
-        className="px-2 py-1 cursor-pointer text-sm border border-gray-500 rounded-md bg-[#050505] hover:bg-[#282424] transition-all  duration-400">
-          Return
+        className="px-2 py-1 flex items-center justify-center cursor-pointer text-sm border border-gray-500 rounded-md bg-[#050505] hover:bg-[#282424] transition-all  duration-400">
+         <ArrowLeft size={18}/>  Return
         </button>
         <h2 className="text-md font-semibold">{difficulty?.toUpperCase()} Quiz</h2>
         <span className="border-red-500 text-sm border-1 py-1 px-2 rounded-md text-red-500 font-mono">
@@ -115,14 +115,17 @@ const Quizquestions: React.FC<QuizProps> = ({ questions, difficulty }) => {
           }
 
           return (
-            <div key={option.id} className={optionClass} onClick={() => handleOptionClick(option.id)}>
+            <div key={option.id} className={optionClass} onClick={() => handleOptionClick(option.id)}
+            
+            >
               <input
               title="_"
                 type="radio"
                 name={`question-${currentQuestion.id}`}
                 checked={isSelected}
+
                 readOnly
-                className="mr-2"
+                className="mr-2 accent-gray-600"
               />
               {option.option_text}
             </div>
@@ -145,15 +148,15 @@ const Quizquestions: React.FC<QuizProps> = ({ questions, difficulty }) => {
         onClick={goPrevious} disabled={currentIndex === 0}
         
         
-         className="px-4 py-2 bg-white text-black rounded hover:bg-gray-200 transition">
+         className="px-4 py-2 text-neutral-200  cursor-grab bg-transparent border-1 border-gray-500  font-semibold  rounded-md hover:bg-[#222224] hover:text-neutral-100 transition-all  duration-400">
           Previous
         </button>
-        <button onClick={() => setShowExplanation(currentQuestion.id, true)} className="px-4 py-2 bg-white text-black rounded hover:bg-gray-200 transition">
-          Show Answer
+        <button onClick={() => setShowExplanation(currentQuestion.id, true)} className="px-2 py-2 font-semibold  cursor-help bg-[#ffa3031f] border-1 border-orange-500 text-neutral-200 flex gap-1 items-center justify-center  rounded-md hover:bg-[#ffa30347] transition">
+        <BadgeQuestionMark size={20}/>Hint
         </button>
         {currentIndex < questions.length - 1 ? (
-          <button onClick={goNext} className="px-4 py-2 bg-white text-black rounded hover:bg-gray-200 transition">
-            Next Question
+          <button onClick={goNext} className="px-4 py-2 cursor-grab bg-transparent border-1 border-gray-500  font-semibold  rounded-md hover:bg-[#222224] hover:text-neutral-200 transition-all  duration-400">
+            Next 
           </button>
         ) : (
           <button className="px-4 py-2 bg-white text-black rounded hover:bg-gray-200 transition">Result</button>

@@ -42,19 +42,19 @@ export function FloatingDockDemo() {
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      <FloatingDock
-        items={links.map((link) => ({
-          ...link,
-          onClick: () => setActiveTab(link.title),
-        }))}
-      />
+    <div className="flex flex-col h-full">
+      {/* Floating Dock - Fixed at top */}
+      <div className="flex-shrink-0 p-4">
+        <FloatingDock
+          items={links.map((link) => ({
+            ...link,
+            onClick: () => setActiveTab(link.title),
+          }))}
+        />
+      </div>
 
-      {/* ONLY CHANGE: Added h-full to container */}
-      <div className="
-        w-full bg-[#08090A] h-full
-        min-h-[40vh] md:min-h-[85vh]
-      ">
+      {/* Content Area - Scrollable */}
+      <div className="flex-1 overflow-y-auto bg-[#08090A]">
         {activeTab === "Summary" && <Summary />}
         {activeTab === "Chat" && <Chat />}
         {activeTab === "Quiz" && <Quiz />}

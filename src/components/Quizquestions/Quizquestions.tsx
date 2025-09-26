@@ -70,7 +70,7 @@ const Quizquestions: React.FC<QuizProps> = ({ questions, difficulty }) => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-4 border-1 border-gray-600 text-white rounded-md shadow-md">
+    <div className="max-w-3xl mx-auto p-4 border-1 border-gray-600 text-white rounded-md shadow-md h-full overflow-y-auto">
       {/* Header */}
       <div className="flex justify-between items-center mb-4 ">
         <button  

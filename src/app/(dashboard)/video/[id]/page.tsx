@@ -64,10 +64,9 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
   };
 
   return (
-    // ONLY CHANGE: Removed 'fixed' from className
-    <div className="flex flex-col lg:flex-row min-h-screen bg-[#09090B] text-white border border-gray-800">
+    <div className="flex flex-col lg:flex-row h-full bg-[#09090B] text-white border border-gray-800">
       {/* Left: Video + Transcript */}
-      <div className="w-full lg:w-[45%] flex-1 pt-4 px-4">
+      <div className="w-full lg:w-[45%] flex-1 pt-4 px-4 overflow-y-auto">
         {/* YouTube Embed */}
         <YouTube videoId={id} opts={opts} ref={playerRef} />
 
@@ -126,7 +125,7 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
       </div>
 
       {/* Right: Features */}
-      <div className="w-full lg:w-[55%] flex pt-2 flex-col">
+      <div className="w-full lg:w-[55%] h-full flex pt-2 flex-col">
         <FloatingDockDemo />
       </div>
     </div>

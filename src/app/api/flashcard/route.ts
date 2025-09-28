@@ -4,6 +4,9 @@ export async function POST(req : NextRequest) {
     try {
 
         const {videoId}  = await req.json();
+        const userId = req.headers.get("x-user-id");
+
+        
         
     } catch (error) {
         return NextResponse.json(

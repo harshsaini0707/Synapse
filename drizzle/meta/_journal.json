@@ -64,6 +64,13 @@
       "when": 1759065126157,
       "tag": "0008_magenta_steel_serpent",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1759067390430,
+      "tag": "0009_steep_victor_mancha",
+      "breakpoints": true
     }
   ]
 }

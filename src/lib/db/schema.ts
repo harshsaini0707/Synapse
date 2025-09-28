@@ -172,13 +172,6 @@ export const flashcards =  pgTable("flashcards" ,{
   created_at : timestamp("created-at" , {precision : 0}).defaultNow()
 })
 
-//summary chunks 
-export const summaryChunks = pgTable("summaryChunks" , {
-  id : uuid("id").primaryKey().defaultRandom(),
-  video_id :  varchar("video_id", {length :  256}).references(()=>videos.video_id).notNull(),
-  summrayChunkss : varchar("summrayChunkss" , {length : 20000}).notNull(),
-  created_at : timestamp("created_at" , {precision : 0}).defaultNow()
-})
 
 //----------------------Relations-------------------------
 
@@ -190,14 +183,6 @@ export const flashcardsRelation = relations(flashcards , ({one}) =>({
   })
 }))
 
-//sumamry chunks relation
-
-export const summaryChunksRelation =  relations(summaryChunks ,({one}) =>({
-  summary : one(videos , {
-    fields : [summaryChunks.video_id] , 
-    references : [videos.video_id]
-  })
-}))
 
 // Quiz has many questions
 export const quizRelation = relations(quiz , ({many})=>({

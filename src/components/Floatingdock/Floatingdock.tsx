@@ -6,6 +6,7 @@ import { useState } from "react";
 import Chat from "../Chat/Chat";
 import Summary from "../Summary/Summary";
 import Quiz from "../Quiz/Quiz";
+import Flashcard from "../Flashcard/Flashcard";
 
 export function FloatingDockDemo() {
   const [activeTab, setActiveTab] = useState("Quiz");
@@ -58,9 +59,7 @@ export function FloatingDockDemo() {
         {activeTab === "Summary" && <Summary />}
         {activeTab === "Chat" && <Chat />}
         {activeTab === "Quiz" && <Quiz />}
-        {activeTab === "Flashcards" && (
-          <div className="text-white p-4">🃏 Flashcards Component here</div>
-        )}
+        {activeTab === "Flashcards" && <Flashcard/>}
       </div>
     </div>
   );

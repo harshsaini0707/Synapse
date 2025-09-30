@@ -167,7 +167,7 @@ const Summary = () => {
                 <div className="h-8 flex items-center justify-center">
                   <div 
                     key={currentMessageIndex}
-                    className="text-sm text-green-400 animate-pulse transition-all duration-500"
+                    className="text-md font-mono text-green-400 animate-pulse transition-all duration-500"
                   >
                     {rotatingMessages[currentMessageIndex]}
                   </div>
@@ -191,7 +191,7 @@ const Summary = () => {
           )}
 
           {/* Summary Content */}
-          {hasData && !summaryMutation.isPending && (
+          {hasData && (
             <div className={`w-full max-w-4xl mx-auto transition-all duration-300 ${
               isToggling ? 'opacity-50 scale-95' : 'opacity-100 scale-100'
             }`}>
@@ -242,8 +242,8 @@ const Summary = () => {
                 }`}>
                   {getCurrentSummary() || (
                     <div className="text-gray-500 italic">
-                      {viewMode === 'quick' && !cachedQuickSummary && "Click 'Quick' to load quick summary"}
-                      {viewMode === 'detailed' && !cachedDetailedSummary && "Click 'Detailed' to load detailed summary"}
+                      {viewMode === 'quick'  && "Click 'Quick' to load quick summary"}
+                      {viewMode === 'detailed' && "Click 'Detailed' to load detailed summary"}
                     </div>
                   )}
                 </div>

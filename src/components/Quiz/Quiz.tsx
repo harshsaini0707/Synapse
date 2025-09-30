@@ -65,7 +65,7 @@ if(isFetching) return (
       <div className="h-12 flex items-center justify-center perspective-1000">
         <div 
           key={currentMessageIndex}
-          className="text-xl text-green-400 font-mono animate-flipIn"
+          className="text-xl  text-green-400 font-mono animate-flipIn"
         >
           {rotatingMessages[currentMessageIndex]}
         </div>
@@ -111,7 +111,7 @@ if(isFetching) return (
          setAttemptingQuiz(true)
        }}
        disabled={isFetching}
-       className={`flex font-mono items-center justify-center gap-2 bg-white/98 text-black rounded-md px-4 py-3 transition-all duration-300 transform hover:scale-105 hover:shadow-lg ${
+       className={`flex font-mono items-center justify-center gap-2 bg-white/98 text-black rounded-md px-2 py-2 transition-all duration-300 transform hover:scale-105 hover:shadow-lg ${
          isFetching ? 'opacity-50 cursor-not-allowed' : 'hover:bg-white'
        }`}>
          <TestTubeDiagonal className={`h-5 w-5 ${isFetching ? 'animate-spin' : ''}`} />
@@ -141,7 +141,7 @@ if(isFetching) return (
          setAttemptingQuiz(true)
        }}
        disabled={isFetching}
-       className={`flex font-mono items-center justify-center gap-2 bg-white/98 text-black rounded-md px-4 py-3 transition-all duration-300 transform hover:scale-105 hover:shadow-lg ${
+       className={`flex font-mono items-center justify-center gap-2 bg-white/98 text-black rounded-md p-2 transition-all duration-300 transform hover:scale-105 hover:shadow-lg ${
          isFetching ? 'opacity-50 cursor-not-allowed' : 'hover:bg-white'
        }`}>
          <FlaskConical className={`h-5 w-5 ${isFetching ? 'animate-bounce' : ''}`} />

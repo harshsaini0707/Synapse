@@ -222,3 +222,42 @@ body {
 .chat-scrollable::-webkit-scrollbar-thumb:hover {
   background: #6B7280;
 }
+
+/* Custom animations */
+@keyframes flipIn {
+  0% {
+    transform: perspective(400px) rotateX(90deg);
+    opacity: 0;
+  }
+  40% {
+    transform: perspective(400px) rotateX(-20deg);
+  }
+  60% {
+    transform: perspective(400px) rotateX(10deg);
+    opacity: 1;
+  }
+  80% {
+    transform: perspective(400px) rotateX(-5deg);
+  }
+  100% {
+    transform: perspective(400px) rotateX(0deg);
+    opacity: 1;
+  }
+}
+
+.animate-flipIn {
+  animation: flipIn 0.8s ease-out forwards;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+/* Animation delay utilities */
+.animation-delay-500 {
+  animation-delay: 0.5s;
+}
+
+.animation-delay-1000 {
+  animation-delay: 1s;
+}

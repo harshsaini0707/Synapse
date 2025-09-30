@@ -60,7 +60,7 @@ const Summary = () => {
         setCurrentMessageIndex((prevIndex) => 
           (prevIndex + 1) % rotatingMessages.length
         );
-      }, 4000); 
+      }, 5000); 
       return () => clearInterval(interval);
     }
   }, [summaryMutation.isPending, rotatingMessages.length]);

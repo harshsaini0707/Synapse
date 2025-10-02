@@ -75,52 +75,98 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
           <div className="flex m-0.5 p-0.5 rounded-sm items-center justify-center gap-2 bg-[radial-gradient(circle_at_50%_42%,#04170bb5,#000000)]">
             <Clock size={12} />
             <span className="text-sm">
-              Highlights {data ? `(${data?.length})` : " "}
+              {isLoading ? (
+                <span className="flex items-center gap-2">
+                  Highlights
+                  <div className="flex space-x-1">
+                    <div className="w-1 h-1 bg-gray-400 rounded-full animate-bounce"></div>
+                    <div className="w-1 h-1 bg-gray-400 rounded-full animate-bounce animation-delay-100"></div>
+                    <div className="w-1 h-1 bg-gray-400 rounded-full animate-bounce animation-delay-200"></div>
+                  </div>
+                </span>
+              ) : (
+                `Highlights ${data ? `(${data?.length})` : " "}`
+              )}
             </span>
           </div>
         </div>
 
         <div className="flex max-h-[42vh] scrollable-container overflow-y-auto flex-col gap-1 border rounded-sm border-gray-800 bg-[radial-gradient(circle_at_0%_0%,#04170b9c,#000000)]">
-          {data?.map((item: Chapters, index: number) => (
-            <div
-              key={item.id}
-              onClick={() => onCardClick(item.timestamp)}
-              className="flex gap-1 flex-col cursor-pointer border border-gray-900 p-4 m-2 rounded-md"
-            >
-              <div className="flex gap-2 cursor-pointer items-center">
-                <h1 className="border border-gray-800 bg-gray-800 py-1 px-2 font-bold rounded-sm text-sm">
-                  {index + 1}.
-                </h1>
-                {item?.timestamp ? (
-                  <h1 className="border border-gray-800 bg-gray-800 py-1 px-2 rounded-sm text-sm">
-                    {item?.timestamp}
-                  </h1>
-                ) : (
-                  <h1 className="poppins-bold mt-1 text-md">{item?.title}</h1>
-                )}
-              </div>
-              {item?.timestamp && (
-                <div>
-                  <h1 className="poppins-bold">{item?.title}</h1>
+          {isLoading ? (
+            // Loading skeleton
+            Array.from({ length: 6 }).map((_, index) => (
+              <div
+                key={`skeleton-${index}`}
+                className="flex gap-1 flex-col border border-gray-900 p-4 m-2 rounded-md animate-pulse"
+              >
+                <div className="flex gap-2 items-center">
+                  <div className="border border-gray-800 bg-gray-700 py-1 px-2 rounded-sm">
+                    <div className="w-4 h-4 bg-gray-600 rounded"></div>
+                  </div>
+                  <div className="border border-gray-800 bg-gray-700 py-1 px-2 rounded-sm">
+                    <div className="w-12 h-4 bg-gray-600 rounded"></div>
+                  </div>
                 </div>
-              )}
-              <div>
-                <h1 className="text-gray-400 poppins-regular text-sm">
-                  {item?.description}
-                </h1>
-
-                {item?.timestamp && (
-                  <h1 className="flex items-center text-gray-400 mt-3">
+                <div>
+                  <div className="w-3/4 h-5 bg-gray-700 rounded mb-2"></div>
+                </div>
+                <div>
+                  <div className="w-full h-3 bg-gray-800 rounded mb-1"></div>
+                  <div className="w-5/6 h-3 bg-gray-800 rounded mb-1"></div>
+                  <div className="w-4/5 h-3 bg-gray-800 rounded"></div>
+                  
+                  <div className="flex items-center text-gray-400 mt-3">
                     <span className="flex-grow border-t border-gray-700"></span>
                     <span className="px-2 text-sm font-mono bg-transparent">
-                      Play this part
+                      <div className="w-20 h-3 bg-gray-700 rounded"></div>
                     </span>
                     <span className="flex-grow border-t border-gray-700"></span>
-                  </h1>
-                )}
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            data?.map((item: Chapters, index: number) => (
+              <div
+                key={item.id}
+                onClick={() => onCardClick(item.timestamp)}
+                className="flex gap-1 flex-col cursor-pointer border border-gray-900 p-4 mx-2 my-1 rounded-md hover:border-gray-700 transition-colors duration-200"
+              >
+                <div className="flex gap-2 cursor-pointer items-center">
+                  <h1 className="border border-gray-800 bg-gray-800 py-1 px-2 font-bold rounded-sm text-sm">
+                    {index + 1}.
+                  </h1>
+                  {item?.timestamp ? (
+                    <h1 className="border border-gray-800 bg-gray-800 py-1 px-2 rounded-sm text-sm">
+                      {item?.timestamp}
+                    </h1>
+                  ) : (
+                    <h1 className="poppins-bold mt-1 text-md">{item?.title}</h1>
+                  )}
+                </div>
+                {item?.timestamp && (
+                  <div>
+                    <h1 className="poppins-bold">{item?.title}</h1>
+                  </div>
+                )}
+                <div>
+                  <h1 className="text-gray-400 poppins-regular text-sm">
+                    {item?.description}
+                  </h1>
+
+                  {item?.timestamp && (
+                    <h1 className="flex items-center text-gray-400 mt-3">
+                      <span className="flex-grow border-t border-gray-700"></span>
+                      <span className="px-2 text-sm font-mono bg-transparent">
+                        Play this part
+                      </span>
+                      <span className="flex-grow border-t border-gray-700"></span>
+                    </h1>
+                  )}
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
 

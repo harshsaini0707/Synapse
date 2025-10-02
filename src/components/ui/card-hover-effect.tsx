@@ -220,7 +220,7 @@ export const HoverEffect = ({
 
             {/* Title */}
             <div className="py-3 px-2 bg-black text-center">
-              <h4 className="text-zinc-100 kanit tracking-wide mt-4 line-clamp-2">
+              <h4 className="text-zinc-100 quicksand-font  mt-4 line-clamp-2">
                 {item.title}
               </h4>
             </div>

@@ -115,10 +115,10 @@ const Chat = () => {
                 </div>
                 {/* AI Message */}
                 <div className="flex justify-start ">
-                  <div className=" p-3 rounded-2xl rounded-bl-lg  text-white shadow-lg">
+                  <div className=" p-3 rounded-2xl rounded-bl-lg  text-neutral-50 shadow-lg">
                     <div className="flex items-start gap-2.5">
                      
-                      <p className="break-words quicksand-font text-md">{ele.answer}</p>
+                      <p className="break-words quicksand-font text-md ">{ele.answer}</p>
                     </div>
                   </div>
                 </div>

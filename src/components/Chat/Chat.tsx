@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import { Send, User, Bot } from "lucide-react";
+import ReactMarkdown from 'react-markdown';
 import { useUserStore } from "@/store/userStore";
 import { useVideoStore } from "@/store/videoStore";
 import Homechat from "../Chatcard/homeChat";
@@ -117,8 +118,34 @@ const Chat = () => {
                 <div className="flex justify-start ">
                   <div className=" p-3 rounded-2xl rounded-bl-lg  text-neutral-50 shadow-lg">
                     <div className="flex items-start gap-2.5">
-                     
-                      <p className="break-words quicksand-font text-md ">{ele.answer}</p>
+                      <div className="prose prose-invert prose-sm max-w-none
+                          prose-headings:text-white prose-headings:font-bold prose-headings:mb-2 prose-headings:quicksand-bold
+                          prose-h1:text-lg prose-h1:mb-3 prose-h1:font-bold prose-h1:text-white
+                          prose-h2:text-base prose-h2:mb-2 prose-h2:font-bold prose-h2:text-white
+                          prose-h3:text-sm prose-h3:mb-2 prose-h3:font-bold prose-h3:text-white
+                          prose-h4:text-sm prose-h4:mb-2 prose-h4:font-bold prose-h4:text-white
+                          prose-h5:text-xs prose-h5:mb-1 prose-h5:font-bold prose-h5:text-white
+                          prose-h6:text-xs prose-h6:mb-1 prose-h6:font-semibold prose-h6:text-gray-200
+                          prose-p:text-neutral-300 prose-p:leading-relaxed prose-p:mb-2 prose-p:quicksand-regular
+                          prose-strong:text-white prose-strong:font-bold prose-strong:quicksand-bold
+                          prose-em:text-gray-300 prose-em:italic prose-em:quicksand-medium
+                          prose-ul:text-neutral-300 prose-ul:mb-2 prose-ol:text-neutral-300 prose-ol:mb-2
+                          prose-li:text-neutral-300 prose-li:marker:text-gray-400 prose-li:mb-1 prose-li:quicksand-regular
+                          prose-blockquote:border-l-gray-600 prose-blockquote:text-gray-300 prose-blockquote:mb-2 prose-blockquote:pl-4 prose-blockquote:italic
+                          prose-code:text-green-400 prose-code:bg-gray-800 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-xs prose-code:font-mono
+                          prose-pre:bg-gray-800 prose-pre:border prose-pre:border-gray-700 prose-pre:mb-2 prose-pre:text-xs prose-pre:p-3 prose-pre:rounded-lg
+                          prose-a:text-blue-400 prose-a:hover:text-blue-300 prose-a:underline prose-a:underline-offset-2
+                          prose-hr:border-gray-600 prose-hr:my-4
+                          prose-table:text-neutral-300 prose-table:border-gray-600
+                          prose-thead:border-gray-500 prose-th:text-white prose-th:font-semibold
+                          prose-td:border-gray-600 prose-td:text-neutral-300
+                          prose-img:rounded-lg prose-img:shadow-md
+                          prose-video:rounded-lg prose-video:shadow-md
+                          prose-figure:text-center prose-figcaption:text-gray-400 prose-figcaption:text-xs prose-figcaption:mt-2">
+                        <ReactMarkdown>
+                          {ele.answer}
+                        </ReactMarkdown>
+                      </div>
                     </div>
                   </div>
                 </div>

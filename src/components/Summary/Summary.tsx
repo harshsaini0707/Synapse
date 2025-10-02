@@ -248,17 +248,32 @@ const Summary = () => {
                   isToggling ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'
                 }`}>
                   <div className="prose prose-invert prose-gray max-w-none
-                      prose-headings:text-white prose-headings:font-semibold prose-headings:mb-4
-                      prose-h1:text-2xl prose-h1:mb-6 prose-h2:text-xl prose-h2:mb-5 prose-h3:text-lg prose-h3:mb-4
-                      prose-p:text-gray-200 prose-p:leading-relaxed prose-p:mb-4
-                      prose-strong:text-white prose-strong:font-semibold
-                      prose-em:text-gray-300 prose-em:italic
-                      prose-ul:text-gray-200 prose-ul:mb-4 prose-ol:text-gray-200 prose-ol:mb-4
-                      prose-li:text-gray-200 prose-li:marker:text-gray-400 prose-li:mb-2
-                      prose-blockquote:border-l-gray-600 prose-blockquote:text-gray-300 prose-blockquote:mb-4
-                      prose-code:text-green-400 prose-code:bg-gray-800 prose-code:px-1 prose-code:rounded
-                      prose-pre:bg-gray-800 prose-pre:border prose-pre:border-gray-700 prose-pre:mb-4
-                      prose-a:text-blue-400 prose-a:hover:text-blue-300">
+                      prose-headings:text-white prose-headings:font-bold prose-headings:mb-4 prose-headings:quicksand-bold
+                      prose-h1:text-3xl prose-h1:mb-6 prose-h1:font-bold prose-h1:text-white prose-h1:border-b prose-h1:border-gray-600 prose-h1:pb-2
+                      prose-h2:text-2xl prose-h2:mb-5 prose-h2:font-bold prose-h2:text-white
+                      prose-h3:text-xl prose-h3:mb-4 prose-h3:font-bold prose-h3:text-white
+                      prose-h4:text-lg prose-h4:mb-3 prose-h4:font-bold prose-h4:text-white
+                      prose-h5:text-base prose-h5:mb-3 prose-h5:font-semibold prose-h5:text-white
+                      prose-h6:text-sm prose-h6:mb-2 prose-h6:font-semibold prose-h6:text-gray-200
+                      prose-p:text-neutral-200 prose-p:leading-relaxed prose-p:mb-4 prose-p:quicksand-regular
+                      prose-strong:text-white prose-strong:font-bold prose-strong:quicksand-bold
+                      prose-em:text-gray-300 prose-em:italic prose-em:quicksand-medium
+                      prose-ul:text-neutral-200 prose-ul:mb-4 prose-ol:text-neutral-200 prose-ol:mb-4
+                      prose-li:text-neutral-200 prose-li:marker:text-gray-400 prose-li:mb-2 prose-li:quicksand-regular
+                      prose-blockquote:border-l-4 prose-blockquote:border-gray-500 prose-blockquote:text-gray-300 prose-blockquote:mb-4 prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:bg-gray-800/30 prose-blockquote:py-3 prose-blockquote:rounded-r-lg
+                      prose-code:text-green-400 prose-code:bg-gray-800 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-sm prose-code:font-mono prose-code:border prose-code:border-gray-700
+                      prose-pre:bg-gray-900 prose-pre:border prose-pre:border-gray-700 prose-pre:mb-4 prose-pre:p-4 prose-pre:rounded-lg prose-pre:overflow-x-auto
+                      prose-a:text-blue-400 prose-a:hover:text-blue-300 prose-a:underline prose-a:underline-offset-4 prose-a:decoration-2
+                      prose-hr:border-gray-600 prose-hr:my-6 prose-hr:border-2
+                      prose-table:text-neutral-200 prose-table:border prose-table:border-gray-600 prose-table:rounded-lg prose-table:overflow-hidden
+                      prose-thead:bg-gray-800 prose-thead:border-gray-500 prose-th:text-white prose-th:font-bold prose-th:p-3 prose-th:border-gray-600
+                      prose-tbody:bg-gray-900/30 prose-td:border-gray-600 prose-td:text-neutral-200 prose-td:p-3
+                      prose-img:rounded-xl prose-img:shadow-lg prose-img:border prose-img:border-gray-700 prose-img:my-4
+                      prose-video:rounded-xl prose-video:shadow-lg prose-video:border prose-video:border-gray-700 prose-video:my-4
+                      prose-figure:text-center prose-figure:my-6 prose-figcaption:text-gray-400 prose-figcaption:text-sm prose-figcaption:mt-3 prose-figcaption:italic
+                      prose-kbd:bg-gray-800 prose-kbd:text-gray-200 prose-kbd:px-2 prose-kbd:py-1 prose-kbd:rounded prose-kbd:text-xs prose-kbd:font-mono prose-kbd:border prose-kbd:border-gray-600
+                      prose-mark:bg-yellow-500/20 prose-mark:text-yellow-200 prose-mark:px-1 prose-mark:rounded
+                      prose-del:text-red-400 prose-del:line-through prose-ins:text-green-400 prose-ins:underline prose-ins:decoration-green-400">
                     <ReactMarkdown>
                       {getCurrentSummary()}
                     </ReactMarkdown>

@@ -3,8 +3,8 @@
 import { FloatingDockDemo } from "@/components/Floatingdock/Floatingdock";
 import { useFetchChapters } from "@/hooks/fetchChapater";
 import YouTube, { YouTubeProps } from "react-youtube";
-import { Clock } from "lucide-react";
-import React, { use, useEffect, useRef } from "react";
+import { Clock, ChevronDown, ChevronUp } from "lucide-react";
+import React, { use, useEffect, useRef, useState } from "react";
 import { useVideoStore } from "@/store/videoStore";
 
 type Chapters = {
@@ -22,6 +22,9 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
   const { id } = use(params);
 
   const setVideoId = useVideoStore((state) => state.setVideoId);
+  
+  // State for controlling highlight visibility
+  const [showHighlights, setShowHighlights] = useState(true);
 
   useEffect(() => {
     setVideoId(id);
@@ -72,7 +75,10 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
 
         {/* Highlights Section */}
         <div className="my-2 border border-gray-800 bg-[#18181A] rounded-md">
-          <div className="flex m-0.5 p-0.5 rounded-sm items-center justify-center gap-2 bg-[radial-gradient(circle_at_50%_42%,#04170bb5,#000000)]">
+          <div 
+            className="flex m-0.5 p-0.5 rounded-sm items-center justify-center gap-2 bg-[radial-gradient(circle_at_50%_42%,#04170bb5,#000000)] cursor-pointer relative"
+            onClick={() => setShowHighlights(!showHighlights)}
+          >
             <Clock size={12} />
             <span className="text-sm">
               {isLoading ? (
@@ -88,86 +94,91 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
                 `Highlights ${data ? `(${data?.length})` : " "}`
               )}
             </span>
+            <div className="absolute right-2">
+              {showHighlights ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            </div>
           </div>
         </div>
 
-        <div className="flex max-h-[42vh] scrollable-container overflow-y-auto flex-col gap-1 border rounded-sm border-gray-800 bg-[radial-gradient(circle_at_0%_0%,#04170b9c,#000000)]">
-          {isLoading ? (
-            // Loading skeleton
-            Array.from({ length: 6 }).map((_, index) => (
-              <div
-                key={`skeleton-${index}`}
-                className="flex gap-1 flex-col border border-gray-900 p-4 m-2 rounded-md animate-pulse"
-              >
-                <div className="flex gap-2 items-center">
-                  <div className="border border-gray-800 bg-gray-700 py-1 px-2 rounded-sm">
-                    <div className="w-4 h-4 bg-gray-600 rounded"></div>
+        {showHighlights && (
+          <div className="flex max-h-[42vh] scrollable-container overflow-y-auto flex-col gap-1 border rounded-sm border-gray-800 bg-[radial-gradient(circle_at_0%_0%,#04170b9c,#000000)]">
+            {isLoading ? (
+              // Loading skeleton
+              Array.from({ length: 6 }).map((_, index) => (
+                <div
+                  key={`skeleton-${index}`}
+                  className="flex gap-1 flex-col border border-gray-900 p-4 m-2 rounded-md animate-pulse"
+                >
+                  <div className="flex gap-2 items-center">
+                    <div className="border border-gray-800 bg-gray-700 py-1 px-2 rounded-sm">
+                      <div className="w-4 h-4 bg-gray-600 rounded"></div>
+                    </div>
+                    <div className="border border-gray-800 bg-gray-700 py-1 px-2 rounded-sm">
+                      <div className="w-12 h-4 bg-gray-600 rounded"></div>
+                    </div>
                   </div>
-                  <div className="border border-gray-800 bg-gray-700 py-1 px-2 rounded-sm">
-                    <div className="w-12 h-4 bg-gray-600 rounded"></div>
-                  </div>
-                </div>
-                <div>
-                  <div className="w-3/4 h-5 bg-gray-700 rounded mb-2"></div>
-                </div>
-                <div>
-                  <div className="w-full h-3 bg-gray-800 rounded mb-1"></div>
-                  <div className="w-5/6 h-3 bg-gray-800 rounded mb-1"></div>
-                  <div className="w-4/5 h-3 bg-gray-800 rounded"></div>
-                  
-                  <div className="flex items-center text-gray-400 mt-3">
-                    <span className="flex-grow border-t border-gray-700"></span>
-                    <span className="px-2 text-sm font-mono bg-transparent">
-                      <div className="w-20 h-3 bg-gray-700 rounded"></div>
-                    </span>
-                    <span className="flex-grow border-t border-gray-700"></span>
-                  </div>
-                </div>
-              </div>
-            ))
-          ) : (
-            data?.map((item: Chapters, index: number) => (
-              <div
-                key={item.id}
-                onClick={() => onCardClick(item.timestamp)}
-                className="flex gap-1 flex-col cursor-pointer border border-gray-900 p-4 mx-2 my-1 rounded-md hover:border-gray-700 transition-colors duration-200"
-              >
-                <div className="flex gap-2 cursor-pointer items-center">
-                  <h1 className="border border-gray-800 bg-gray-800 py-1 px-2 font-bold rounded-sm text-sm">
-                    {index + 1}.
-                  </h1>
-                  {item?.timestamp ? (
-                    <h1 className="border border-gray-800 bg-gray-800 py-1 px-2 rounded-sm text-sm">
-                      {item?.timestamp}
-                    </h1>
-                  ) : (
-                    <h1 className="poppins-bold mt-1 text-md">{item?.title}</h1>
-                  )}
-                </div>
-                {item?.timestamp && (
                   <div>
-                    <h1 className="poppins-bold">{item?.title}</h1>
+                    <div className="w-3/4 h-5 bg-gray-700 rounded mb-2"></div>
                   </div>
-                )}
-                <div>
-                  <h1 className="text-gray-400 poppins-regular text-sm">
-                    {item?.description}
-                  </h1>
-
-                  {item?.timestamp && (
-                    <h1 className="flex items-center text-gray-400 mt-3">
+                  <div>
+                    <div className="w-full h-3 bg-gray-800 rounded mb-1"></div>
+                    <div className="w-5/6 h-3 bg-gray-800 rounded mb-1"></div>
+                    <div className="w-4/5 h-3 bg-gray-800 rounded"></div>
+                    
+                    <div className="flex items-center text-gray-400 mt-3">
                       <span className="flex-grow border-t border-gray-700"></span>
                       <span className="px-2 text-sm font-mono bg-transparent">
-                        Play this part
+                        <div className="w-20 h-3 bg-gray-700 rounded"></div>
                       </span>
                       <span className="flex-grow border-t border-gray-700"></span>
-                    </h1>
-                  )}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))
-          )}
-        </div>
+              ))
+            ) : (
+              data?.map((item: Chapters, index: number) => (
+                <div
+                  key={item.id}
+                  onClick={() => onCardClick(item.timestamp)}
+                  className="flex gap-1 flex-col cursor-pointer border border-gray-900 p-4 mx-2 my-1 rounded-md hover:border-gray-700 transition-colors duration-200"
+                >
+                  <div className="flex gap-2 cursor-pointer items-center">
+                    <h1 className="border border-gray-800 bg-gray-800 py-1 px-2 font-bold rounded-sm text-sm">
+                      {index + 1}.
+                    </h1>
+                    {item?.timestamp ? (
+                      <h1 className="border border-gray-800 bg-gray-800 py-1 px-2 rounded-sm text-sm">
+                        {item?.timestamp}
+                      </h1>
+                    ) : (
+                      <h1 className="poppins-bold mt-1 text-md">{item?.title}</h1>
+                    )}
+                  </div>
+                  {item?.timestamp && (
+                    <div>
+                      <h1 className="poppins-bold">{item?.title}</h1>
+                    </div>
+                  )}
+                  <div>
+                    <h1 className="text-gray-400 poppins-regular text-sm">
+                      {item?.description}
+                    </h1>
+
+                    {item?.timestamp && (
+                      <h1 className="flex items-center text-gray-400 mt-3">
+                        <span className="flex-grow border-t border-gray-700"></span>
+                        <span className="px-2 text-sm font-mono bg-transparent">
+                          Play this part
+                        </span>
+                        <span className="flex-grow border-t border-gray-700"></span>
+                      </h1>
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        )}
       </div>
 
       {/* Right: Features */}

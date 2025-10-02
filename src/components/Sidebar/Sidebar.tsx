@@ -6,7 +6,9 @@ import {
   IconBrandTabler,
   IconSettings,
   IconUserBolt,
+  IconCreditCard 
 } from "@tabler/icons-react";
+
 import { motion } from "motion/react";
 
 import Image from "next/image";
@@ -18,15 +20,14 @@ export function SidebarDemo() {
   const [open, setOpen] = useState(false);
 
   const links = [
-    { label: "Home", href: "/home", icon: <IconBrandTabler className="h-5 w-5 shrink-0" /> },
-    { label: "Profile", href: "/history", icon: <IconUserBolt className="h-5 w-5 shrink-0" /> },
-    { label: "Settings", href: "/settings", icon: <IconSettings className="h-5 w-5 shrink-0" /> },
-    { label: "Logout", href: "/logout", icon: <IconArrowLeft className="h-5 w-5 shrink-0" /> },
+    { label: "Home", href: "/home", icon: <IconBrandTabler className="h-5 w-5 shrink-0 text-white " /> },
+    { label: "Premium", href: "/premium", icon: <IconCreditCard className="h-5 w-5 shrink-0 text-white" /> },
+     { label: "Logout", href: "/logout", icon: <IconArrowLeft className="h-5 w-5 shrink-0 text-white" /> }
   ];
 
   return (
     <Sidebar open={open} setOpen={setOpen}>
-      <SidebarBody className="justify-between gap-10 rounded-xl">
+      <SidebarBody className="justify-between gap-10 ">
         {/* Top part */}
         <div className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto">
           {open ? <Logo /> : <LogoIcon />}
@@ -67,7 +68,7 @@ export const Logo = () => (
     <motion.span
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="poppins-medium text-black dark:text-white"
+      className="quicksand-bold text-white dark:text-white"
     >
       Synapse
     </motion.span>

@@ -96,7 +96,7 @@ const FloatingDockDesktop = ({
       onMouseMove={(e) => mouseX.set(e.pageX)}
       onMouseLeave={() => mouseX.set(Infinity)}
       className={cn(
-        "mx-auto hidden h-8 items-end gap-3 rounded-3xl bg-black border-1 border-gray-850 p-1  md:flex dark:bg-neutral-900",
+        "mx-auto hidden h-8 items-center justify-center gap-10 rounded-3xl bg-transparent border-1 border-gray-850 p-1  md:flex ",
         className,
       )}
     >
@@ -138,7 +138,7 @@ function IconContainer({
       <motion.div
         ref={ref}
         style={{ scale, y }}
-        className="flex items-center justify-center gap-1 px-3 rounded-md bg-transparent transition-colors hover:py-1 hover:bg-[radial-gradient(circle_at_50%_42%,#04170bb5,#000000)]"
+        className="flex items-center quicksand-font justify-center gap-1 px-3 rounded-md bg-transparent transition-colors hover:py-1 "
       >
         <div className="w-4 h-4 flex items-center justify-center">{icon}</div>
         <span className="text-sm font-medium whitespace-nowrap">{title}</span>

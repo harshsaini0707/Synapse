@@ -55,33 +55,35 @@ const Home = () => {
       {/* Main Content */}
       <div className="flex flex-col min-h-screen relative z-10 px-8 md:px-16 pt-10 pb-12 gap-12 items-center">
         {/* Info & Search Section */}
-        <div className="flex flex-col mt-10 gap-6 text-center max-w-2xl">
+        <div className="flex flex-col mt-8 gap-6 text-center max-w-2xl">
           <HoverBorderGradientDemo />
 
-          <h1 className="text-gray-200 poppins-bold text-xl md:text-5xl">
+          <h1 className="text-gray-200 alan-sans-font text-xl md:text-5xl">
             Experience Synapse AI Tutor
           </h1>
 
-          <p className="text-gray-500 poppins-regular text-md md:text-xl">
+          <p className="text-gray-500 poppins-regular leading-tight text-md md:text-xl">
             Transform any YouTube video into smart, interactive learning experiences <br />
             that wire knowledge straight to your synapses.
           </p>
 
-          <div className="flex items-center gap-3 bg-black border border-gray-800 rounded-lg py-2 px-4 shadow-md w-full md:w-auto">
+          <div className={`flex  items-center gap-3  bg-black border border-gray-800 rounded-lg py-2 px-4 text-sm shadow-md w-full md:w-auto transition-all duration-500
+            ${link!='' ? "border-b-1 border-b-blue-700 shadow-sm shadow-blue-400 " : ""}
+            `}>
   <LinkIcon className="text-gray-400 w-6 h-6" />
   <input
     type="text"
     value={link}
     onChange={(e) => setLink(e.target.value)}
     placeholder="Paste YouTube link here and start learning..."
-    className="flex-1 bg-transparent outline-none text-blue-400 px-2"
+    className="flex-1 bg-transparent outline-none text-blue-400 px-2 "
   />
   <button
      type='button'
      title='query'
     disabled={link.trim() === ''}
     onClick={handleExtract}
-    className={`p-2 rounded-md transition-all duration-200 ${
+    className={`p-2 rounded-md transition-all duration-400 ${
       link.trim() === ''
         ? 'bg-transparent text-white cursor-not-allowed'
         : 'bg-gray-300 text-black hover:bg-gray-400 hover:cursor-pointer active:scale-95'
@@ -94,7 +96,7 @@ const Home = () => {
         </div>
 
         {/* Placeholder for recent videos or components */}
-        <div className=" flex flex-col w-full mt-8 mx-auto ">
+        <div className=" flex flex-col w-full mt-2 mx-auto ">
          
         <div className='flex  items-center gap-2 px-8 '> <History className='text-white '/>  <h1 className='text-white poppins-semibold text-xl'> Recent</h1></div>
         <div >

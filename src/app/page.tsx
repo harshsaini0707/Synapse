@@ -13,14 +13,17 @@ const LandingPage = () => {
       <NavbarDemo />
 
       {/* Features */}
-      <div className="bg-red-600 py-10 text-center">
-        <p className="text-xl font-semibold text-white">What Features we have!!</p>
+      <div className="bg-[radial-gradient(circle_at_50%_65%,#b3e0a8bd,#64da36d1)] py-2 text-center">
+    
         <FeaturesSectionDemo />
       </div>
 
-      {/* Globe Section */}
+
+
       
-     <BackgroundBeamsDemo/>
+
+      {/* Globe Section */}
+      <BackgroundBeamsDemo/>
      
     </div>
   )

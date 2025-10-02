@@ -1,5 +1,6 @@
 import { Brain, NotebookTabs } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
+import ReactMarkdown from 'react-markdown'
 import { LoaderThreeDemo } from '../Loadertunder/Loadertunder'
 import { useVideoStore } from '@/store/videoStore'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -12,7 +13,7 @@ type SummaryType = "quick" | "detailed";
 const Summary = () => {
   const [summary, setSummary] = useState('');
   const [currentSummaryType, setCurrentSummaryType] = useState<SummaryType | ''>('');
-  const [viewMode, setViewMode] = useState<SummaryType>('quick'); // 'quick' or 'detailed'
+  const [viewMode, setViewMode] = useState<SummaryType>(); 
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [isToggling, setIsToggling] = useState(false);
   
@@ -126,7 +127,10 @@ const Summary = () => {
                 {/* Enhanced Generate Buttons */}
                 <div className="flex flex-row gap-6">
                   <button 
-                    onClick={() => summaryMutation.mutate('quick')}
+                    onClick={() => {
+                      summaryMutation.mutate('quick');
+                    setCurrentSummaryType("quick")
+                    }}
                     disabled={summaryMutation.isPending}
                     className="group hover:scale-105 duration-300 text-black border border-gray-600 bg-white/95 px-4 py-2 flex items-center gap-3 rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:shadow-xl transition-all"
                   >
@@ -136,7 +140,10 @@ const Summary = () => {
                     <h1 className='font-mono font-semibold'>Quick Summary</h1>
                   </button>
                   <button
-                    onClick={() => summaryMutation.mutate('detailed')}
+                    onClick={() =>{
+                       summaryMutation.mutate('detailed');
+                       setCurrentSummaryType("detailed")
+                    }}
                     disabled={summaryMutation.isPending}
                     className="group hover:scale-105 duration-300 text-black border border-gray-600 bg-white/95 px-4 py-2 flex items-center gap-3 rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:shadow-xl transition-all"
                   >
@@ -195,7 +202,7 @@ const Summary = () => {
             <div className={`w-full max-w-4xl mx-auto transition-all duration-300 ${
               isToggling ? 'opacity-50 scale-95' : 'opacity-100 scale-100'
             }`}>
-              <div className="bg-gray-900/40 border border-gray-700 rounded-2xl p-6 transition-all duration-300 hover:border-gray-600">
+              <div className="bg-transparent border border-gray-700 rounded-2xl p-6 transition-all duration-300 hover:border-gray-600">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div className={`transition-all duration-300 ${isToggling ? 'rotate-12' : 'rotate-0'}`}>
@@ -237,15 +244,25 @@ const Summary = () => {
                   </div>
                 </div>
                 
-                <div className={`text-gray-200 leading-relaxed whitespace-pre-wrap transition-all duration-500 ${
+                <div className={`text-gray-200 leading-relaxed transition-all duration-500 ${
                   isToggling ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'
                 }`}>
-                  {getCurrentSummary() || (
-                    <div className="text-gray-500 italic">
-                      {viewMode === 'quick'  && "Click 'Quick' to load quick summary"}
-                      {viewMode === 'detailed' && "Click 'Detailed' to load detailed summary"}
-                    </div>
-                  )}
+                  <div className="prose prose-invert prose-gray max-w-none
+                      prose-headings:text-white prose-headings:font-semibold prose-headings:mb-4
+                      prose-h1:text-2xl prose-h1:mb-6 prose-h2:text-xl prose-h2:mb-5 prose-h3:text-lg prose-h3:mb-4
+                      prose-p:text-gray-200 prose-p:leading-relaxed prose-p:mb-4
+                      prose-strong:text-white prose-strong:font-semibold
+                      prose-em:text-gray-300 prose-em:italic
+                      prose-ul:text-gray-200 prose-ul:mb-4 prose-ol:text-gray-200 prose-ol:mb-4
+                      prose-li:text-gray-200 prose-li:marker:text-gray-400 prose-li:mb-2
+                      prose-blockquote:border-l-gray-600 prose-blockquote:text-gray-300 prose-blockquote:mb-4
+                      prose-code:text-green-400 prose-code:bg-gray-800 prose-code:px-1 prose-code:rounded
+                      prose-pre:bg-gray-800 prose-pre:border prose-pre:border-gray-700 prose-pre:mb-4
+                      prose-a:text-blue-400 prose-a:hover:text-blue-300">
+                    <ReactMarkdown>
+                      {getCurrentSummary()}
+                    </ReactMarkdown>
+                  </div>
                 </div>
               </div>
             </div>

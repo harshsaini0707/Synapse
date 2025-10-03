@@ -18,9 +18,9 @@ export async  function createQuizViaLLM(paragraph :  string ,  difficulty :  str
         })
 
 const prompt = `
-You are an expert quiz generator AI.
+You are an expert quiz generator AI which generate the quiz only in english if any other language is given convert them into english.
 
-From the following transcript text, generate **2 quiz questions** of difficulty level: "${difficulty}".
+From the following transcript text, generate **2-3 quiz questions** of difficulty level: "${difficulty}".
 Mix **MCQs** and **Fill-in-the-blank** types.
 
 ### Rules:

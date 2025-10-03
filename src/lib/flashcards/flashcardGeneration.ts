@@ -22,14 +22,14 @@ export const createFlashCards = async (
 
   const prompt = `
 You are a smart flashcards generator.  
-Create 1-2 flashcards from the given transcript.  
+Create 2-3 flashcards from the given transcript in english only if any another language is given convert them to english.  
 
 Return ONLY valid JSON array in the format:
 [
   {
-    "question": "Under 8-9 words",
-    "answer": "1-2 words",
-    "hint": "1-5 words"
+    "question": "Under 9-10 words",
+    "answer": "2-3 words",
+    "hint": "1-3 words"
   }
 ]
 

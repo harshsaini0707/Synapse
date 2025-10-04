@@ -70,6 +70,8 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
     height: "288",
     playerVars: {
       autoplay: 0,
+      origin: typeof window !== 'undefined' ? window.location.origin : 'https://synapse-eight-psi.vercel.app',
+      enablejsapi: 1,
     },
   };
 

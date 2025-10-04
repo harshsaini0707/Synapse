@@ -130,18 +130,18 @@ export async function POST(req : NextRequest){
     } catch (error) {
         console.error('Transcript API Error:', error);
         
-        // More specific error messages
-        let errorMessage = "Failed to fetch the youtube transcript, Internal Server Error";
+        // // More specific error messages
+        // let errorMessage = "Failed to fetch the youtube transcript, Internal Server Error";
         
-        if (error instanceof Error) {
-            if (error.message.includes("No transcript found")) {
-                errorMessage = "No transcript available for this video. Please try a video with captions enabled.";
-            } else if (error.message.includes("video_basic_info")) {
-                errorMessage = "Could not access video information. The video might be private or restricted.";
-            } else if (error.message.includes("authentication") || error.message.includes("credentials")) {
-                errorMessage = "Google authentication error. Please contact support.";
-            }
-        }
+        // if (error instanceof Error) {
+        //     if (error.message.includes("No transcript found")) {
+        //         errorMessage = "No transcript available for this video. Please try a video with captions enabled.";
+        //     } else if (error.message.includes("video_basic_info")) {
+        //         errorMessage = "Could not access video information. The video might be private or restricted.";
+        //     } else if (error.message.includes("authentication") || error.message.includes("credentials")) {
+        //         errorMessage = "Google authentication error. Please contact support.";
+        //     }
+        // }
         
         return NextResponse.json(
             { error: error },

@@ -1,9 +1,7 @@
+
 import { FeaturesSectionDemo } from '@/components/Features/Features'
-import { GlobeDemo } from '@/components/Globe/Globe'
-import { InfiniteMovingCardsDemo } from '@/components/InfiniteCard/Infinitecards'
 import { NavbarDemo } from '@/components/Navbar/Navbar'
 import { BackgroundBeamsDemo } from '@/components/Reviews/Reviews'
-import { UniversityLogos } from '@/components/UniversityLogos/UniversityLogos'
 import React from 'react'
 
 const LandingPage = () => {

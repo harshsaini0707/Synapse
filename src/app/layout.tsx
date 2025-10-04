@@ -1,17 +1,19 @@
-'use client'
-import { SessionProvider } from "next-auth/react"
 import "./globals.css"
-import QueryProvider from "@/providers/QueryProvider"
+import ClientProviders from "@/components/providers/ClientProviders"
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Synapse',
+  description: 'AI-powered learning platform',
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html>
+    <html lang="en">
       <body>
-        <SessionProvider>
-          <QueryProvider>
-      {children}
-          </QueryProvider>
-        
-        </SessionProvider>
+        <ClientProviders>
+          {children}
+        </ClientProviders>
       </body>
     </html>
   )

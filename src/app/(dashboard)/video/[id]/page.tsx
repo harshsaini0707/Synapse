@@ -25,6 +25,21 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
   
   // State for controlling highlight visibility
   const [showHighlights, setShowHighlights] = useState(true);
+  
+  // State for responsive layout
+  const [isDesktopLayout, setIsDesktopLayout] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktopLayout(window.innerWidth >= 950);
+    };
+
+    // Set initial state
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     setVideoId(id);
@@ -67,9 +82,13 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-full bg-[#09090B] text-white border border-gray-800">
+    <div className={`flex h-full bg-[#09090B] text-white border border-gray-800 ${
+      isDesktopLayout ? 'flex-row' : 'flex-col'
+    }`}>
       {/* Left: Video + Transcript */}
-      <div className="w-full lg:w-[45%] flex-1 pt-4 px-4 overflow-y-auto">
+      <div className={`flex-1 pt-2 px-3  ${
+        isDesktopLayout ? 'w-[45%]' : 'w-full'
+      }`}>
         {/* YouTube Embed */}
         <YouTube videoId={id} opts={opts} ref={playerRef} />
 
@@ -182,7 +201,9 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
       </div>
 
       {/* Right: Features */}
-      <div className="w-full lg:w-[55%] h-full flex pt-2 flex-col">
+      <div className={`h-full flex pt-1 flex-col ${
+        isDesktopLayout ? 'w-[55%]' : 'w-full'
+      }`}>
         <FloatingDockDemo />
       </div>
     </div>

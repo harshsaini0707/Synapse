@@ -7,7 +7,7 @@ import { transcriptChunks, videos } from "../db/schema";
 import { eq } from "drizzle-orm";
 
 
-export async function createEmbedding(transcript :  string , viedoId : string){
+export async function createEmbedding(transcript :  string | undefined , viedoId : string){
 try {
 
     if(!transcript){
@@ -19,8 +19,8 @@ try {
 
     //chunking 
     const splitter  = new RecursiveCharacterTextSplitter({
-        chunkSize: 1000,
-        chunkOverlap : 100
+        chunkSize: 2000,
+        chunkOverlap : 300
     })
 
     const chunks  = await splitter.splitText(transcript);

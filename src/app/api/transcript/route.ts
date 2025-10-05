@@ -127,7 +127,7 @@ export async function POST(req : NextRequest){
         })
           
     } catch (error) {
-        console.error('Transcript API Error:-', error);
+        console.error('Transcript API Error:', error);
         
         // More specific error messages
         let errorMessage = "Failed to fetch the youtube transcript, Internal Server Error";

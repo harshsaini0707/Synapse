@@ -1,11 +1,11 @@
 import {  NextRequest, NextResponse } from "next/server";
-import {YoutubeLoader}  from "@langchain/community/document_loaders/web/youtube"
-import play from "play-dl";
 import { db } from "@/lib";
 import {  videoChapters, videos } from "@/lib/db/schema";
 import { createEmbedding } from "@/lib/gemini-transript/embedding";
 import { hasChapterEmbeddingAndHighlights } from "@/lib/gemini-transript/hasChapters-gemini";
 import { summarizeNoChapters } from "@/lib/gemini-transript/noChapters-gemini";
+import { getVideoDetails, extractChaptersWithLLM } from "@/lib/youtube-api";
+import { YoutubeLoader } from "@langchain/community/document_loaders/web/youtube";
 
 export async function POST(req : NextRequest){
     try {
@@ -26,9 +26,8 @@ export async function POST(req : NextRequest){
             );
         }
 
-        const ytUrl = `https://www.youtube.com/watch?v=${videoId}` as string
-        
-        console.log(`Processing video: ${videoId}`);
+    // Log only the video processing start if needed (can remove if truly only description is desired)
+    // console.log(`Processing video: ${videoId}`);
 
         const user = await db.query.users.findFirst({
             where : (users , {eq} ) => eq(users.id , userId)
@@ -51,7 +50,7 @@ export async function POST(req : NextRequest){
         })
 
         if(alreadyHaveVideo){
-            console.log('Already have data for video:', videoId);
+            // Suppressed: existing video log
 
             const chapters = await db.query.videoChapters.findMany({
                 where : (videoChapters , {eq}) =>(
@@ -64,63 +63,63 @@ export async function POST(req : NextRequest){
             })
         }
        
-        console.log('Fetching transcript for:', ytUrl);
+    // Suppressed: metadata + transcript fetch log
 
-        // Get Transcript
-        const transcript = YoutubeLoader.createFromUrl(ytUrl , {
-            language : "en"
-        })
-        const docs = await transcript.load();
-        const transcriptText = docs.map(d => d.pageContent).join("\n");
+    // 1. Metadata (title, thumbnail, duration, description) via YouTube Data API
+    const videoDetails = await getVideoDetails(videoId);
+    // Suppressed: video title log
+
+    // 2. Transcript strictly via LangChain YoutubeLoader
+    const ytUrl = `https://www.youtube.com/watch?v=${videoId}`;
+    const transcriptLoader = YoutubeLoader.createFromUrl(ytUrl, { language: "en" });
+    const docs = await transcriptLoader.load();
+    const transcriptText = docs.map(d => d.pageContent).join("\n");
+    // Suppressed: transcript length log
 
         if (!transcriptText || transcriptText.trim().length === 0) {
             throw new Error("No transcript found for this video");
         }
 
-        console.log('Transcript fetched, getting video details...');
-
-        // Get video info using play-dl
-        const info = await play.video_basic_info(ytUrl);
-        const details = info.video_details;
-
-        if (!details) {
-            throw new Error("Could not fetch video details");
-        }
-
-        console.log('Video details fetched, inserting into database...');
+    // Suppressed: DB insert log
 
         const enterDataInVideoTable = await db.insert(videos).values({
             user_id : userId ,
             video_id : videoId,
-            title : details?.title ?? "No Title",
-            thumbnail : details?.thumbnails?.at(-1)?.url ?? "",
-            duration : details?.durationRaw ?? "",
+            title : videoDetails.title,
+            thumbnail : videoDetails.thumbnail,
+            duration : videoDetails.duration,
             transcript : transcriptText,
         }).returning();
 
-        console.log('Creating embeddings...');
+    // Suppressed: embeddings log
 
         // Create embedding
         await createEmbedding(transcriptText , videoId);
 
-        const chapters = details.chapters?.map((c)=> ({
-            title: c.title,
-            timeStamp: c.timestamp
-        })) || [];
+                // Use chapters extracted from description via LLM (fresh extraction to ensure consistency)
+                const chapters = videoDetails.chapters.length > 0
+                    ? videoDetails.chapters
+                    : await extractChaptersWithLLM(videoDetails.description);
 
-        console.log(`Found ${chapters.length} chapters`);
+    // Suppressed: chapters count log
+    // Only log the description as requested
+    console.log('VIDEO_DESCRIPTION_START');
+    console.log(videoDetails.description || '');
+    console.log('VIDEO_DESCRIPTION_END');
 
         if(chapters.length > 0) {
+            // Suppressed: with chapters log
             await hasChapterEmbeddingAndHighlights(chapters , videoId);
         } else {
-            await summarizeNoChapters(transcriptText , details?.durationRaw ,  videoId);
+            // Suppressed: without chapters log
+            await summarizeNoChapters(transcriptText , videoDetails.duration ,  videoId);
         }
 
         const finalChapters = await db.query.videoChapters.findMany({
             where : (videoChapters , {eq}) => eq(videoChapters.video_id ,  videoId)
         })
 
-        console.log('Processing completed successfully');
+    // Suppressed: completion log
 
         return NextResponse.json({
             videoInfo : enterDataInVideoTable ,
@@ -130,21 +129,29 @@ export async function POST(req : NextRequest){
     } catch (error) {
         console.error('Transcript API Error:-', error);
         
-        // // More specific error messages
-        // let errorMessage = "Failed to fetch the youtube transcript, Internal Server Error";
+        // More specific error messages
+        let errorMessage = "Failed to fetch the youtube transcript, Internal Server Error";
         
-        // if (error instanceof Error) {
-        //     if (error.message.includes("No transcript found")) {
-        //         errorMessage = "No transcript available for this video. Please try a video with captions enabled.";
-        //     } else if (error.message.includes("video_basic_info")) {
-        //         errorMessage = "Could not access video information. The video might be private or restricted.";
-        //     } else if (error.message.includes("authentication") || error.message.includes("credentials")) {
-        //         errorMessage = "Google authentication error. Please contact support.";
-        //     }
-        // }
+        if (error instanceof Error) {
+            if (error.message.includes("No transcript found") || 
+                error.message.includes("No transcript available") ||
+                error.message.includes("Transcript is disabled")) {
+                errorMessage = "No transcript available for this video. Please try a video with captions enabled.";
+            } else if (error.message.includes("Video not found") || 
+                       error.message.includes("private/deleted")) {
+                errorMessage = "Video not found. The video might be private, deleted, or the ID is incorrect.";
+            } else if (error.message.includes("YouTube API access forbidden") || 
+                       error.message.includes("quota") || 
+                       error.message.includes("API key")) {
+                errorMessage = "YouTube API quota exceeded or invalid API key. Please contact support.";
+            } else if (error.message.includes("authentication") || 
+                       error.message.includes("credentials")) {
+                errorMessage = "YouTube API authentication error. Please contact support.";
+            }
+        }
         
         return NextResponse.json(
-            { error: error },
+            { error: errorMessage },
             { status: 500 }
         )
     }

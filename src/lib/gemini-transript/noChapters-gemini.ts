@@ -2,11 +2,12 @@ import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { db } from "@/lib";
 import { videoChapters } from "@/lib/db/schema";
+import { Transcript } from "@/types/scrapeType";
 
 
 export async function summarizeNoChapters(
-  transcript: string,
-  totalDuration: string,
+  transcript: Transcript[] | undefined,
+  totalDuration: string | undefined,
   video_id: string
 ) {
   const llm = new ChatGoogleGenerativeAI({

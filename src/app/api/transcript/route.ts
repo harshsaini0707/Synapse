@@ -118,14 +118,15 @@ export async function POST(req : NextRequest){
 
 // Now  from descrition try to fetch the timestamp and make chapter else use the {start , end , transcript } to create the highlight wiht timestamp
 
-       const chapters = await  getChaptersFromDescription(scrapData?.description)
+       const chapters =  await  getChaptersFromDescription(scrapData?.description)
 
        
 
-        if(chapters.length > 0) {
+        if(chapters.length > 0 || !chapters) {
             await hasChapterEmbeddingAndHighlights(chapters , videoId);
         } else {
-            await summarizeNoChapters(transcriptText , details?.durationRaw ,  videoId);
+            const transcriptWithTimeStamp = scrapData.transcript;
+            await summarizeNoChapters(transcriptWithTimeStamp , scrapData?.durationRaw ,  videoId);
         }
 
         const finalChapters = await db.query.videoChapters.findMany({

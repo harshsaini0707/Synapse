@@ -45,19 +45,33 @@ Return ONLY the JSON array.`;
         : (response.content as Array<{ type: string; text: string }>)
             .map((c) => (c.type === "text" ? c.text : ""))
             .join("\n");
+            
 
     // Clean the response to get pure JSON
-    const jsonString = content.trim().replace(/```json\n?|```/g, "");
+    const jsonString = content.trim().replace(/```json\n?|```/g, "").trim();
 
-    if (!jsonString.startsWith("[") || !jsonString.endsWith("]")) {
-      console.warn("LLM did not return a valid JSON array string:", jsonString);
+    console.log("LLM raw response:", content);
+    console.log("Cleaned JSON string:", jsonString);
+
+    // More flexible JSON validation - check if it looks like an array
+    if (!jsonString.includes("[") || !jsonString.includes("]")) {
+      console.warn("LLM did not return a JSON array:", jsonString);
       return [];
     }
 
-    const parsed = JSON.parse(jsonString);
+    let parsed;
+    try {
+      parsed = JSON.parse(jsonString);
+    } catch (parseError) {
+      console.error("JSON parse error:", parseError);
+      console.error("Failed to parse:", jsonString);
+      return [];
+    }
 
+    // Validate the parsed array
     if (
       Array.isArray(parsed) &&
+      parsed.length >= 2 && // At least 2 chapters as per rules
       parsed.every(
         (item) =>
           item &&
@@ -66,6 +80,7 @@ Return ONLY the JSON array.`;
           /^\d{1,2}:\d{2}(:\d{2})?$/.test(item.timeStamp)
       )
     ) {
+      console.log(`Successfully extracted ${parsed.length} chapters from description`);
       return parsed as Chapter[];
     }
 

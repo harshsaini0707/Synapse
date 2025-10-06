@@ -1,9 +1,9 @@
-import { ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings } from "@langchain/google-genai"
-import { NextResponse } from "next/server"
+import {GoogleGenerativeAIEmbeddings } from "@langchain/google-genai"
 import {TaskType} from "@google/generative-ai"
 import { db } from ".."
 import { transcriptChunks, videoChapters } from "../db/schema"
 import { sql } from "drizzle-orm"
+import { getLLMInstance } from "../llm"
 
 type chapters = {
 title : string , 
@@ -67,12 +67,7 @@ const topChunks = await db.select()
 
 export async function generateSummary(textSumamrize : string , chapterTitle : string) :Promise<string>{
 
-    const model = new ChatGoogleGenerativeAI({
-        model : "gemini-2.5-flash-lite",
-        temperature:0,
-        apiKey :process.env.GEMINI_API_KEY!
-    })
-
+    const model = getLLMInstance();
    const prompt = `
 Summarize the following text about "${chapterTitle}" in 3-4 concise sentences.
 Only return the summary text itself. 

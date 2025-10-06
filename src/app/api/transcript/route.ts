@@ -3,7 +3,7 @@ import { db } from "@/lib";
 import { videos } from "@/lib/db/schema";
 import { createEmbedding } from "@/lib/gemini-transript/embedding";
 import { hasChapterEmbeddingAndHighlights } from "@/lib/gemini-transript/hasChapters-gemini";
-import { summarizeNoChapters } from "@/lib/gemini-transript/noChapters-gemini";
+import { summarizeNoChapters, generateHighlightsFromTranscript } from "@/lib/gemini-transript/noChapters-gemini";
 import { getInfoFromVideo } from "@/lib/scrapVideo/scrapVideo";
 import { ScrapedVideoItem } from "@/types/scrapeType";
 import { getChaptersFromDescription } from "@/lib/scrapVideo/getVideoChaptersFromDescription";
@@ -105,7 +105,7 @@ export async function POST(req : NextRequest){
             user_id : userId ,
             video_id : videoId,
             title : scrapData?.title ?? "No Title",
-            thumbnail : scrapData?.thumbnails?? "",
+            thumbnail : scrapData?.thumbnail ?? "",
             duration : scrapData?.durationRaw ?? "",
             transcript : transcriptText || " ",
         }).returning();
@@ -116,17 +116,17 @@ export async function POST(req : NextRequest){
         await createEmbedding(transcriptText , videoId);
 
 
-// Now  from descrition try to fetch the timestamp and make chapter else use the {start , end , transcript } to create the highlight wiht timestamp
+// Now from description try to fetch the timestamp and make chapter else use the {start, end, transcript} to create the highlight with timestamp
 
-       const chapters =  await  getChaptersFromDescription(scrapData?.description)
+       const chapters = await getChaptersFromDescription(scrapData?.description ?? "");
 
-       
-
-        if(chapters.length > 0 || !chapters) {
-            await hasChapterEmbeddingAndHighlights(chapters , videoId);
+        if(chapters.length > 0) {
+            // We found chapters in description, use them with embeddings
+            await hasChapterEmbeddingAndHighlights(chapters, videoId);
         } else {
+            // No chapters found in description, generate highlights from transcript with timestamps
             const transcriptWithTimeStamp = scrapData.transcript;
-            await summarizeNoChapters(transcriptWithTimeStamp , scrapData?.durationRaw ,  videoId);
+            await generateHighlightsFromTranscript(transcriptWithTimeStamp, scrapData?.durationRaw, videoId);
         }
 
         const finalChapters = await db.query.videoChapters.findMany({

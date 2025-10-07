@@ -88,7 +88,7 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
       isDesktopLayout ? 'flex-row' : 'flex-col'
     }`}>
       {/* Left: Video + Transcript */}
-      <div className={`flex-1 pt-2 px-3 flex flex-col min-h-0 ${
+      <div className={`flex-1 pt-2 px-3${
         isDesktopLayout ? 'w-[45%]' : 'w-full'
       }`}>
         {/* YouTube Embed */}
@@ -122,7 +122,7 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
         </div>
 
         {showHighlights && (
-          <div className="flex-1 min-h-0 overflow-y-auto scrollable-container flex flex-col gap-1 border rounded-sm border-gray-800 bg-[radial-gradient(circle_at_0%_0%,#04170b9c,#000000)]">
+           <div className="flex max-h-[42vh] scrollable-container overflow-y-auto flex-col gap-1 border rounded-sm border-gray-800 bg-[radial-gradient(circle_at_0%_0%,#04170b9c,#000000)]">
             {isLoading ? (
               // Loading skeleton
               Array.from({ length: 6 }).map((_, index) => (

@@ -2,7 +2,6 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { db } from "@/lib/index";
 import * as schema from "@/lib/db/schema";
-import jwt from "jsonwebtoken";
 
 export const handler = NextAuth({
   providers: [
@@ -12,7 +11,12 @@ export const handler = NextAuth({
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET!,
-  session: { strategy: "jwt" },
+  session: { strategy: "jwt"  ,
+    maxAge :2 * 24 * 60 * 60,
+  },
+   jwt: {
+    maxAge: 2* 24 * 60 * 60, 
+  },
 
   callbacks: {
     async signIn({ user }) {
@@ -29,21 +33,6 @@ export const handler = NextAuth({
             email: user.email!,
             image: user.image || "",
           });
-
-          dbUser = await db.query.users.findFirst({
-            where: (u, { eq }) => eq(u.email, user.email!),
-          });
-        }
-
-        if (dbUser) {
-          // Create JWT with jsonwebtoken
-          const token = jwt.sign(
-            { userId: dbUser.id },
-            process.env.NEXTAUTH_SECRET!,
-            { expiresIn: "7d" }
-          );
-
-          user.jwt = token; // <-- attach to user
         }
 
         return true;
@@ -59,7 +48,6 @@ export const handler = NextAuth({
           where: (u, { eq }) => eq(u.email, user.email!),
         });
         if (dbUser) token.id = dbUser.id;
-        if (user?.jwt) token.jwt = user.jwt;
       }
       return token;
     },
@@ -67,7 +55,6 @@ export const handler = NextAuth({
     async session({ session, token }) {
       if (token?.id && session.user) {
         session.user.id = token.id;
-        session.jwt = token.jwt as string;
       }
       return session;
     },

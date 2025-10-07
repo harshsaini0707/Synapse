@@ -10,19 +10,29 @@ import {
 } from "@tabler/icons-react";
 
 import { motion } from "motion/react";
-
+import { signOut } from "next-auth/react";
 import Image from "next/image";
 import { useUserStore } from "@/store/userStore";
 
 export function SidebarDemo() {
 
-  const user = useUserStore((state) => state.user)
+  const user = useUserStore((state) => state.user);
+  const clearUser = useUserStore((state) => state.clearUser);
   const [open, setOpen] = useState(false);
+
+  const handleLogout = async () => {
+  
+    clearUser();
+    
+    await signOut({ 
+      callbackUrl: "/",
+      redirect: true 
+    });
+  };
 
   const links = [
     { label: "Home", href: "/home", icon: <IconBrandTabler className="h-5 w-5 shrink-0 text-white " /> },
-    { label: "Premium", href: "/premium", icon: <IconCreditCard className="h-5 w-5 shrink-0 text-white" /> },
-     { label: "Logout", href: "/logout", icon: <IconArrowLeft className="h-5 w-5 shrink-0 text-white" /> }
+    { label: "Premium", href: "/premium", icon: <IconCreditCard className="h-5 w-5 shrink-0 text-white" /> }
   ];
 
   return (
@@ -35,6 +45,22 @@ export function SidebarDemo() {
             {links.map((link, idx) => (
               <SidebarLink key={idx} link={link} />
             ))}
+          
+            <div 
+              onClick={handleLogout}
+              className="flex items-center justify-start gap-2 group/sidebar py-2 cursor-pointer  rounded transition-colors"
+            >
+              <IconArrowLeft className="h-5 w-5 shrink-0 text-white" />
+              <motion.span
+                animate={{
+                  display: open ? "inline-block" : "none",
+                  opacity: open ? 1 : 0,
+                }}
+                className="text-white group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
+              >
+                Logout
+              </motion.span>
+            </div>
           </div>
         </div>
 
@@ -63,7 +89,7 @@ export function SidebarDemo() {
 
 // Logos
 export const Logo = () => (
-  <a href="#" className="flex items-center space-x-2 py-1 text-sm font-normal">
+  <a href="/home" className="flex items-center space-x-2 py-1 text-sm font-normal" title="Synapse Home">
     <div className="h-5 w-6 shrink-0 rounded bg-black dark:bg-white" />
     <motion.span
       initial={{ opacity: 0 }}
@@ -76,7 +102,7 @@ export const Logo = () => (
 );
 
 export const LogoIcon = () => (
-  <a href="#" className="flex items-center space-x-2 py-1 text-sm font-normal">
+  <a href="/home" className="flex items-center space-x-2 py-1 text-sm font-normal" title="Synapse Home">
     <div className="h-5 w-6 shrink-0 rounded bg-black dark:bg-white" />
   </a>
 );

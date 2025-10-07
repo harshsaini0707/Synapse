@@ -14,7 +14,8 @@ export async function GET(req: NextRequest){
         }
 
         const videoHistory = await db.query.videos.findMany({
-            where: (video ,  {eq}) => eq(video.user_id , userId)
+            where: (video ,  {eq}) => eq(video.user_id , userId),
+            orderBy: (video , {desc}) =>[desc(video.created_at)]
         })
 
         if(!videoHistory || videoHistory.length === 0){

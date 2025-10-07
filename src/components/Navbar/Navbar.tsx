@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/resizable-navbar";
 import { useState } from "react";
 import Firstimpression from "../Firstimpression/Firstimpression";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export function NavbarDemo() {
   const navItems = [
@@ -28,7 +30,8 @@ export function NavbarDemo() {
       link: "#contact",
     },
   ];
-
+  const {status} =useSession();
+  const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
@@ -39,8 +42,8 @@ export function NavbarDemo() {
           <NavbarLogo />
           <NavItems items={navItems} />
           <div className="flex items-center gap-4">
-            <NavbarButton variant="secondary">Login</NavbarButton>
-            <NavbarButton variant="primary">Book a call</NavbarButton>
+          
+            <NavbarButton variant="secondary" onClick={status === 'authenticated' ? () => router.push("/home") : () => router.push("/signin")}>Login</NavbarButton>
           </div>
         </NavBody>
 
@@ -70,7 +73,14 @@ export function NavbarDemo() {
             ))}
             <div className="flex w-full flex-col gap-4">
               <NavbarButton
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  if (status === 'authenticated') {
+                    router.push("/home");
+                  } else {
+                    router.push("/signin");
+                  }
+                }}
                 variant="primary"
                 className="w-full"
               >

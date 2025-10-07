@@ -29,9 +29,7 @@ export async function GET(req: NextRequest){
             {data : videoHistory} , 
             {status :  200}
         )
-
-
-        
+    
     } catch (error) {
         console.log(error);
         

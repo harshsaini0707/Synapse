@@ -8,10 +8,10 @@ import { cn } from "@/lib/utils";
 // Helper function to get size-based styles
 const getSizeStyles = (size: "sm" | "md" | "lg" | "xl") => {
   const sizeMap = {
-    sm: "text-sm sm:text-lg md:text-xl lg:text-2xl py-1 px-2",
-    md: "text-lg sm:text-xl md:text-2xl lg:text-4xl py-2 px-3", 
-    lg: "text-2xl sm:text-3xl md:text-4xl lg:text-6xl py-3 px-4",
-    xl: "text-3xl sm:text-4xl md:text-5xl lg:text-7xl py-4 px-5"
+    sm: "text-lg text-gray-950 md:text-xl lg:text-2xl py-1 px-2",
+    md: "text-3xl text-gray-950 md:text-4xl lg:text-5xl py-2 px-3", 
+    lg: "text-4xl text-gray-950 md:text-5xl lg:text-6xl py-3 px-4",
+    xl: "text-5xl text-gray-950 md:text-6xl lg:text-7xl py-4 px-5"
   };
   return sizeMap[size];
 };
@@ -21,37 +21,37 @@ const getVariantStyles = (variant: "default" | "primary" | "secondary" | "accent
   if (!useThemeColors) {
     // Fallback to custom green background
     return {
-      text: "text-black dark:text-black",
+      text: "", // Text color now handled in getSizeStyles
       background: "bg-[#9AE600]",
-      shadow: "shadow-[inset_0_-1px_#8AD100,inset_0_0_0_1px_#8AD100,_0_4px_8px_#8AD100] dark:shadow-[inset_0_-1px_#8AD100,inset_0_0_0_1px_#8AD100,_0_4px_8px_#8AD100]"
+      shadow: "shadow-[inset_0_-1px_#8AD100,inset_0_0_0_1px_#8AD100,_0_4px_8px_#8AD100]"
     };
   }
 
   const variantMap = {
     default: {
-      text: "text-black",
+      text: "", // Text color now handled in getSizeStyles
       background: "bg-[#9AE600]",
-    //  shadow: "shadow-[inset_0_-1px_#8AD100,inset_0_0_0_1px_#8AD100,_0_4px_8px_#8AD100]"
+      shadow: "shadow-[inset_0_-1px_#8AD100,inset_0_0_0_1px_#8AD100,_0_4px_8px_#8AD100]"
     },
     primary: {
       text: "text-primary-foreground",
       background: "bg-gradient-to-b from-primary/90 to-primary",
-     // shadow: "shadow-[inset_0_-1px_hsl(var(--primary-foreground)/0.1),inset_0_0_0_1px_hsl(var(--primary-foreground)/0.2),_0_4px_8px_hsl(var(--primary)/0.5)]"
+      shadow: "shadow-[inset_0_-1px_hsl(var(--primary-foreground)/0.1),inset_0_0_0_1px_hsl(var(--primary-foreground)/0.2),_0_4px_8px_hsl(var(--primary)/0.5)]"
     },
     secondary: {
       text: "text-secondary-foreground",
       background: "bg-gradient-to-b from-secondary/90 to-secondary",
-    //  shadow: "shadow-[inset_0_-1px_hsl(var(--secondary-foreground)/0.1),inset_0_0_0_1px_hsl(var(--secondary-foreground)/0.2),_0_4px_8px_hsl(var(--secondary)/0.5)]"
+      shadow: "shadow-[inset_0_-1px_hsl(var(--secondary-foreground)/0.1),inset_0_0_0_1px_hsl(var(--secondary-foreground)/0.2),_0_4px_8px_hsl(var(--secondary)/0.5)]"
     },
     accent: {
       text: "text-accent-foreground",
       background: "bg-gradient-to-b from-accent/90 to-accent",
-     // shadow: "shadow-[inset_0_-1px_hsl(var(--accent-foreground)/0.1),inset_0_0_0_1px_hsl(var(--accent-foreground)/0.2),_0_4px_8px_hsl(var(--accent)/0.5)]"
+      shadow: "shadow-[inset_0_-1px_hsl(var(--accent-foreground)/0.1),inset_0_0_0_1px_hsl(var(--accent-foreground)/0.2),_0_4px_8px_hsl(var(--accent)/0.5)]"
     },
     muted: {
       text: "text-muted-foreground",
       background: "bg-gradient-to-b from-muted/90 to-muted",
-    //  shadow: "shadow-[inset_0_-1px_hsl(var(--muted-foreground)/0.1),inset_0_0_0_1px_hsl(var(--muted-foreground)/0.2),_0_4px_8px_hsl(var(--muted)/0.5)]"
+      shadow: "shadow-[inset_0_-1px_hsl(var(--muted-foreground)/0.1),inset_0_0_0_1px_hsl(var(--muted-foreground)/0.2),_0_4px_8px_hsl(var(--muted)/0.5)]"
     }
   };
   

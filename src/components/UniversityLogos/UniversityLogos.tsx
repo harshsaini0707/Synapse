@@ -1,84 +1,90 @@
 "use client";
 import React from "react";
+import Image from "next/image";
+
+// Import all logo images
+import chitkaraLogo from "/public/logos/chitkara.png";
+import harvardLogo from "/public/logos/harvard.png";
+import hydrabadLogo from "/public/logos/hydrabad.jpeg";
+import iiscLogo from "/public/logos/iisc.png";
+import iitBombayLogo from "/public/logos/iit-bombay.png";
+import iitDelhiLogo from "/public/logos/iit-delhi.png";
+import iitMadrasLogo from "/public/logos/iit-madras.png";
+import mitLogo from "/public/logos/mit.png";
+import nitLogo from "/public/logos/nit.png";
+import tokyoLogo from "/public/logos/tokyo.png";
 
 interface University {
   name: string;
-  logo: string;
+  logo: any;
   country: string;
 }
 
 const universities: University[] = [
   // Indian Universities
-  { name: "IIT Bombay", logo: "/logos/iit-bombay.png", country: "India" },
-  { name: "IIT Delhi", logo: "/logos/iit-delhi.png", country: "India" },
-  { name: "IISc Bangalore", logo: "/logos/iisc.png", country: "India" },
-  { name: "BITS Pilani", logo: "/logos/bits.png", country: "India" },
-  { name: "IIT Madras", logo: "/logos/iit-madras.png", country: "India" },
+  { name: "IIT Bombay", logo: iitBombayLogo, country: "India" },
+  { name: "IIT Delhi", logo: iitDelhiLogo, country: "India" },
+  { name: "IIT Madras", logo: iitMadrasLogo, country: "India" },
+  { name: "IISc Bangalore", logo: iiscLogo, country: "India" },
+  { name: "NIT", logo: nitLogo, country: "India" },
+  { name: "Chitkara University", logo: chitkaraLogo, country: "India" },
+  { name: "University of Hyderabad", logo: hydrabadLogo, country: "India" },
   
   // International Universities
-  { name: "MIT", logo: "/logos/mit.png", country: "USA" },
-  { name: "Stanford", logo: "/logos/stanford.png", country: "USA" },
-  { name: "Harvard", logo: "/logos/harvard.png", country: "USA" },
-  { name: "Oxford", logo: "/logos/oxford.png", country: "UK" },
-  { name: "Cambridge", logo: "/logos/cambridge.png", country: "UK" },
-  { name: "ETH Zurich", logo: "/logos/eth.png", country: "Switzerland" },
-  { name: "NUS", logo: "/logos/nus.png", country: "Singapore" },
-  { name: "University of Tokyo", logo: "/logos/tokyo.png", country: "Japan" },
+  { name: "Harvard", logo: harvardLogo, country: "USA" },
+  { name: "MIT", logo: mitLogo, country: "USA" },
+  { name: "University of Tokyo", logo: tokyoLogo, country: "Japan" },
 ];
 
 export const UniversityLogos = () => {
   return (
-    <div className="relative overflow-hidden">
-      {/* Scrolling container */}
-      <div className="flex animate-scroll">
-        {/* First set */}
-        <div className="flex space-x-4 animate-marquee">
-          {universities.map((university, index) => (
-            <div
-              key={index}
-              className="flex flex-col items-center justify-center min-w-[120px] group hover:scale-110 transition-transform duration-300"
-            >
-              {/* Logo placeholder with gradient background */}
-              <div className="w-16 h-16 bg-gradient-to-br from-white/20 to-gray-300/10 rounded-full flex items-center justify-center mb-2 border border-white/10 group-hover:border-white/30 transition-all duration-300">
-                <div className="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center">
-                  {/* You can replace this with actual logos */}
-                  <span className="text-gray-800 font-bold text-xs">
-                    {university.name.split(' ').map(word => word[0]).join('')}
-                  </span>
-                </div>
+    <div className="py-8 max-w-6xl">
+      <div className="relative overflow-hidden">
+        {/* Scrolling container */}
+        <div className="flex">
+          {/* First set */}
+          <div className="flex space-x-6 animate-marquee items-center">
+            {universities.map((university, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-center w-16 h-16 bg-white  transition-all duration-300  p-2 flex-shrink-0"
+              >
+                <Image
+                  src={university.logo}
+                  alt={`${university.name} logo`}
+                  width={56}
+                  height={56}
+                  className="object-contain w-full h-full"
+                  priority={index < 5}
+                />
               </div>
-              <span className="text-xs text-center font-medium text-gray-300 group-hover:text-white transition-colors">
-                {university.name}
-              </span>
-            </div>
-          ))}
+            ))}
+          </div>
+          
+          {/* Duplicate set for seamless loop */}
+          <div className="flex space-x-6 animate-marquee items-center">
+            {universities.map((university, index) => (
+              <div
+                key={`duplicate-${index}`}
+                className="flex items-center justify-center w-16 h-16 bg-white  hover:scale-110 transition-all duration-300  p-2 flex-shrink-0"
+              >
+                <Image
+                  src={university.logo}
+                  alt={`${university.name} logo`}
+                  width={56}
+                  height={56}
+                  className="object-contain w-full h-full"
+                  priority={index < 5}
+                />
+              </div>
+            ))}
+          </div>
         </div>
         
-        {/* Duplicate set for seamless loop */}
-        <div className="flex space-x-4 animate-marquee">
-          {universities.map((university, index) => (
-            <div
-              key={`duplicate-${index}`}
-              className="flex flex-col items-center justify-center min-w-[120px] group hover:scale-110 transition-transform duration-300"
-            >
-              <div className="w-16 h-16 bg-gradient-to-br from-white/20 to-gray-300/10 rounded-full flex items-center justify-center mb-2 border border-white/10 group-hover:border-white/30 transition-all duration-300">
-                <div className="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center">
-                  <span className="text-gray-800 font-bold text-xs">
-                    {university.name.split(' ').map(word => word[0]).join('')}
-                  </span>
-                </div>
-              </div>
-              <span className="text-xs text-center font-medium text-gray-300 group-hover:text-white transition-colors">
-                {university.name}
-              </span>
-            </div>
-          ))}
-        </div>
+        {/* Gradient overlays for smooth edges */}
+        <div className="absolute top-0 left-0 w-20 h-full bg-gradient-to-r from-white to-transparent pointer-events-none z-10"></div>
+        <div className="absolute top-0 right-0 w-20 h-full bg-gradient-to-l from-white to-transparent pointer-events-none z-10"></div>
       </div>
-      
-      {/* Gradient overlays for smooth edges */}
-      <div className="absolute top-0 left-0 w-6 h-full [mask-image:linear-gradient(to_right,transparent,white_1%,white_14%,transparent)] pointer-events-none z-10"></div>
-     
     </div>
   );
 };

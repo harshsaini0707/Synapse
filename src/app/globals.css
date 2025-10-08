@@ -183,6 +183,33 @@ body {
     }
   }
 }
+
+/* University logos marquee animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes bounce-horizontal {
+  0%, 100% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(10px);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+.animate-bounce-horizontal {
+  animation: bounce-horizontal 3s ease-in-out infinite;
+}
 ::selection {
   background-color: #04c85f; /* green background */
   color: #ffffff;            /* white text */

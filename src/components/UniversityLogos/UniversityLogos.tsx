@@ -21,7 +21,7 @@ interface University {
 }
 
 const universities: University[] = [
-  // Indian Universities
+ 
   { name: "IIT Bombay", logo: iitBombayLogo, country: "India" },
   { name: "IIT Delhi", logo: iitDelhiLogo, country: "India" },
   { name: "IIT Madras", logo: iitMadrasLogo, country: "India" },
@@ -30,7 +30,6 @@ const universities: University[] = [
   { name: "Chitkara University", logo: chitkaraLogo, country: "India" },
   { name: "University of Hyderabad", logo: hydrabadLogo, country: "India" },
   
-  // International Universities
   { name: "Harvard", logo: harvardLogo, country: "USA" },
   { name: "MIT", logo: mitLogo, country: "USA" },
   { name: "University of Tokyo", logo: tokyoLogo, country: "Japan" },
@@ -38,16 +37,16 @@ const universities: University[] = [
 
 export const UniversityLogos = () => {
   return (
-    <div className="py-8 max-w-6xl">
-      <div className="relative overflow-hidden">
-        {/* Scrolling container */}
-        <div className="flex">
+    <div className="w-full py-4 md:py-6 lg:py-8 overflow-hidden">
+      <div className="relative w-full">
+        {/* Scrolling container - properly contained */}
+        <div className="flex w-full overflow-hidden">
           {/* First set */}
-          <div className="flex space-x-6 animate-marquee items-center">
+          <div className="flex space-x-3 sm:space-x-4 md:space-x-6 lg:space-x-8 animate-marquee items-center min-w-max">
             {universities.map((university, index) => (
               <div
                 key={index}
-                className="flex items-center justify-center w-16 h-16 bg-white  transition-all duration-300  p-2 flex-shrink-0"
+                className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-white rounded-lg shadow-sm border border-gray-200 hover:scale-105 md:hover:scale-110 transition-all duration-300 hover:shadow-md p-1 sm:p-1.5 md:p-2 flex-shrink-0"
               >
                 <Image
                   src={university.logo}
@@ -56,17 +55,18 @@ export const UniversityLogos = () => {
                   height={56}
                   className="object-contain w-full h-full"
                   priority={index < 5}
+                  sizes="(max-width: 640px) 32px, (max-width: 768px) 40px, (max-width: 1024px) 48px, 56px"
                 />
               </div>
             ))}
           </div>
           
           {/* Duplicate set for seamless loop */}
-          <div className="flex space-x-6 animate-marquee items-center">
+          <div className="flex space-x-3 sm:space-x-4 md:space-x-6 lg:space-x-8 animate-marquee items-center min-w-max">
             {universities.map((university, index) => (
               <div
                 key={`duplicate-${index}`}
-                className="flex items-center justify-center w-16 h-16 bg-white  hover:scale-110 transition-all duration-300  p-2 flex-shrink-0"
+                className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-white rounded-lg shadow-sm border border-gray-200 hover:scale-105 md:hover:scale-110 transition-all duration-300 hover:shadow-md p-1 sm:p-1.5 md:p-2 flex-shrink-0"
               >
                 <Image
                   src={university.logo}
@@ -75,15 +75,15 @@ export const UniversityLogos = () => {
                   height={56}
                   className="object-contain w-full h-full"
                   priority={index < 5}
+                  sizes="(max-width: 640px) 32px, (max-width: 768px) 40px, (max-width: 1024px) 48px, 56px"
                 />
               </div>
             ))}
           </div>
         </div>
-        
-        {/* Gradient overlays for smooth edges */}
-        <div className="absolute top-0 left-0 w-20 h-full bg-gradient-to-r from-white to-transparent pointer-events-none z-10"></div>
-        <div className="absolute top-0 right-0 w-20 h-full bg-gradient-to-l from-white to-transparent pointer-events-none z-10"></div>
+       
+        <div className="absolute top-0 left-0 w-6 sm:w-8 md:w-12 lg:w-20 h-full bg-gradient-to-r from-white to-transparent pointer-events-none z-10"></div>
+        <div className="absolute top-0 right-0 w-6 sm:w-8 md:w-12 lg:w-20 h-full bg-gradient-to-r from-transparent to-white pointer-events-none z-10"></div>
       </div>
     </div>
   );

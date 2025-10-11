@@ -4,8 +4,6 @@ import { Sidebar, SidebarBody, SidebarLink } from "../ui/sidebar";
 import {
   IconArrowLeft,
   IconBrandTabler,
-  IconSettings,
-  IconUserBolt,
   IconCreditCard 
 } from "@tabler/icons-react";
 
@@ -31,8 +29,8 @@ export function SidebarDemo() {
   };
 
   const links = [
-    { label: "Home", href: "/home", icon: <IconBrandTabler className="h-5 w-5 shrink-0 text-white " /> },
-    { label: "Premium", href: "/premium", icon: <IconCreditCard className="h-5 w-5 shrink-0 text-white" /> }
+    { label: "Home", href: "/home", icon: <IconBrandTabler className="h-5 w-5 shrink-0 text-white quicksand-mdeium " /> },
+    { label: "Premium", href: "/premium", icon: <IconCreditCard className="h-5 w-5 shrink-0 text-white quicksand-medium" /> }
   ];
 
   return (
@@ -50,7 +48,7 @@ export function SidebarDemo() {
               onClick={handleLogout}
               className="flex items-center justify-start gap-2 group/sidebar py-2 cursor-pointer  rounded transition-colors"
             >
-              <IconArrowLeft className="h-5 w-5 shrink-0 text-white" />
+              <IconArrowLeft className="h-5 w-5 shrink-0 text-neutral-100 quicksand-medium" />
               <motion.span
                 animate={{
                   display: open ? "inline-block" : "none",

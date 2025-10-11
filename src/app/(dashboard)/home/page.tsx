@@ -76,6 +76,11 @@ const Home = () => {
     type="text"
     value={link}
     onChange={(e) => setLink(e.target.value)}
+    onKeyDown={(e) => {
+      if (e.key === 'Enter' && link.trim() !== '') {
+        handleExtract();
+      }
+    }}
     placeholder="Paste YouTube link here and start learning..."
     className="flex-1 bg-transparent outline-none text-blue-400 px-2 "
   />

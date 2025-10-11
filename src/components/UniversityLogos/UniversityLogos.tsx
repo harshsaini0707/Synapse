@@ -37,7 +37,7 @@ const universities: University[] = [
 
 export const UniversityLogos = () => {
   return (
-    <div className="w-full py-4 md:py-6 lg:py-8 overflow-hidden">
+    <div className="w-full pt-4 md:pt-6 lg:pt-8 overflow-hidden">
       <div className="relative w-full">
         {/* Scrolling container - properly contained */}
         <div className="flex w-full overflow-hidden">
@@ -46,7 +46,7 @@ export const UniversityLogos = () => {
             {universities.map((university, index) => (
               <div
                 key={index}
-                className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-white rounded-lg shadow-sm border border-gray-200 hover:scale-105 md:hover:scale-110 transition-all duration-300 hover:shadow-md p-1 sm:p-1.5 md:p-2 flex-shrink-0"
+                className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-transparent hover:scale-105 md:hover:scale-110 transition-all duration-300 hover:shadow-md p-1 sm:p-1.5 md:p-2 flex-shrink-0"
               >
                 <Image
                   src={university.logo}
@@ -66,7 +66,7 @@ export const UniversityLogos = () => {
             {universities.map((university, index) => (
               <div
                 key={`duplicate-${index}`}
-                className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-white rounded-lg shadow-sm border border-gray-200 hover:scale-105 md:hover:scale-110 transition-all duration-300 hover:shadow-md p-1 sm:p-1.5 md:p-2 flex-shrink-0"
+                className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-transparent  hover:scale-105 md:hover:scale-110 transition-all duration-300 hover:shadow-md p-1 sm:p-1.5 md:p-2 flex-shrink-0"
               >
                 <Image
                   src={university.logo}

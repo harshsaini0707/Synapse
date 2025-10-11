@@ -61,9 +61,9 @@ export function BentoFeatures() {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
+    <div className="max-w-7xl mx-auto px-4 pt-12">
       {/* Header Section */}
-      <div className="text-center mb-16">
+      <div className="text-center mb-14">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -71,8 +71,8 @@ export function BentoFeatures() {
           viewport={{ once: true }}
           className="flex flex-col items-center gap-4"
         >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl quicksand-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
-            Packed with powerful features
+          <h2 className="text-3xl md:text-4xl lg:text-5xl quicksand-bold text-[#020612]">
+            Packed with Powerful Features
           </h2>
           <p className="text-lg md:text-xl quicksand-medium text-gray-600 max-w-3xl">
             Learn smarter with YouTube — create quizzes, flashcards, summaries, highlights, and chat your way to mastery
@@ -169,9 +169,9 @@ export function BentoFeatures() {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.5 }}
         viewport={{ once: true }}
-        className="text-center mt-16"
+        className="text-center mt-12"
       >
-        <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-green-100 to-emerald-100 rounded-full border border-green-200/50">
+        <div className="inline-flex items-center gap-3 px-6 py-3 mb-10 bg-gradient-to-r from-green-100 to-emerald-100 rounded-full border border-green-200/50">
           <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
           <span className="text-green-700 quicksand-semibold">
             And many more features coming soon!

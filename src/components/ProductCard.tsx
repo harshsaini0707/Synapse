@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 type Product = {
   product_id: number | string;
@@ -12,43 +11,23 @@ type Product = {
 
 export default function ProductCard({ product }: { product: Product }) {
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
-  const checkoutProduct = async (productId: number | string, is_recurring: boolean, useDynamicPaymentLinks: boolean) => {
+  const checkoutProduct = async (productId: number | string) => {
     setLoading(true);
+    
     try {
-      if (useDynamicPaymentLinks) {
-        let productType = "onetime"
-        if (is_recurring) {
-          productType = "subscription"
-        }
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/checkout/${productType}?productId=${productId}`, {
-          cache: "no-store",
-        });
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        
-        if (data.error) {
-          throw new Error(data.error);
-        }
-        
-        if (data.payment_link) {
-          router.push(data.payment_link);
-        } else {
-          throw new Error("No payment link received");
-        }
-      } else {
-        let checkoutUrl = `https://test.checkout.dodopayments.com/buy/${productId}?quantity=1&redirect_url=${process.env.NEXT_PUBLIC_BASE_URL}`
-        router.push(checkoutUrl)
-      }
+      // Use Dodo's direct checkout - they handle the form
+      const redirectUrl = `${window.location.origin}/premium/success`;
+      const checkoutUrl = `https://test.checkout.dodopayments.com/buy/${productId}?quantity=1&redirect_url=${encodeURIComponent(redirectUrl)}`;
+      
+      console.log("Redirecting to Dodo checkout:", checkoutUrl);
+      
+      // Redirect to Dodo's checkout page (they handle customer info form)
+      window.location.href = checkoutUrl;
+      
     } catch (error) {
       console.error("Checkout error:", error);
-      alert("Payment initialization failed. Please try again.");
-    } finally {
+      alert("Unable to start checkout. Please try again.");
       setLoading(false);
     }
   };
@@ -60,10 +39,10 @@ export default function ProductCard({ product }: { product: Product }) {
       <p className="text-green-600 font-semibold mt-4">${product.price / 100}</p>
       <button
         className="text-xl font-bold bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded disabled:opacity-50"
-        onClick={() => checkoutProduct(product.product_id, product.is_recurring, true)}
+        onClick={() => checkoutProduct(product.product_id)}
         disabled={loading}
       >
-        {loading ? "Processing..." : "Buy now"}
+        {loading ? "Redirecting..." : "Buy now"}
       </button>
     </div>
   );

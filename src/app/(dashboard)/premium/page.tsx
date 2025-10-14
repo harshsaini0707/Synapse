@@ -6,39 +6,30 @@ import {Rocket , Flame , Target , Lock, RotateCcw, Zap, Crosshair, Mail, HelpCir
 const Premiumplan = () => {
   const plans = [
     {
-      product_id: process.env.NEXT_PUBLIC_DODO_PRODUCT_ID_6!, // $6 plan
-      name: "Basic Plan",
-      icon: Rocket,
-      description: "Perfect for trying out all features",
-      duration: "15 Days",
-      price: 600, // $6.00 in cents
-      originalPrice: null,
-      isPopular: false,
-      savings: null,
-      badge: "Trial"
-    },
-    {
-      product_id: process.env.NEXT_PUBLIC_DODO_PRODUCT_ID_10!, // $10 plan
-      name: "Popular Plan",
+      product_id: process.env.NEXT_PUBLIC_DODO_PRODUCT_ID_MONTHLY!, // Monthly plan
+      name: "Monthly Plan",
       icon: Flame,
-      description: "Most chosen by our users",
+      description: "Perfect for regular learning",
       duration: "1 Month",
       price: 1000, // $10.00 in cents
+      priceINR: 899, // ₹899
       originalPrice: null,
       isPopular: true,
       savings: null,
       badge: "MOST POPULAR"
     },
     {
-      product_id: process.env.NEXT_PUBLIC_DODO_PRODUCT_ID_40!, // $40 plan
-      name: "Best Value Plan",
-      icon: Target,
-      description: "Best deal for serious learners",
-      duration: "6 Months",
-      price: 4000, // $40.00 in cents
-      originalPrice: 6000, // $60.00 (6 × $10.00)
+      product_id: process.env.NEXT_PUBLIC_DODO_PRODUCT_ID_YEARLY!, // Yearly plan
+      name: "Yearly Plan",
+      icon: Infinity,
+      description: "Best value for serious learners",
+      duration: "12 Months",
+      price: 8400, // $84.00 in cents
+      priceINR: 7499, // ₹7,499
+      originalPrice: 12000, // $120.00 (12 × $10.00)
+      originalPriceINR: 10788, // ₹10,788 (12 × ₹899)
       isPopular: false,
-      savings: "33% OFF",
+      savings: "Save 30%",
       badge: "BEST VALUE"
     }
   ];
@@ -51,8 +42,8 @@ const Premiumplan = () => {
     "Unlimited flashcards",
     "Quiz system (all types)",
     "Video timestamps & highlights",
-    "Batch video processing",
     "Custom quiz creation",
+    "Unlimited chat with video",
     "All type of summaries",
     "All new upcoming features"
   ];
@@ -101,7 +92,7 @@ const Premiumplan = () => {
         </div>
 
         {/* Pricing Cards */}
-        <div className='grid md:grid-cols-3 gap-8 max-w-6xl mx-auto'>
+        <div className='grid md:grid-cols-2 gap-8 max-w-4xl mx-auto'>
           {plans.map((plan, index) => (
             <div 
               key={plan.product_id}
@@ -151,17 +142,18 @@ const Premiumplan = () => {
                     </span>
                     <div className="flex flex-col">
                       <span className="text-gray-400 text-sm">/ {plan.duration}</span>
-                      <span className="text-gray-300 text-xs">≈ ₹{Math.round(plan.price / 100 * 88)}</span>
+                      <span className="text-gray-300 text-xs">₹{plan.priceINR}</span>
                     </div>
                   </div>
-                  {plan.originalPrice && (
-                    <div className="text-gray-200 line-through text-sm mt-1">
-                      ${(plan.originalPrice / 100).toFixed(0)} / <span className="text-xs">₹{Math.round(plan.originalPrice / 100 * 88)}</span>
+                
+                  {plan.duration === "12 Months" && (
+                    <div className="text-lime-300 text-sm mt-2 font-semibold">
+                      Only ${(plan.price / 12 / 100).toFixed(2)}/month
                     </div>
                   )}
-                  {plan.duration === "6 Months" && (
-                    <div className="text-lime-300 text-sm mt-2 font-semibold">
-                      Only ${(plan.price / 6 / 100).toFixed(2)}/month / <span className="text-xs">₹{Math.round(plan.price / 6 / 100 * 88)}</span>
+                  {plan.savings && (
+                    <div className="text-green-400 text-sm mt-2 font-semibold">
+                      🎉 {plan.savings} (2 months free!)
                     </div>
                   )}
                 </div>
@@ -202,13 +194,13 @@ const Premiumplan = () => {
                     : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
                 }`}
               >
-                {index === 0 ? 'Start 15-Day Access' : index === 1 ? 'Get 1-Month Access' : 'Get 6-Month Access'}
+                {index === 0 ? 'Get Monthly Access' : 'Get Yearly Access'}
               </button>
 
               {/* Per month calculation for longer plans */}
-              {plan.duration !== "15 Days" && (
+              {plan.duration === "12 Months" && (
                 <div className="text-center mt-3 text-gray-300 text-xs">
-                  {plan.duration === "1 Month" ? "Full month access" : "Equivalent to $6.67/month"}
+                  Equivalent to $7.00/month (Save 30%)
                 </div>
               )}
             </div>

@@ -1,22 +1,17 @@
 import { NextResponse } from "next/server";
 
 const PRODUCT_PLANS = {
-  [process.env.NEXT_PUBLIC_DODO_PRODUCT_ID_6!]: {
-    name: "Basic Plan",
-    duration: "15 Days",
-    price: "$6",
-    features: "All features included"
-  },
-  [process.env.NEXT_PUBLIC_DODO_PRODUCT_ID_10!]: {
-    name: "Popular Plan", 
+
+  [process.env.NEXT_PUBLIC_DODO_PRODUCT_ID_MONTHLY!]: {
+    name: "Monthly Plan", 
     duration: "1 Month",
     price: "$10",
     features: "All features included"
   },
-  [process.env.NEXT_PUBLIC_DODO_PRODUCT_ID_40!]: {
-    name: "Best Value Plan",
-    duration: "6 Months", 
-    price: "$40",
+  [process.env.NEXT_PUBLIC_DODO_PRODUCT_ID_YEARLY!]: {
+    name: "Yearly Plan",
+    duration: "12 Months", 
+    price: "$84",
     features: "All features included"
   }
 };

@@ -71,7 +71,7 @@ const Premiumplan = () => {
       <div className="relative z-10 py-12">
         <div className='max-w-7xl mx-auto px-4'>
         {/* Header */}
-        <div className='text-center mb-12'>
+        <div className='text-center mb-8'>
           <h1 className='text-3xl md:text-5xl poppins-bold text-lime-400 mb-4 [text-shadow:_2px_2px_0_rgb(0_0_0_/_40%)]'>
            All Features Included
           </h1>
@@ -196,7 +196,7 @@ const Premiumplan = () => {
                     alert('Failed to initiate checkout. Please try again.');
                   }
                 }}
-                className={`w-full py-4 px-6 rounded-lg font-bold text-lg transition-all duration-300 ${
+                className={`w-full py-4 px-6 rounded-lg font-bold text-lg transition-all duration-300 cursor-pointer ${
                   plan.isPopular
                     ? 'bg-lime-400 text-black hover:bg-lime-300 shadow-lg hover:shadow-lime-400/25'
                     : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'

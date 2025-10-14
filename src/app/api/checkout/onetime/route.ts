@@ -1,5 +1,26 @@
 import { NextResponse } from "next/server";
 
+const PRODUCT_PLANS = {
+  [process.env.NEXT_PUBLIC_DODO_PRODUCT_ID_6!]: {
+    name: "Basic Plan",
+    duration: "15 Days",
+    price: "$6",
+    features: "All features included"
+  },
+  [process.env.NEXT_PUBLIC_DODO_PRODUCT_ID_10!]: {
+    name: "Popular Plan", 
+    duration: "1 Month",
+    price: "$10",
+    features: "All features included"
+  },
+  [process.env.NEXT_PUBLIC_DODO_PRODUCT_ID_40!]: {
+    name: "Best Value Plan",
+    duration: "6 Months", 
+    price: "$40",
+    features: "All features included"
+  }
+};
+
 // Simple API route that returns direct checkout URL
 export async function GET(request: Request) {
   try {
@@ -9,16 +30,28 @@ export async function GET(request: Request) {
     if (!productId) {
       return NextResponse.json({ error: "Product ID is required" }, { status: 400 });
     }
+
+    // Validate product ID
+    const planDetails = PRODUCT_PLANS[productId];
+    if (!planDetails) {
+      console.error("Invalid product ID:", productId);
+      return NextResponse.json({ error: "Invalid product ID" }, { status: 400 });
+    }
     
-    console.log("Creating direct checkout URL for product:", productId);
+    console.log(`Creating checkout URL for ${planDetails.name} (${planDetails.duration}) - ${planDetails.price}`);
+    console.log("Product ID:", productId);
     
     // Create direct Dodo checkout URL - they handle the form
     const redirectUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/premium/success`;
     const checkoutUrl = `https://test.checkout.dodopayments.com/buy/${productId}?quantity=1&redirect_url=${encodeURIComponent(redirectUrl)}`;
     
+    console.log("Generated checkout URL:", checkoutUrl);
+    console.log("Redirect URL:", redirectUrl);
+    
     return NextResponse.json({ 
       checkout_url: checkoutUrl,
-      message: "Redirect to Dodo checkout page"
+      message: "Redirect to Dodo checkout page",
+      plan_details: planDetails
     });
     
   } catch (error) {
@@ -42,12 +75,20 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+
+    // Validate product ID
+    const planDetails = PRODUCT_PLANS[productId];
+    if (!planDetails) {
+      console.error("Invalid product ID:", productId);
+      return NextResponse.json({ error: "Invalid product ID" }, { status: 400 });
+    }
     
     // Get user data from request body
     const body = await request.json();
     const { customer, billing } = body;
     
-    console.log("Creating payment for product:", productId);
+    console.log(`Creating payment for ${planDetails.name} (${planDetails.duration}) - ${planDetails.price}`);
+    console.log("Product ID:", productId);
     console.log("Customer info:", customer);
     console.log("Billing info:", billing);
     
@@ -57,7 +98,8 @@ export async function POST(request: Request) {
     
     return NextResponse.json({ 
       checkout_url: checkoutUrl,
-      message: "Using Dodo's checkout form"
+      message: "Using Dodo's checkout form",
+      plan_details: planDetails
     });
     
   } catch (error) {

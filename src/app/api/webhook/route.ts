@@ -23,9 +23,9 @@ export async function POST(request: Request) {
       switch (payload.type) {
         case "subscription.active":
           const subscription = await dodopayments.subscriptions.retrieve(payload.data.subscription_id);
-          console.log("-------SUBSCRIPTION DATA START ---------")
-          console.log(subscription)
-          console.log("-------SUBSCRIPTION DATA END ---------")
+          // console.log("-------SUBSCRIPTION DATA START ---------")
+          // console.log(subscription)
+          // console.log("-------SUBSCRIPTION DATA END ---------")
           break;
         case "subscription.failed":
           break;
@@ -42,9 +42,9 @@ export async function POST(request: Request) {
         switch (payload.type) {
             case "payment.succeeded":
               const paymentDataResp = await dodopayments.payments.retrieve(payload.data.payment_id)
-              console.log("-------PAYMENT DATA START ---------")
-              console.log(paymentDataResp)
-              console.log("-------PAYMENT DATA END ---------")
+              // console.log("-------PAYMENT DATA START ---------")
+              // console.log(paymentDataResp)
+              // console.log("-------PAYMENT DATA END ---------")
               break;
             default:
                 break;

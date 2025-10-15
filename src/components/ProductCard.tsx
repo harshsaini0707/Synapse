@@ -22,7 +22,7 @@ export default function ProductCard({ product }: { product: Product }) {
       
       console.log("Redirecting to Dodo checkout:", checkoutUrl);
       
-      // Redirect to Dodo's checkout page (they handle customer info form)
+      
       window.location.href = checkoutUrl;
       
     } catch (error) {

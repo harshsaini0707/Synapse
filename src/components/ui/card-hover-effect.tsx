@@ -60,7 +60,7 @@ const EmptyStateCard = () => {
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="col-span-full flex flex-col items-center justify-center py-16 px-8 text-center"
+      className="col-span-full flex flex-col items-center justify-center  px-8 text-center"
     >
       <motion.div
         animate={{ 
@@ -72,7 +72,7 @@ const EmptyStateCard = () => {
           repeat: Infinity,
           ease: "easeInOut"
         }}
-        className="relative mb-6"
+        className="relative mb-4"
       >
         <div className="relative">
           <Video className="w-16 h-16 text-gray-600" />
@@ -97,7 +97,7 @@ const EmptyStateCard = () => {
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.2 }}
-        className="text-xl font-semibold text-gray-300 mb-2"
+        className="text-xl quicksand-semibold text-gray-300 mb-2"
       >
         No videos yet
       </motion.h3>
@@ -106,7 +106,7 @@ const EmptyStateCard = () => {
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.3 }}
-        className="text-gray-500 max-w-md"
+        className="text-gray-500 max-w-md quicksand-medium"
       >
         Start your learning journey by uploading your first video. Transform any content into interactive study materials!
       </motion.p>
@@ -119,7 +119,7 @@ const EmptyStateCard = () => {
       >
         <Link 
           href="/home"
-          className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105"
+          className="inline-flex items-center gap-2 px-6 py-3 quicksand-semibold bg-lime-400 text-black hover:bg-lime-300 shadow-lg hover:shadow-lime-400/25 rounded-lg  transition-all duration-200 transform "
         >
           <Sparkles className="w-4 h-4" />
           Get Started

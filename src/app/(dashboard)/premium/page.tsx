@@ -63,7 +63,7 @@ const Premiumplan = () => {
         <div className='max-w-7xl mx-auto px-4'>
         {/* Header */}
         <div className='text-center mb-8'>
-          <h1 className='text-3xl md:text-5xl poppins-bold text-lime-400 mb-4 [text-shadow:_2px_2px_0_rgb(0_0_0_/_40%)]'>
+          <h1 className='text-3xl md:text-5xl poppins-bold text-neutral-200 mb-4 [text-shadow:_2px_2px_0_rgb(0_0_0_/_40%)]'>
            All Features Included
           </h1>
           <p className='text-md text-gray-300 leading-snug quicksand-medium mb-8'>
@@ -137,7 +137,7 @@ const Premiumplan = () => {
                 {/* Pricing */}
                 <div className="mb-4">
                   <div className="flex items-center justify-center gap-2">
-                    <span className="text-4xl font-bold text-lime-400">
+                    <span className="text-4xl font-bold text-neutral-50">
                       ${(plan.price / 100).toFixed(0)}
                     </span>
                     <div className="flex flex-col">
@@ -148,12 +148,12 @@ const Premiumplan = () => {
                 
                   {plan.duration === "12 Months" && (
                     <div className="text-lime-300 text-sm mt-2 font-semibold">
-                      Only ${(plan.price / 12 / 100).toFixed(2)}/month
+                      Only ${(plan.price / 12 / 100).toFixed(0)} /month
                     </div>
                   )}
                   {plan.savings && (
                     <div className="text-green-400 text-sm mt-2 font-semibold">
-                      🎉 {plan.savings} (2 months free!)
+                      🎉 2 months free!
                     </div>
                   )}
                 </div>

@@ -167,7 +167,7 @@ export const HoverEffect = ({
     );
   }
 
-  // Empty state - no data
+  
   if (!items || items.length === 0) {
     return (
       <div className={cn("grid grid-cols-1 gap-6 py-10", className)}>

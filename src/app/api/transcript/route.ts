@@ -8,10 +8,6 @@ import { getInfoFromVideo } from "@/lib/scrapVideo/scrapVideo";
 import { ScrapedVideoItem } from "@/types/scrapeType";
 import { getChaptersFromDescription } from "@/lib/scrapVideo/getVideoChaptersFromDescription";
 
-
-
-
-
 export async function POST(req : NextRequest){
     try {
         const {videoId} :{videoId : string}  = await req.json();
@@ -30,6 +26,8 @@ export async function POST(req : NextRequest){
                 { status: 400 }
             );
         }
+
+        
 
         const ytUrl = `https://www.youtube.com/watch?v=${videoId}` as string
         

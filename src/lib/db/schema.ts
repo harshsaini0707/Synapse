@@ -172,7 +172,7 @@ export const flashcards =  pgTable("flashcards" ,{
   created_at : timestamp("created-at" , {precision : 0}).defaultNow()
 })
 
-//Subscription table.
+//Subscription table
 
 
 //----------------------Relations-------------------------

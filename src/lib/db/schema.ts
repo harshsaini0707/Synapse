@@ -171,6 +171,7 @@ export const flashcards =  pgTable("flashcards" ,{
   hint : varchar("hint" , {length :  256}).notNull(),
   created_at : timestamp("created-at" , {precision : 0}).defaultNow()
 })
+//Subscription 
 
 
 

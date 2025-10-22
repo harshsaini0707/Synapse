@@ -13,7 +13,10 @@ export const users = pgTable("users" ,
     email: varchar('email' , {length :  256}).notNull().unique(),
     image : varchar('image', { length: 800 }),
     age:integer(),
-    subscribedUser : boolean().default(false),
+    subscribedUser : boolean('subscribedUser').default(false),
+    has_user_trial : boolean('has_user_trial').default(false),
+    trial_videos_created : integer('trial_videos_created').default(0),
+    premium_videos_created : integer('premium_videos_created').default(0),
     created_at:timestamp('created_at' , { precision: 0 }).defaultNow().notNull(),
     updated_at: timestamp("updated_at" , {precision : 0}),
     delete_at: timestamp("delete_at" , {precision : 0})
@@ -171,11 +174,42 @@ export const flashcards =  pgTable("flashcards" ,{
   hint : varchar("hint" , {length :  256}).notNull(),
   created_at : timestamp("created-at" , {precision : 0}).defaultNow()
 })
-//Subscription 
+
+//One-time payment
+ export const oneTimePayments = pgTable("oneTimePayments",{
+  id : uuid('id').primaryKey().defaultRandom(),
+  user_id : uuid('user_id').references(()=>users.id).notNull(),
+
+
+  //dodo-payment fields
+  dodo_payment_id : varchar('dodo_payment_id' , {length:256}).unique().notNull(),
+  dodo_customer_id : varchar('dodo_customer_id' , {length : 256}),
+
+  // Payment details
+  product_id: varchar("product_id", { length: 256 }).notNull(),
+  plan_name: varchar("plan_name", { length: 256 }).notNull(), 
+  plan_duration: varchar("plan_duration", { length: 50 }).notNull(), 
+  amount: integer("amount").notNull(), // Amount in cents
+  currency: varchar("currency", { length: 10 }).default("USD"),
+  status: varchar("status", { length: 50 }).notNull(),
+  
+   // Customer information at time of payment
+  customer_email: varchar("customer_email", { length: 256 }),
+  customer_name: varchar("customer_name", { length: 256 }),
+
+  // Payment expires after duration
+  expires_at: timestamp("expires_at").notNull(),
+  
+  created_at: timestamp("created_at", { precision: 0 }).defaultNow().notNull(),
+  updated_at: timestamp("updated_at", { precision: 0 }),
+
+ })
+
 
 
 
 //----------------------Relations-------------------------
+
 
 //falshcard realtion
 export const flashcardsRelation = relations(flashcards , ({one}) =>({
@@ -238,5 +272,13 @@ export const userAnswersRelations = relations(userAnswers, ({ one }) => ({
   option: one(quizOptions, {
     fields: [userAnswers.selected_option_id],
     references: [quizOptions.id],
+  }),
+}));
+
+
+export const oneTimePaymentsRelations = relations(oneTimePayments, ({ one }) => ({
+  user: one(users, {
+    fields: [oneTimePayments.user_id],
+    references: [users.id],
   }),
 }));

@@ -1,16 +1,18 @@
 import { NextResponse } from "next/server";
 
-const PRODUCT_PLANS = {
+export const PRODUCT_PLANS = {
 
   [process.env.NEXT_PUBLIC_DODO_PRODUCT_ID_MONTHLY!]: {
     name: "Monthly Plan", 
     duration: "1 Month",
     price: "$10",
+    durationInDays: 30,
     features: "All features included"
   },
   [process.env.NEXT_PUBLIC_DODO_PRODUCT_ID_YEARLY!]: {
     name: "Yearly Plan",
-    duration: "12 Months", 
+    duration: "12 Months",
+    durationInDays: 365, 
     price: "$84",
     features: "All features included"
   }

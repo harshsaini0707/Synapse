@@ -77,7 +77,7 @@ export async function POST(request: Request) {
 
 
 
-async function handlePaymentSucceeded(paymentData) {
+async function handlePaymentSucceeded(paymentData : any) {
   try {
     
     console.log('Processding succesful payment');

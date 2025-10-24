@@ -11,7 +11,9 @@ export default withAuth(
   //console.log(req);
     
 
-    const publicRoutes = ["/", "/signin"];
+  // Public routes that should not be redirected for auth
+  // Added "/api/webhook" so external services (Dodo webhooks) can POST without being redirected
+  const publicRoutes = ["/", "/signin", "/api/webhook"];
 
     if (publicRoutes.includes(pathname)) {
       return NextResponse.next();
@@ -37,6 +39,7 @@ export default withAuth(
 
 export const config = {
   matcher: [
-    "/((?!api/auth|_next/static|_next/image|favicon.ico).*)",
+    // Exclude api/auth, api/webhook, _next/static, _next/image, and favicon.ico
+    "/((?!api/auth|api/webhook|_next/static|_next/image|favicon.ico).*)",
   ],
 };

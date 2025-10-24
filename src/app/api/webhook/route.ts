@@ -109,7 +109,9 @@ async function handlePaymentSucceeded(paymentData : any) {
   try {
     
     console.log('Processing successful payment...');
-    console.log('Payment ID:', paymentData.payment_id || paymentData.id);
+    console.log(paymentData);
+    
+    console.log('Payment ID:', paymentData?.payment_id || paymentData.id);
     console.log('Customer email:', paymentData.customer?.email);
 
     // Find user by email with better error handling

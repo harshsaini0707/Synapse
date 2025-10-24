@@ -7,17 +7,9 @@ import { oneTimePayments, users } from "@/lib/db/schema";
 import { PRODUCT_PLANS } from "../checkout/onetime/route";
 
 
-const webhook = new Webhook(process.env.DODO_PAYMENTS_WEBHOOK_KEY || "");
+const webhook = new Webhook(process.env.DODO_PAYMENTS_WEBHOOK_KEY! || "");
 
-// Add GET handler for health check
-export async function GET() {
-  return NextResponse.json({ 
-    status: "ok", 
-    message: "Webhook endpoint is active",
-    hasWebhookKey: !!process.env.DODO_PAYMENTS_WEBHOOK_KEY,
-    timestamp: new Date().toISOString()
-  }, { status: 200 });
-}
+
 
 export async function POST(request: Request) {
   try {
@@ -54,9 +46,6 @@ export async function POST(request: Request) {
       switch (payload.type) {
         case "subscription.active":
           const subscription = await dodopayments.subscriptions.retrieve(payload.data.subscription_id);
-          // console.log("-------SUBSCRIPTION DATA START ---------")
-          // console.log(subscription)
-          // console.log("-------SUBSCRIPTION DATA END ---------")
           break;
         case "subscription.failed":
           break;
@@ -72,15 +61,24 @@ export async function POST(request: Request) {
     } else if (payload.data.payload_type === "Payment") {
         switch (payload.type) {
             case "payment.succeeded":
-              const paymentDataResp = await dodopayments.payments.retrieve(payload.data.payment_id)
-              // console.log("-------PAYMENT DATA START ---------")
-              // console.log(paymentDataResp)
-              // console.log("-------PAYMENT DATA END ---------")
-              await handlePaymentSucceeded(paymentDataResp);
+              console.log('Payment succeeded event received');
+              console.log('Payment ID:', payload.data.payment_id);
+              
+              try {
+                // Try to retrieve full payment data from Dodo API
+                const paymentDataResp = await dodopayments.payments.retrieve(payload.data.payment_id);
+                console.log('Payment data retrieved successfully from Dodo API');
+                await handlePaymentSucceeded(paymentDataResp);
+              } catch (apiError: any) {
+                console.error('Failed to retrieve payment from Dodo API:', apiError.message);
+                console.log('Using webhook payload data directly instead');
+                // If API call fails, use the webhook payload data directly
+                await handlePaymentSucceeded(payload.data);
+              }
               break;
 
               case "payment.failed":
-                console.log('Payment failed' ,payload.data.payment_id);
+                console.log('Payment failed', payload.data.payment_id);
                 await handlePaymentFailed(payload.data.payment_id)
                 break;
             default:
@@ -97,14 +95,10 @@ export async function POST(request: Request) {
     console.error("Error:", error?.message || error);
     console.error("Stack:", error?.stack);
     
-    // Return 400 for verification errors, 500 for others
-    const isVerificationError = String(error?.message || "").toLowerCase().includes("verify") || 
-                                String(error?.message || "").toLowerCase().includes("signature");
-    const status = isVerificationError ? 400 : 500;
-    
+  
     return NextResponse.json(
       { error: error?.message || "Webhook processing error" },
-      { status }
+      { status : 200 }
     );
   }
 }

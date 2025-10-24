@@ -72,8 +72,9 @@ export async function POST(request: Request) {
               } catch (apiError: any) {
                 console.error('Failed to retrieve payment from Dodo API:', apiError.message);
                 console.log('Using webhook payload data directly instead');
+                console.log('Payload data structure:', JSON.stringify(payload.data, null, 2));
                 // If API call fails, use the webhook payload data directly
-                await handlePaymentSucceeded(payload.data , payload.data.payment_id);
+                await handlePaymentSucceeded(payload.data, payload.data.payment_id);
               }
               break;
 
@@ -109,7 +110,10 @@ async function handlePaymentSucceeded(paymentData : any ,  payment_id ?: any) {
   try {
     
     console.log('Processing successful payment...');
-    console.log(paymentData);
+    console.log('paymentData keys:', Object.keys(paymentData));
+    console.log('paymentData.payment_id:', paymentData.payment_id);
+    console.log('paymentData.id:', paymentData.id);
+    console.log('payment_id parameter:', payment_id);
     
     console.log('Payment ID:', paymentData?.payment_id || paymentData.id || payment_id);
     console.log('Customer email:', paymentData.customer?.email);

@@ -109,7 +109,7 @@ async function handlePaymentSucceeded(paymentData : any) {
   try {
     
     console.log('Processing successful payment...');
-    console.log('Payment ID:', paymentData.id);
+    console.log('Payment ID:', paymentData.payment_id || paymentData.id);
     console.log('Customer email:', paymentData.customer?.email);
 
     // Find user by email with better error handling
@@ -135,6 +135,13 @@ async function handlePaymentSucceeded(paymentData : any) {
       console.error("No product id found in payment payload:", paymentData);
       return;
     }
+    
+    // Extract payment ID safely
+    const paymentId = paymentData.payment_id || paymentData.id;
+    if (!paymentId) {
+      console.error("No payment ID found in payload");
+      return;
+    }
 
     const planDetails = PRODUCT_PLANS[productId];
     if (!planDetails) {
@@ -147,7 +154,7 @@ async function handlePaymentSucceeded(paymentData : any) {
       try {
         await db.insert(oneTimePayments).values({
           user_id: user.id,
-          dodo_payment_id: paymentData.id,
+          dodo_payment_id: paymentId,
           dodo_customer_id: paymentData.customer?.customer_id || paymentData.customer?.id || null,
           product_id: productId,
           plan_name: paymentData.product?.name || "Unknown Plan",
@@ -176,7 +183,7 @@ async function handlePaymentSucceeded(paymentData : any) {
     try {
       await db.insert(oneTimePayments).values({
         user_id: user.id,
-        dodo_payment_id: paymentData.id,
+        dodo_payment_id: paymentId,
         dodo_customer_id: paymentData.customer?.customer_id || paymentData.customer?.id || null,
         product_id: productId,
         plan_name: planDetails.name,

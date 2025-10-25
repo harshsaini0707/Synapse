@@ -7,9 +7,11 @@ import { summarizeNoChapters, generateHighlightsFromTranscript } from "@/lib/gem
 import { getInfoFromVideo } from "@/lib/scrapVideo/scrapVideo";
 import { ScrapedVideoItem } from "@/types/scrapeType";
 import { getChaptersFromDescription } from "@/lib/scrapVideo/getVideoChaptersFromDescription";
+import { checkUserAccess, updateTrialUsage } from "@/lib/userAccess";
 
 export async function POST(req : NextRequest){
     try {
+        
         const {videoId} :{videoId : string}  = await req.json();
         const userId = req.headers.get("x-user-id");
         
@@ -42,6 +44,22 @@ export async function POST(req : NextRequest){
                 {message :"User not found!!"},
                 {status :  404}
             )
+        }
+
+  // Check user access before processing video
+        const accessStatus = await checkUserAccess(userId);
+        
+        if (!accessStatus.canCreateVideo) {
+            return NextResponse.json(
+                { 
+                    message: accessStatus.reason || "Premium subscription required",
+                    requiresPremium: true,
+                    isPremium: accessStatus.isPremium,
+                    hasUsedTrial: accessStatus.hasUsedTrial,
+                    isNewUser: accessStatus.isNewUser
+                },
+                { status: 403 }
+            );
         }
 
         // Check if video already exists
@@ -130,6 +148,13 @@ export async function POST(req : NextRequest){
         const finalChapters = await db.query.videoChapters.findMany({
             where : (videoChapters , {eq}) => eq(videoChapters.video_id ,  videoId)
         })
+
+
+         // Update trial usage if user is on trial (new user who just created first video)
+        if (!accessStatus.isPremium && accessStatus.isNewUser && !accessStatus.hasUsedTrial) {
+            await updateTrialUsage(userId);
+            console.log('Trial usage updated for user:', userId);
+        }
 
         console.log('Processing completed successfully');
 

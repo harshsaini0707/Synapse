@@ -74,7 +74,8 @@ export async function POST(request: Request) {
                 console.log('Using webhook payload data directly instead');
                 console.log('Payload data structure:', JSON.stringify(payload.data, null, 2));
                 // If API call fails, use the webhook payload data directly
-                await handlePaymentSucceeded(payload.data, payload.data.payment_id);
+                // Ensure we pass the payment_id from the payload
+                await handlePaymentSucceeded(payload.data);
               }
               break;
 
@@ -106,16 +107,22 @@ export async function POST(request: Request) {
 
 
 
-async function handlePaymentSucceeded(paymentData : any ,  payment_id ?: any) {
+async function handlePaymentSucceeded(paymentData : any) {
   try {
     
     console.log('Processing successful payment...');
     console.log('paymentData keys:', Object.keys(paymentData));
-    console.log('paymentData.payment_id:', paymentData.payment_id);
-    console.log('paymentData.id:', paymentData.id);
-    console.log('payment_id parameter:', payment_id);
+    console.log('Full paymentData:', JSON.stringify(paymentData, null, 2));
     
-    console.log('Payment ID:', paymentData?.payment_id || paymentData.id || payment_id);
+    // Extract payment ID - try multiple possible fields
+    const paymentId = paymentData.payment_id || paymentData.id || paymentData.dodo_payment_id;
+    console.log('Extracted Payment ID:', paymentId);
+    
+    if (!paymentId) {
+      console.error("No payment ID found in payload. Available keys:", Object.keys(paymentData));
+      throw new Error("Missing payment ID in webhook payload");
+    }
+    
     console.log('Customer email:', paymentData.customer?.email);
 
     // Find user by email with better error handling
@@ -131,22 +138,16 @@ async function handlePaymentSucceeded(paymentData : any ,  payment_id ?: any) {
 
      if (!user) {
       console.error("User not found for payment:", paymentData.customer.email);
-      return;
+      throw new Error(`User not found: ${paymentData.customer.email}`);
     }
     
     console.log('User found:', user.id);
+    
     // Safely extract product id - Dodo may send it under product, product_cart, or product_id
     const productId = paymentData?.product?.id || paymentData?.product_id || paymentData?.product_cart?.[0]?.product_id;
     if (!productId) {
       console.error("No product id found in payment payload:", paymentData);
-      return;
-    }
-    
-    // Extract payment ID safely
-    const paymentId = paymentData.payment_id || paymentData.id || payment_id;
-    if (!paymentId) {
-      console.error("No payment ID found in payload");
-      return;
+      throw new Error("Missing product ID in webhook payload");
     }
 
     const planDetails = PRODUCT_PLANS[productId];
@@ -157,24 +158,30 @@ async function handlePaymentSucceeded(paymentData : any ,  payment_id ?: any) {
       const fallbackExpires = new Date();
       fallbackExpires.setDate(fallbackExpires.getDate() + 30);
 
+      // Extract customer information safely
+      const customerId = paymentData.customer?.customer_id || paymentData.customer?.id || paymentData.customer_id || null;
+      const customerEmail = paymentData.customer?.email || paymentData.email || user.email;
+      const customerName = paymentData.customer?.name || paymentData.customer_name || user.userName || "";
+
       try {
         await db.insert(oneTimePayments).values({
           user_id: user.id,
           dodo_payment_id: paymentId,
-          dodo_customer_id: paymentData.customer?.customer_id || paymentData.customer?.id || null,
+          dodo_customer_id: customerId,
           product_id: productId,
           plan_name: paymentData.product?.name || "Unknown Plan",
           plan_duration: "30 days",
           amount: paymentData.total_amount || paymentData.amount || 0,
           currency: paymentData.currency || paymentData.settlement_currency || "USD",
           status: paymentData.status || "succeeded",
-          customer_email: paymentData.customer?.email,
-          customer_name: paymentData.customer?.name || user.userName || "",
+          customer_email: customerEmail,
+          customer_name: customerName,
           expires_at: fallbackExpires,
         });
         console.log("Stored fallback payment record successfully");
       } catch (dbError: any) {
         console.error("Failed to insert fallback payment:", dbError.message);
+        console.error("DB Error details:", dbError);
         throw dbError;
       }
 
@@ -186,24 +193,37 @@ async function handlePaymentSucceeded(paymentData : any ,  payment_id ?: any) {
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + planDetails.durationInDays);
 
+    // Extract customer information safely
+    const customerId = paymentData.customer?.customer_id || paymentData.customer?.id || paymentData.customer_id || null;
+    const customerEmail = paymentData.customer?.email || paymentData.email || user.email;
+    const customerName = paymentData.customer?.name || paymentData.customer_name || user.userName || "";
+
+    console.log('Preparing to insert payment record with:');
+    console.log('  - user_id:', user.id);
+    console.log('  - dodo_payment_id:', paymentId);
+    console.log('  - dodo_customer_id:', customerId);
+    console.log('  - product_id:', productId);
+    console.log('  - plan_name:', planDetails.name);
+
     try {
       await db.insert(oneTimePayments).values({
         user_id: user.id,
         dodo_payment_id: paymentId,
-        dodo_customer_id: paymentData.customer?.customer_id || paymentData.customer?.id || null,
+        dodo_customer_id: customerId,
         product_id: productId,
         plan_name: planDetails.name,
         plan_duration: planDetails.duration,
         amount: paymentData.total_amount || paymentData.amount || 0,
         currency: paymentData.currency || paymentData.settlement_currency || "USD",
         status: paymentData.status || "succeeded",
-        customer_email: paymentData.customer?.email,
-        customer_name: paymentData.customer?.name || user.userName || "",
+        customer_email: customerEmail,
+        customer_name: customerName,
         expires_at: expiresAt,
       });
       console.log('Payment record inserted successfully');
     } catch (dbError: any) {
       console.error("Failed to insert payment record:", dbError.message);
+      console.error("DB Error details:", dbError);
       throw dbError;
     }
 

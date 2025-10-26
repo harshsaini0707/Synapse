@@ -11,7 +11,6 @@ export async function GET(req: NextRequest) {
         { status: 401 }
       );
     }
-
     const accessStatus = await checkUserAccess(userId);
     
     return NextResponse.json({

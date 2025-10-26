@@ -49,7 +49,6 @@ export const videos =  pgTable("videos" , {
 
 
 // Transriptchunks
-
 export const transcriptChunks = pgTable(
   "transcript_chunks",
   {

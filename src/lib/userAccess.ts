@@ -56,7 +56,7 @@ export async function checkUserAccess(userId: string): Promise<UserAccessStatus>
 
     const userVideoCount = videoCount[0]?.count || 0;
 
-    // Check if user has used trial from database
+    
     const hasUsedTrial = user.has_user_trial || false;
 
     // If user is new (no videos created) and hasn't used trial, allow one free video

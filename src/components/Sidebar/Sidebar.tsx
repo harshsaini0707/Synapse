@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Sidebar, SidebarBody, SidebarLink } from "../ui/sidebar";
+import { Sidebar, SidebarBody, SidebarLink, useSidebar } from "../ui/sidebar";
 import {
   IconArrowLeft,
   IconBrandTabler,
@@ -11,6 +11,7 @@ import { motion } from "motion/react";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import { useUserStore } from "@/store/userStore";
+import LogoImage from "../../../public/logos/logo2.png"
 
 export function SidebarDemo() {
 
@@ -86,21 +87,38 @@ export function SidebarDemo() {
 }
 
 // Logos
-export const Logo = () => (
-  <a href="/home" className="flex items-center space-x-2 py-1 text-sm font-normal" title="Synapse Home">
-    <div className="h-5 w-6 shrink-0 rounded bg-black dark:bg-white" />
-    <motion.span
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="quicksand-bold text-white dark:text-white"
-    >
-      Synapse
-    </motion.span>
-  </a>
-);
+export const Logo = () => {
+  const { open, animate } = useSidebar();
+  return (
+    <a href="/home" className="flex items-center space-x-2 py-1 text-sm font-normal" title="Synapse Home">
+      <Image
+        src={LogoImage}
+        alt="Synapse Logo"
+        width={32}
+        height={24}
+        className="h-5 w-6 shrink-0 rounded"
+      />
+      <motion.span
+        animate={{
+          display: animate ? (open ? "inline-block" : "none") : "inline-block",
+          opacity: animate ? (open ? 1 : 0) : 1,
+        }}
+        className="quicksand-bold text-white whitespace-nowrap"
+      >
+        Synapse
+      </motion.span>
+    </a>
+  );
+};
 
 export const LogoIcon = () => (
   <a href="/home" className="flex items-center space-x-2 py-1 text-sm font-normal" title="Synapse Home">
-    <div className="h-5 w-6 shrink-0 rounded bg-black dark:bg-white" />
+    <Image
+      src={LogoImage}
+      alt="Synapse Logo"
+      width={32}
+      height={24}
+      className="h-5 w-6 shrink-0 rounded"
+    />
   </a>
 );

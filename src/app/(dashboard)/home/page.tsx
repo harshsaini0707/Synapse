@@ -99,7 +99,7 @@ const Home = () => {
           <HoverBorderGradientDemo />
 
           <h1 className="text-gray-200 alan-sans-font text-xl md:text-5xl">
-            Experience Synapse AI Tutor
+           Learn Smarter with Synapse
           </h1>
 
           <p className="text-gray-500 poppins-regular leading-tight text-md md:text-xl">

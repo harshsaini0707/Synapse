@@ -7,6 +7,8 @@ import {
   useScroll,
   useMotionValueEvent,
 } from "framer-motion";
+import Image from "next/image";
+import LogoImage from "../../../public/logos/logo2.png";
 
 import React, { useRef, useState } from "react";
 
@@ -136,7 +138,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
           {hovered === idx && (
             <motion.div
               layoutId="hovered"
-              className="absolute inset-0 h-full w-full rounded-full bg-gray-100 dark:bg-neutral-800"
+              className="absolute inset-0 h-full w-full rounded-full bg-neutral-300 dark:bg-neutral-800"
             />
           )}
           <span className="relative z-20">{item.name}</span>
@@ -234,16 +236,17 @@ export const MobileNavToggle = ({
 export const NavbarLogo = () => {
   return (
     <a
-      href="#"
+      
       className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black"
     >
-      <img
-        src="https://assets.aceternity.com/logo-dark.png"
-        alt="logo"
-        width={30}
-        height={30}
+      <Image
+        src={LogoImage}
+        alt="Synapse Logo"
+        width={36}
+        height={36}
+        className="rounded"
       />
-      <span className="quicksand-bold text-black dark:text-white">Synapse</span>
+      <span className="quicksand-bold text-[#020612] dark:text-white">Synapse</span>
     </a>
   );
 };

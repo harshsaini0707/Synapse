@@ -7,7 +7,7 @@ const devDbUrl = process.env.DEV_DATABASE_URL!;
 const prodDbUrl = process.env.PROD_DATABASE_URL!;
 
 export const client = new pg.Pool({
-  connectionString:process.env.NODE_ENV === "production" ? prodDbUrl :devDbUrl ,
+  connectionString: process.env.NODE_ENV === "development" ? devDbUrl :devDbUrl ,
   ssl: { rejectUnauthorized: false },
   max: 10, // Reduced for serverless (Vercel)
   min: 0, // Allow 0 connections when idle

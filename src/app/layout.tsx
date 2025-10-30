@@ -1,10 +1,16 @@
 import "./globals.css"
 import ClientProviders from "@/components/providers/ClientProviders"
 import type { Metadata } from 'next'
-
+import Logo from "../../public/logos/logo2.png"
 export const metadata: Metadata = {
   title: 'Synapse',
   description: 'AI-powered learning platform',
+  icons:{
+    icon:'/logos/logo2.png',
+    shortcut:'/logos/logo2.png',
+    apple:'/logos/logo2.png'
+  }
+
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -6,7 +6,9 @@ export default defineConfig({
     out:'./drizzle', //This specifies the output directory where Drizzle Kit will save the generated migration files.
 
     dbCredentials:{
-        url: process.env.DATABASE_URL! as string
+        url: process.env.NODE_ENV === "production" 
+            ? process.env.PROD_DATABASE_URL! 
+            : process.env.DEV_DATABASE_URL!
     },
     verbose:  true,
     strict : true

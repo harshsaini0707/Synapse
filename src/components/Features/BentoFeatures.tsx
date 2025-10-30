@@ -3,6 +3,8 @@
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 // Import images
 import quizImage from "/public/images/Quiz.png";
@@ -12,62 +14,54 @@ import highlightsImage from "/public/images/Highlights.png";
 import chatImage from "/public/images/Chat.png";
 
 export function BentoFeatures() {
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  const handleCardClick = () => {
+    if (session) {
+      router.push('/home');
+    } else {
+      router.push('/signin');
+    }
+  };
+
   const features = [
-    {
-      category: "PROGRESSION",
-      title: "Interactive Quizzes",
-      description: "Test your knowledge with AI-generated quizzes from any YouTube video. Track your progress and identify learning gaps.",
-      image: quizImage,
-      gradient: "from-emerald-500 to-green-600",
-      statLabel: "Questions Generated",
-      statValue: "10,000+",
-      statChange: "+25%",
-      statChangeType: "increase"
-    },
-    {
-      category: "PROGRESSION",
-      title: "Smart Flashcards",
-      description: "Automatically generated flashcards help you memorize key concepts effectively with spaced repetition.",
-      image: flashcardImage,
-      gradient: "from-teal-500 to-emerald-600",
-      statLabel: "Cards Created",
-      statValue: "15,000+",
-      statChange: "+18%",
-      statChangeType: "increase"
-    },
-    {
-      category: "MANAGEMENT",
-      title: "AI-Powered Chat",
-      description: "Ask questions about the video content and get instant, context-aware answers powered by advanced AI.",
-      image: chatImage,
-      gradient: "from-green-500 to-teal-600",
-      statLabel: "Conversations",
-      statValue: "8,500+",
-      statChange: "+32%",
-      statChangeType: "increase"
-    },
-    {
-      category: "PROGRESSION",
-      title: "Comprehensive Summaries",
-      description: "Get detailed summaries of video content in seconds, highlighting key points and main takeaways.",
-      image: summaryImage,
-      gradient: "from-lime-500 to-green-600",
-      statLabel: "Summaries Generated",
-      statValue: "12,000+",
-      statChange: "+22%",
-      statChangeType: "increase"
-    },
-    {
-      category: "MANAGEMENT",
+     {
       title: "Smart Highlights",
       description: "Key moments and important concepts are automatically highlighted for quick review and easy navigation.",
       image: highlightsImage,
       gradient: "from-emerald-600 to-teal-700",
-      statLabel: "Highlights Marked",
-      statValue: "20,000+",
-      statChange: "+28%",
-      statChangeType: "increase"
+      buttonText: "Start Creating"
     },
+    {
+      title: "Interactive Quizzes",
+      description: "Test your knowledge with AI-generated quizzes from any YouTube video. Track your progress and identify learning gaps.",
+      image: quizImage,
+      gradient: "from-emerald-500 to-green-600",
+      buttonText: "Start Creating"
+    },
+     {
+      title: "AI-Powered Chat",
+      description: "Ask questions about the video content and get instant, context-aware answers powered by advanced AI.",
+      image: chatImage,
+      gradient: "from-green-500 to-teal-600",
+      buttonText: "Start Asking"
+    },
+    {
+      title: "Smart Flashcards",
+      description: "Automatically generated flashcards help you memorize key concepts effectively with spaced repetition with proper hint and answer.",
+      image: flashcardImage,
+      gradient: "from-teal-500 to-emerald-600",
+      buttonText: "Start Creating"
+    },
+    {
+      title: "Comprehensive Summaries",
+      description: "Get detailed and quick summaries of video content in seconds, highlighting key points and main takeaways.",
+      image: summaryImage,
+      gradient: "from-lime-500 to-green-600",
+      buttonText: "Start Creating"
+    },
+   
   ];
 
   return (
@@ -103,27 +97,15 @@ export function BentoFeatures() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
+              onClick={handleCardClick}
               className={cn(
-                "group relative overflow-hidden rounded-3xl bg-white",
+                "group relative overflow-hidden rounded-3xl bg-white cursor-pointer",
                 "border border-gray-200 shadow-lg hover:shadow-2xl",
                 "transition-all duration-500 ease-out",
                 "hover:-translate-y-2"
               )}
             >
-              {/* Category Badge */}
-              <div className="absolute top-6 left-6 z-20">
-                <span className={cn(
-                  "inline-block px-4 py-1.5 rounded-full text-xs quicksand-semibold uppercase tracking-wider",
-                  "bg-white/90 backdrop-blur-sm",
-                  feature.category === "PROGRESSION" 
-                    ? "text-emerald-700 border border-emerald-200" 
-                    : "text-teal-700 border border-teal-200"
-                )}>
-                  {feature.category}
-                </span>
-              </div>
-
-              {/* Image Section with Gradient Overlay */}
+              {/* Image Section */}
               <div className="relative h-64 overflow-hidden rounded-t-3xl">
                 <Image
                   src={feature.image}
@@ -132,60 +114,6 @@ export function BentoFeatures() {
                   className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
-                {/* Gradient overlay */}
-                <div className={cn(
-                  "absolute inset-0 bg-gradient-to-t opacity-60",
-                  feature.gradient,
-                  "mix-blend-multiply"
-                )} />
-                
-                {/* Stats overlay on hover */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <div className="absolute bottom-6 left-6 right-6">
-                    <div className="flex items-end justify-between">
-                      <div>
-                        <p className="text-white/80 text-sm quicksand-medium mb-1">
-                          {feature.statLabel}
-                        </p>
-                        <p className="text-white text-3xl quicksand-bold">
-                          {feature.statValue}
-                        </p>
-                      </div>
-                      <div className={cn(
-                        "flex items-center gap-1 px-3 py-1.5 rounded-full",
-                        feature.statChangeType === "increase" 
-                          ? "bg-green-500/20 border border-green-400/30" 
-                          : "bg-red-500/20 border border-red-400/30"
-                      )}>
-                        <svg 
-                          className={cn(
-                            "w-4 h-4",
-                            feature.statChangeType === "increase" ? "text-green-400" : "text-red-400"
-                          )} 
-                          fill="none" 
-                          viewBox="0 0 24 24" 
-                          stroke="currentColor"
-                        >
-                          <path 
-                            strokeLinecap="round" 
-                            strokeLinejoin="round" 
-                            strokeWidth={2} 
-                            d={feature.statChangeType === "increase" 
-                              ? "M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" 
-                              : "M13 17h8m0 0v-8m0 8l-8-8-4 4-6-6"
-                            } 
-                          />
-                        </svg>
-                        <span className={cn(
-                          "text-sm quicksand-semibold",
-                          feature.statChangeType === "increase" ? "text-green-400" : "text-red-400"
-                        )}>
-                          {feature.statChange}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
 
               {/* Content Section */}
@@ -197,9 +125,9 @@ export function BentoFeatures() {
                   {feature.description}
                 </p>
                 
-                {/* Learn More Link */}
+                {/* Button */}
                 <div className="flex items-center gap-2 text-green-600 quicksand-semibold text-sm group-hover:gap-3 transition-all duration-300">
-                  <span>Learn more</span>
+                  <span>{feature.buttonText}</span>
                   <svg 
                     className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" 
                     fill="none" 
@@ -209,16 +137,6 @@ export function BentoFeatures() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </div>
-              </div>
-
-              {/* Decorative gradient border on hover */}
-              <div className={cn(
-                "absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500",
-                "bg-gradient-to-br pointer-events-none",
-                feature.gradient,
-                "p-[2px]"
-              )}>
-                <div className="w-full h-full bg-white rounded-3xl" />
               </div>
             </motion.div>
           ))}

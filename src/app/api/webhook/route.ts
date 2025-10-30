@@ -36,9 +36,9 @@ export async function POST(request: Request) {
     }
 
     // Verify webhook signature
-  //  console.log("Verifying webhook signature...");
+   console.log("Verifying webhook signature...");
     await webhook.verify(rawBody, webhookHeaders);
-   // console.log("Signature verified successfully");
+    console.log("Signature verified successfully");
     
     const payload = JSON.parse(rawBody);
 
@@ -61,18 +61,18 @@ export async function POST(request: Request) {
     } else if (payload.data.payload_type === "Payment") {
         switch (payload.type) {
             case "payment.succeeded":
-             ` // console.log('Payment succeeded event received');
-              // console.log('Payment ID:', payload.data.payment_id);`
+             console.log('Payment succeeded event received');
+              console.log('Payment ID:', payload.data.payment_id);
               
               try {
                 // Try to retrieve full payment data from Dodo API
                 const paymentDataResp = await dodopayments.payments.retrieve(payload.data.payment_id);
-             //   console.log('Payment data retrieved successfully from Dodo API');
+               console.log('Payment data retrieved successfully from Dodo API');
                 await handlePaymentSucceeded(paymentDataResp);
               } catch (apiError: any) {
-                // console.error('Failed to retrieve payment from Dodo API:', apiError.message);
-                // console.log('Using webhook payload data directly instead');
-                // console.log('Payload data structure:', JSON.stringify(payload.data, null, 2));
+                console.error('Failed to retrieve payment from Dodo API:', apiError.message);
+                console.log('Using webhook payload data directly instead');
+                console.log('Payload data structure:', JSON.stringify(payload.data, null, 2));
                 // If API call fails, use the webhook payload data directly
                 // Ensure we pass the payment_id from the payload
                 await handlePaymentSucceeded(payload.data);
@@ -110,13 +110,13 @@ export async function POST(request: Request) {
 async function handlePaymentSucceeded(paymentData : any) {
   try {
     
-    // console.log('Processing successful payment...');
-    // console.log('paymentData keys:', Object.keys(paymentData));
-    // console.log('Full paymentData:', JSON.stringify(paymentData, null, 2));
+    console.log('Processing successful payment...');
+    console.log('paymentData keys:', Object.keys(paymentData));
+    console.log('Full paymentData:', JSON.stringify(paymentData, null, 2));
     
     // Extract payment ID - try multiple possible fields
     const paymentId = paymentData.payment_id ;
-  //  console.log('Extracted Payment ID:', paymentId);
+    console.log('Extracted Payment ID:', paymentId);
     
     if (!paymentId) {
       console.error("No payment ID found in payload. Available keys:", Object.keys(paymentData));
@@ -141,7 +141,7 @@ async function handlePaymentSucceeded(paymentData : any) {
       throw new Error(`User not found: ${paymentData.customer.email}`);
     }
     
-   // console.log('User found:', user.id);
+    console.log('User found:', user.id);
 
     const productId =  paymentData?.product_cart?.[0]?.product_id;
     if (!productId) {
@@ -156,7 +156,7 @@ async function handlePaymentSucceeded(paymentData : any) {
       throw new Error(`Unknown product ID: ${productId}`);
     }
 
-  //  console.log('Plan found:', planDetails.name);
+    console.log('Plan found:', planDetails.name);
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + planDetails.durationInDays);
 
@@ -165,12 +165,12 @@ async function handlePaymentSucceeded(paymentData : any) {
     const customerEmail = paymentData.customer?.email || paymentData.email || user.email;
     const customerName = paymentData.customer?.name || paymentData.customer_name || user.userName || "";
 
-    // console.log('Preparing to insert payment record with:');
-    // console.log('  - user_id:', user.id);
-    // console.log('  - dodo_payment_id:', paymentId);
-    // console.log('  - dodo_customer_id:', customerId);
-    // console.log('  - product_id:', productId);
-    // console.log('  - plan_name:', planDetails.name);
+    console.log('Preparing to insert payment record with:');
+    console.log('  - user_id:', user.id);
+    console.log('  - dodo_payment_id:', paymentId);
+    console.log('  - dodo_customer_id:', customerId);
+    console.log('  - product_id:', productId);
+    console.log('  - plan_name:', planDetails.name);
 
     try {
       await db.insert(oneTimePayments).values({
@@ -187,7 +187,7 @@ async function handlePaymentSucceeded(paymentData : any) {
         customer_name: customerName,
         expires_at: expiresAt,
       });
-    //  console.log('Payment record inserted successfully');
+     console.log('Payment record inserted successfully');
     } catch (dbError: any) {
       console.error("Failed to insert payment record:", dbError.message);
       console.error("DB Error details:", dbError);
@@ -202,13 +202,13 @@ async function handlePaymentSucceeded(paymentData : any) {
           updated_at: new Date() 
         })
         .where(eq(users.id, user.id));
-    //  console.log('User subscription status updated successfully');
+      console.log('User subscription status updated successfully');
     } catch (dbError: any) {
       console.error("Failed to update user subscription:", dbError.message);
       throw dbError;
     }
 
-   // console.log(`Payment processed successfully for user: ${user.email}`);
+   console.log(`Payment processed successfully for user: ${user.email}`);
 
   } catch (error: any) {
     console.error("Error handling payment succeeded:", error.message);

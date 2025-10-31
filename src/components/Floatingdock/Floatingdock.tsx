@@ -10,7 +10,7 @@ import Flashcard from "../Flashcard/Flashcard";
 import { IdCardLanyard } from "lucide-react";
 
 export function FloatingDockDemo() {
-  const [activeTab, setActiveTab] = useState("Quiz");
+  const [activeTab, setActiveTab] = useState("Chat");
 
   const links = [
     {

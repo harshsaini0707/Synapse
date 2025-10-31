@@ -7,6 +7,7 @@ import Chat from "../Chat/Chat";
 import Summary from "../Summary/Summary";
 import Quiz from "../Quiz/Quiz";
 import Flashcard from "../Flashcard/Flashcard";
+import { IdCardLanyard } from "lucide-react";
 
 export function FloatingDockDemo() {
   const [activeTab, setActiveTab] = useState("Quiz");
@@ -14,30 +15,22 @@ export function FloatingDockDemo() {
   const links = [
     {
       title: "Summary",
-      icon: <IconHome className={`h-full w-full quicksand-medium  ${activeTab === "Summary" ? "text-neutral-50 poppins-extrabold bg-green-500 p-0.5  rounded-sm " : "text-neutral-500 dark:text-neutral-300"}`} />,
+      icon: <IconHome className={`h-full w-full quicksand-medium  ${activeTab === "Summary" ? "text-black text-bold poppins-extrabold bg-lime-400 p-0.5  rounded-sm " : "text-neutral-400 dark:text-neutral-300"}`} />,
       href: "#",
     },
     {
       title: "Chat",
-      icon: <IconTerminal2 className={`h-full w-full quicksand-medium ${activeTab === "Chat" ? "text-neutral-50 poppins-extrabold bg-green-500 p-0.5  rounded-sm" : "text-neutral-500 dark:text-neutral-300"}`} />,
+      icon: <IconTerminal2 className={`h-full w-full quicksand-medium ${activeTab === "Chat" ? "text-black text-bold poppins-extrabold bg-lime-400 p-0.5  rounded-sm" : "text-neutral-400 dark:text-neutral-300"}`} />,
       href: "#",
     },
     {
       title: "Quiz",
-      icon: <IconNewSection className={`h-full w-full quicksand-medium ${activeTab === "Quiz" ? "text-neutral-50 poppins-extrabold  bg-green-500 p-0.5  rounded-sm" : "text-neutral-500 dark:text-neutral-300"}`} />,
+      icon: <IconNewSection className={`h-full w-full quicksand-medium ${activeTab === "Quiz" ? "text-black text-bold poppins-extrabold  bg-lime-400 p-0.5  rounded-sm" : "text-neutral-400 dark:text-neutral-300"}`} />,
       href: "#",
     },
     {
       title: "Flashcards",
-      icon: (
-        <img
-          src="https://assets.aceternity.com/logo-dark.png"
-          width={20}
-          height={20}
-          alt="Logo"
-          className={`quicksand-medium ${activeTab === "Flashcards" ? "filter brightness-150 poppins-extrabold  bg-green-500 p-0.5  rounded-sm" : ""}`}
-        />
-      ),
+      icon:<IdCardLanyard className={`h-full w-full quicksand-medium ${activeTab === "Flashcards" ? "text-black text-boldpoppins-extrabold  bg-lime-400 p-0.5  rounded-sm" : "text-neutral-400 dark:text-neutral-300"}`} />,
       href: "#",
     },
   ];

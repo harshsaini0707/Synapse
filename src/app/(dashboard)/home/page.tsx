@@ -24,7 +24,7 @@ try {
 
     return null;
 } catch (error) {
-  console.log(error);
+  //console.log(error);
   return null;
 }
 } 
@@ -80,7 +80,7 @@ const Home = () => {
     const canProceed = await checkUserAccess();
 
     if (canProceed) {
-      console.log(id);
+    //  console.log(id);
       router.push(`/video/${id}`);
     }
     

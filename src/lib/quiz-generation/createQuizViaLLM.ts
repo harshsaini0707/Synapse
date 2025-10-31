@@ -18,21 +18,23 @@ export async  function createQuizViaLLM(paragraph :  string ,  difficulty :  str
         })
 
 const prompt = `
-You are an expert quiz generator AI which generate the quiz only in english if any other language is given convert them into english.
+You are an expert quiz generator AI which generates quizzes only in English. If any other language is given, convert it to English.
 
-From the following transcript text, generate **2-3 quiz questions** of difficulty level: "${difficulty}".
-Mix **MCQs** and **Fill-in-the-blank** types.
+Generate **2-3 quiz questions** of difficulty level: "${difficulty}". Mix **MCQs** and **Fill-in-the-blank** types.
 
 ### Rules:
-1. Questions must be clear, concise, and directly derived from the transcript.  
-2. Each MCQ must have exactly **4 options** with only **1 correct answer**.  
-3. Each Fill-in-the-blank must also have **4 options** (with only 1 correct).  
-4. Difficulty should match the requested level ("easy", "medium", "hard").  
-5. Explanations must justify why the answer is correct.  
-6. Avoid ambiguous or opinion-based questions.  
-7. Do NOT repeat questions across windows.  
-8. Use **simple JSON** output — no markdown, no commentary, just raw JSON.  
-9. fill up question should same as  provide the format below and it compulsary containd the _____ for that corect option on in question not in option.
+1. Questions must be clear, concise, and directly derived from the transcript, but NEVER mention or reference the transcript or its context in the question text (do not use phrases like "according to the transcript" or similar).
+2. Ask pure questions only.
+3. Each MCQ must have exactly **4 options** with only **1 correct answer**.
+4. Each Fill-in-the-blank must also have **4 options** (with only 1 correct).
+5. Difficulty should match the requested level ("easy", "medium", "hard").
+6. Explanations must justify why the answer is correct.
+7. Avoid ambiguous or opinion-based questions.
+8. Do NOT repeat questions across windows.
+9. Use **simple JSON** output — no markdown, no commentary, just raw JSON.
+10. Fill-in-the-blank questions must contain the _____ for the correct option in the question, not in the options.
+11. Ensure all options are varied and meaningful; do not use repetitive or similar options (e.g., avoid options like "b", "bc", "cbc", etc.).
+
 ### Output Format (Strict JSON Array):
 [
   {

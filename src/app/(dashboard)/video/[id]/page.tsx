@@ -47,7 +47,7 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
 
   const { isLoading, isError, data } = useFetchChapters(id);
 
-  if (isLoading) console.log("load ho raha hai!!");
+  //if (isLoading) console.log("load ho raha hai!!");
 
   const playerRef = useRef<any>(null);
 

@@ -34,7 +34,7 @@ export function useFetchChapters(videoId : string){
         enabled: !!videoId, // prevents running if videoId is undefined
         staleTime: Infinity, 
        gcTime: Infinity,
-       retry:  4,
+       retry: 3,
        
 
     })

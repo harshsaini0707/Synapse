@@ -51,7 +51,7 @@ export function useQuiz( video_id: string | null , difficulty :"easy" | "hard" |
         enabled: !!difficulty && (options?.enabled ?? false),
         staleTime: Infinity, 
         gcTime: Infinity,
-        retry:  10,
+        retry:  3,
       
         ...options
 

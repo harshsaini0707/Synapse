@@ -47,7 +47,7 @@ export const useFlashcard = (viedo_id : string | null , generate : boolean) =>{
         enabled : !!viedo_id && !!userId && generate,
         staleTime :  Infinity ,
         gcTime : Infinity,
-        retry : 3,
+        retry : 2,
 
 
     })

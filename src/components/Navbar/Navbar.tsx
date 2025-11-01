@@ -34,13 +34,15 @@ export function NavbarDemo() {
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+
+
   return (
     <div className="relative w-full">
       <Navbar>
         {/* Desktop Navigation */}
         <NavBody>
           <NavbarLogo />
-          <NavItems items={navItems} />
+          <NavItems items={navItems}  />
           <div className="flex items-center gap-4">
           
             <NavbarButton variant="secondary" onClick={status === 'authenticated' ? () => router.push("/home") : () => router.push("/signin")}>Login</NavbarButton>

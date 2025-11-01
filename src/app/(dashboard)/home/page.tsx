@@ -52,8 +52,8 @@ const Home = () => {
       });
 
       const accessData = response.data;
-      
-      if (!accessData.canCreateVideo) {
+      // Only allow premium users
+      if (!accessData.isPremium) {
         setShowPremiumModal(true);
         return false;
       }
@@ -162,7 +162,7 @@ const Home = () => {
             {/* Badge */}
             <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
               <div className="bg-red-500 text-white px-4 py-1 rounded-full text-sm font-bold">
-              NO TRIAL
+                PREMIUM ONLY
               </div>
             </div>
 

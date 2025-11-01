@@ -70,15 +70,13 @@ export async function POST(req : NextRequest){
 
   // Check user access before processing video
         const accessStatus = await checkUserAccess(userId);
-        
-        if (!accessStatus.canCreateVideo) {
+        // Only allow premium users to create transcripts
+        if (!accessStatus.isPremium) {
             return NextResponse.json(
-                { 
-                    message: accessStatus.reason || "Premium subscription required",
+                {
+                    message: "Premium subscription required",
                     requiresPremium: true,
-                    isPremium: accessStatus.isPremium,
-                    hasUsedTrial: accessStatus.hasUsedTrial,
-                    isNewUser: accessStatus.isNewUser
+                    isPremium: false
                 },
                 { status: 403 }
             );
@@ -151,11 +149,7 @@ export async function POST(req : NextRequest){
         })
 
 
-         // Update trial usage if user is on trial (new user who just created first video)
-        if (!accessStatus.isPremium && accessStatus.isNewUser && !accessStatus.hasUsedTrial) {
-            await updateTrialUsage(userId);
-            console.log('Trial usage updated for user:', userId);
-        }
+        // ...existing code...
 
         console.log('Processing completed successfully');
 

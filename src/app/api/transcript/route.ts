@@ -46,6 +46,28 @@ export async function POST(req : NextRequest){
             )
         }
 
+               // Check if video already exists
+        const alreadyHaveVideo = await db.query.videos.findFirst({
+            where : (videos , {eq , and}  ) =>
+                and(
+                    eq(videos.video_id ,  videoId) , 
+                    eq(videos.embedding_done , true)
+                ),
+        })
+
+        if(alreadyHaveVideo){
+            console.log('Already have data for video:', videoId);
+
+            // Fetch all chapters and highlights for this video
+            const chaptersAndHighlights = await db.query.videoChapters.findMany({
+                where : (videoChapters , {eq}) => eq(videoChapters.video_id , videoId)
+            });
+            return NextResponse.json({
+                data: alreadyHaveVideo,
+                chaptersAndHighlights: chaptersAndHighlights
+            });
+        }
+
   // Check user access before processing video
         const accessStatus = await checkUserAccess(userId);
         
@@ -62,28 +84,7 @@ export async function POST(req : NextRequest){
             );
         }
 
-        // Check if video already exists
-        const alreadyHaveVideo = await db.query.videos.findFirst({
-            where : (videos , {eq , and}  ) =>
-                and(
-                    eq(videos.video_id ,  videoId) , 
-                    eq(videos.embedding_done , true)
-                ),
-        })
-
-        if(alreadyHaveVideo){
-            console.log('Already have data for video:', videoId);
-
-            const chapters = await db.query.videoChapters.findMany({
-                where : (videoChapters , {eq}) =>(
-                    eq(videoChapters.video_id , videoId)
-                )
-            })
-            return NextResponse.json({
-                data : alreadyHaveVideo ,
-                chapters : chapters
-            })
-        }
+ 
        
         console.log('Fetching transcript for:', ytUrl);
 

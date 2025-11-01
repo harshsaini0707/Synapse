@@ -59,12 +59,12 @@ export async function POST(req : NextRequest){
             console.log('Already have data for video:', videoId);
 
             // Fetch all chapters and highlights for this video
-            const chaptersAndHighlights = await db.query.videoChapters.findMany({
+            const chapters = await db.query.videoChapters.findMany({
                 where : (videoChapters , {eq}) => eq(videoChapters.video_id , videoId)
             });
             return NextResponse.json({
-                data: alreadyHaveVideo,
-                chaptersAndHighlights: chaptersAndHighlights
+                videoInfo: alreadyHaveVideo,
+                chapters: chapters
             });
         }
 

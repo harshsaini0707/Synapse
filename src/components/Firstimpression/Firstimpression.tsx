@@ -18,11 +18,9 @@ const Firstimpression = () => {
 
   const {status} =  useSession()
   const router = useRouter();
-  const[autoplay , setAutoplay] = useState(false);
 
-    const videoId = "dQw4w9WgXcQ";
-  const baseUrl = `https://www.youtube.com/embed/${videoId}`;
-  const videoUrl = autoplay ? `${baseUrl}?autoplay=1&mute=0` : baseUrl;
+  const videoId = "hmdWp9hRZkY";
+  const videoUrl = `https://www.youtube.com/embed/${videoId}?controls=1&modestbranding=1&showinfo=0&rel=0&iv_load_policy=3`;
 
   return (
     <div className="relative w-full min-h-screen  bg-[radial-gradient(circle_at_48%_200%,#ffffff,#bfe09a)]">
@@ -56,8 +54,8 @@ const Firstimpression = () => {
           </button>
 
           {/* Animated Button */}
-          <div 
-            onClick={()=>setAutoplay(true)}
+          <a 
+            href="#demo-video"
             className="relative group cursor-pointer flex justify-center items-center w-auto h-auto p-4  transition-all duration-300 ease-in-out hover:bg-lime-400/30 select-none"
           >
             {/* Animated Lines */}
@@ -82,12 +80,12 @@ const Firstimpression = () => {
                 <path d="M11.7814 12.1163C11.1956 11.5305 10.2458 11.5305 9.66004 12.1163C9.07426 12.7021 9.07426 13.6519 9.66004 14.2376C10.2458 14.8234 11.1956 14.8234 11.7814 14.2376C12.3671 13.6519 12.3671 12.7021 11.7814 12.1163Z" />
               </svg>
             </button>
-          </div>
+          </a>
         </div>
 
       
-        <div className="max-w-4xl mx-auto  px-4  py-10 ">
-          <div className="aspect-w-16 aspect-h-9 border-8 border-green-500 rounded-xl overflow-hidden shadow-xl ">
+        <div className="max-w-4xl mx-auto  px-4  py-10 " id="demo-video">
+          <div className="aspect-w-21 aspect-h-9 border-8 border-green-500 rounded-xl overflow-hidden shadow-xl ">
             <iframe
               src={videoUrl}
               title="Demo Video"
@@ -95,7 +93,7 @@ const Firstimpression = () => {
               allowFullScreen
               allowTransparency
               
-              className="w-full h-96"
+              className="w-full h-90"
             ></iframe>
           </div>
         </div>

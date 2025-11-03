@@ -340,9 +340,26 @@ const LandingPage = () => {
           </div>
         </div>
         
-        <p className='text-gray-500 text-sm'>
-          © 2025 Harsh Saini / synapse - All Rights Reserved
-        </p>
+        <div className='flex flex-col sm:flex-row justify-between items-center gap-4 pt-6 border-t border-gray-800'>
+          <p className='text-gray-500 text-sm'>
+            © 2025 Harsh Saini / synapse - All Rights Reserved
+          </p>
+          
+          <div className='flex gap-6 text-sm'>
+            <a 
+              href="/privacy" 
+              className='text-gray-400 hover:text-white transition-colors duration-300'
+            >
+              Privacy Policy
+            </a>
+            <a 
+              href="/terms" 
+              className='text-gray-400 hover:text-white transition-colors duration-300'
+            >
+              Terms of Service
+            </a>
+          </div>
+        </div>
       </div>
     </footer>
 

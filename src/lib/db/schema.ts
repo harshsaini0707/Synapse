@@ -14,6 +14,7 @@ export const users = pgTable("users" ,
     image : varchar('image', { length: 800 }),
     age:integer(),
     subscribedUser : boolean('subscribedUser').default(false),
+    is_free_access : boolean('is_free_access').default(false), // Grant unlimited free access to specific users
     has_user_trial : boolean('has_user_trial').default(false),
     trial_videos_created : integer('trial_videos_created').default(0),
     premium_videos_created : integer('premium_videos_created').default(0),

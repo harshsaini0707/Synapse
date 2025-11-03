@@ -9,6 +9,7 @@ export interface UserAccessStatus {
   trialVideosCount: number;
   reason?: string;
   isNewUser: boolean;
+  hasFreeAccess: boolean;
 }
 
 export async function checkUserAccess(userId: string): Promise<UserAccessStatus> {
@@ -25,7 +26,20 @@ export async function checkUserAccess(userId: string): Promise<UserAccessStatus>
         hasUsedTrial: false,
         trialVideosCount: 0,
         reason: "User not found",
-        isNewUser: false
+        isNewUser: false,
+        hasFreeAccess: false
+      };
+    }
+
+    // Check if user has free access granted
+    if (user.is_free_access) {
+      return {
+        canCreateVideo: true,
+        isPremium: false,
+        hasUsedTrial: user.has_user_trial || false,
+        trialVideosCount: user.trial_videos_created || 0,
+        isNewUser: false,
+        hasFreeAccess: true
       };
     }
 
@@ -45,7 +59,8 @@ export async function checkUserAccess(userId: string): Promise<UserAccessStatus>
         isPremium: true,
         hasUsedTrial: user.has_user_trial || false,
         trialVideosCount: user.trial_videos_created || 0,
-        isNewUser: false
+        isNewUser: false,
+        hasFreeAccess: false
       };
     }
 
@@ -66,7 +81,8 @@ export async function checkUserAccess(userId: string): Promise<UserAccessStatus>
         isPremium: false,
         hasUsedTrial: false,
         trialVideosCount: userVideoCount,
-        isNewUser: true
+        isNewUser: true,
+        hasFreeAccess: false
       };
     }
 
@@ -77,7 +93,8 @@ export async function checkUserAccess(userId: string): Promise<UserAccessStatus>
       hasUsedTrial: true,
       trialVideosCount: userVideoCount,
       reason: "Trial used. Premium subscription required to continue creating videos.",
-      isNewUser: false
+      isNewUser: false,
+      hasFreeAccess: false
     };
 
   } catch (error) {
@@ -88,7 +105,8 @@ export async function checkUserAccess(userId: string): Promise<UserAccessStatus>
       hasUsedTrial: false,
       trialVideosCount: 0,
       reason: "Error checking access",
-      isNewUser: false
+      isNewUser: false,
+      hasFreeAccess: false
     };
   }
 }

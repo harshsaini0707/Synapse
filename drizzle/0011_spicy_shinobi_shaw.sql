@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "is_free_access" boolean DEFAULT false;

@@ -78,6 +78,13 @@
       "when": 1761114263080,
       "tag": "0010_naive_magdalene",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1762189467456,
+      "tag": "0011_spicy_shinobi_shaw",
+      "breakpoints": true
     }
   ]
 }

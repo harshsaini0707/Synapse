@@ -52,8 +52,8 @@ const Home = () => {
       });
 
       const accessData = response.data;
-      // Only allow premium users
-      if (!accessData.isPremium) {
+      // Allow premium users OR users with free access
+      if (!accessData.canCreateVideo) {
         setShowPremiumModal(true);
         return false;
       }

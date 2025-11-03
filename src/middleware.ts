@@ -13,7 +13,7 @@ export default withAuth(
 
   // Public routes that should not be redirected for auth
   // Added "/api/webhook" so external services (Dodo webhooks) can POST without being redirected
-  const publicRoutes = ["/", "/signin"];
+  const publicRoutes = ["/", "/signin", "/privacy", "/terms"];
   if (pathname.startsWith("/api/webhook")) {
     return NextResponse.next();
   }

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 // Determine if we should use live mode
-const useLiveMode = process.env.NODE_ENV === "production" && process.env.DODO_USE_LIVE_MODE === "true";
+const useLiveMode = process.env.NODE_ENV === "production";
 
 export const PRODUCT_PLANS = {
   // Use live or test product IDs based on mode

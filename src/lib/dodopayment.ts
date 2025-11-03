@@ -1,7 +1,7 @@
 import DodoPayments from "dodopayments";
 
 
-const useLiveMode = process.env.NODE_ENV === "production" && process.env.DODO_USE_LIVE_MODE === "true";
+const useLiveMode = process.env.NODE_ENV === "production";
 
 
 const apiKey = useLiveMode 

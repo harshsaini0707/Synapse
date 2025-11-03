@@ -18,7 +18,13 @@ export default function ProductCard({ product }: { product: Product }) {
     try {
       // Use Dodo's direct checkout - they handle the form
       const redirectUrl = `${window.location.origin}/premium/success`;
-      const checkoutUrl = `https://test.checkout.dodopayments.com/buy/${productId}?quantity=1&redirect_url=${encodeURIComponent(redirectUrl)}`;
+      
+      // Determine checkout domain based on environment
+      const checkoutDomain = process.env.NODE_ENV === "production"
+        ? "https://checkout.dodopayments.com"
+        : "https://test.checkout.dodopayments.com";
+      
+      const checkoutUrl = `${checkoutDomain}/buy/${productId}?quantity=1&redirect_url=${encodeURIComponent(redirectUrl)}`;
       
       console.log("Redirecting to Dodo checkout:", checkoutUrl);
       

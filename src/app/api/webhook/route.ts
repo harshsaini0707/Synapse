@@ -1,13 +1,17 @@
 import { Webhook } from "standardwebhooks";
 import { NextResponse } from "next/server";
-import { dodopayments } from "@/lib/dodopayment";
+import { dodopayments, isLiveMode } from "@/lib/dodopayment";
 import { db } from "@/lib";
 import { eq } from "drizzle-orm";
 import { oneTimePayments, users } from "@/lib/db/schema";
 import { PRODUCT_PLANS } from "../checkout/onetime/route";
 
+// Use the appropriate webhook secret based on mode
+const webhookSecret =   process.env.DODO_PAYMENTS_WEBHOOK_KEY;
 
-const webhook = new Webhook(process.env.DODO_PAYMENTS_WEBHOOK_KEY! || "");
+const webhook = new Webhook(webhookSecret || "");
+
+
 
 
 
@@ -30,15 +34,15 @@ export async function POST(request: Request) {
     };
 
     // Check if webhook key is configured
-    if (!process.env.DODO_PAYMENTS_WEBHOOK_KEY) {
-     // console.error("DODO_PAYMENTS_WEBHOOK_KEY is not set");
+    if (!webhookSecret) {
+       console.error(`[${isLiveMode() ? "LIVE" : "TEST"}] Webhook secret is not configured`);
       return NextResponse.json({ error: "Webhook key not configured" }, { status: 500 });
     }
 
     // Verify webhook signature
-   // console.log("Verifying webhook signature...");
+  //  console.log(`[${isLiveMode() ? "LIVE" : "TEST"}] Verifying webhook signature...`);
     await webhook.verify(rawBody, webhookHeaders);
-   // console.log("Signature verified successfully");
+  //  console.log(`[${isLiveMode() ? "LIVE" : "TEST"}] Signature verified successfully`);
     
     const payload = JSON.parse(rawBody);
 
@@ -110,7 +114,7 @@ export async function POST(request: Request) {
 async function handlePaymentSucceeded(paymentData : any) {
   try {
     
-    // console.log('Processing successful payment...');
+   // console.log(`[${isLiveMode() ? "LIVE" : "TEST"}] Processing successful payment...`);
     // console.log('paymentData keys:', Object.keys(paymentData));
     // console.log('Full paymentData:', JSON.stringify(paymentData, null, 2));
     
@@ -208,10 +212,10 @@ async function handlePaymentSucceeded(paymentData : any) {
       throw dbError;
     }
 
-   //console.log(`Payment processed successfully for user: ${user.email}`);
+   //console.log(`[${isLiveMode() ? "LIVE" : "TEST"}] Payment processed successfully for user: ${user.email}`);
 
   } catch (error: any) {
-    // console.error("Error handling payment succeeded:", error.message);
+  //  console.error(`[${isLiveMode() ? "LIVE" : "TEST"}] Error handling payment succeeded:`, error.message);
     // console.error("Error stack:", error.stack);
     // Re-throw to be caught by main handler
     throw error;
@@ -221,7 +225,7 @@ async function handlePaymentSucceeded(paymentData : any) {
 
 async function handlePaymentFailed(paymentId: string) {
   try {
-    console.log("Processing failed payment:", paymentId);
+   // console.log(`[${isLiveMode() ? "LIVE" : "TEST"}] Processing failed payment:`, paymentId);
   
   } catch (error) {
     console.error("Error handling payment failed:", error);

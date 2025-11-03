@@ -4,6 +4,8 @@ import React from 'react'
 import {Rocket , Flame , Target , Lock, RotateCcw, Zap, Crosshair, Mail, HelpCircle , Infinity } from "lucide-react"
 
 const Premiumplan = () => {
+  // Determine if we should use live mode based on environment variable
+  
   const plans = [
     {
       product_id: process.env.NEXT_PUBLIC_DODO_PRODUCT_ID_MONTHLY!, // Monthly plan
@@ -19,7 +21,8 @@ const Premiumplan = () => {
       badge: "MOST POPULAR"
     },
     {
-      product_id: process.env.NEXT_PUBLIC_DODO_PRODUCT_ID_YEARLY!, // Yearly plan
+
+      product_id : process.env.NEXT_PUBLIC_DODO_PRODUCT_ID_YEARLY!,
       name: "Yearly Plan",
       icon: Infinity,
       description: "Best value for serious learners",

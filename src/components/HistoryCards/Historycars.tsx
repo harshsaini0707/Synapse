@@ -4,7 +4,7 @@ import { HoverEffect } from "../ui/card-hover-effect";
 export function CardHoverEffectDemo() {
   const { data, isPending, isError } = useVideoHistory();
 
-  console.log(data);
+ // console.log(data);
   
   return (
     <div className="w-full mx-auto px-4">

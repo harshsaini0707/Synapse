@@ -32,7 +32,7 @@ export function useVideoHistory(){
         enabled : !!userId ,
         staleTime :  Infinity,
         gcTime : Infinity ,
-        retry : 2
+        retry : 1
     })
 }
 

@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
 
-export const PRODUCT_PLANS = {
+// Determine if we should use live mode
+const useLiveMode = process.env.NODE_ENV === "production" && process.env.DODO_USE_LIVE_MODE === "true";
 
-  [process.env.NEXT_PUBLIC_DODO_PRODUCT_ID_MONTHLY!]: {
+export const PRODUCT_PLANS = {
+  // Use live or test product IDs based on mode
+  [ process.env.NEXT_PUBLIC_DODO_PRODUCT_ID_MONTHLY!]: {
     name: "Monthly Plan", 
     duration: "1 Month",
     price: "$10",
@@ -32,15 +35,21 @@ export async function GET(request: Request) {
     const planDetails = PRODUCT_PLANS[productId];
     if (!planDetails) {
       console.error("Invalid product ID:", productId);
+      console.error("Available product IDs:", Object.keys(PRODUCT_PLANS));
+      console.error("Mode:", useLiveMode ? "LIVE" : "TEST");
       return NextResponse.json({ error: "Invalid product ID" }, { status: 400 });
     }
     
-    console.log(`Creating checkout URL for ${planDetails.name} (${planDetails.duration}) - ${planDetails.price}`);
+    console.log(`[${useLiveMode ? "LIVE" : "TEST"}] Creating checkout URL for ${planDetails.name} (${planDetails.duration}) - ${planDetails.price}`);
     console.log("Product ID:", productId);
     
-    // Create direct Dodo checkout URL - they handle the form
+    // Create direct Dodo checkout URL - use correct domain based on mode
+    const checkoutDomain = useLiveMode 
+      ? "https://checkout.dodopayments.com" 
+      : "https://test.checkout.dodopayments.com";
+    
     const redirectUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/premium/success`;
-    const checkoutUrl = `https://test.checkout.dodopayments.com/buy/${productId}?quantity=1&redirect_url=${encodeURIComponent(redirectUrl)}`;
+    const checkoutUrl = `${checkoutDomain}/buy/${productId}?quantity=1&redirect_url=${encodeURIComponent(redirectUrl)}`;
     
     console.log("Generated checkout URL:", checkoutUrl);
     console.log("Redirect URL:", redirectUrl);
@@ -48,7 +57,8 @@ export async function GET(request: Request) {
     return NextResponse.json({ 
       checkout_url: checkoutUrl,
       message: "Redirect to Dodo checkout page",
-      plan_details: planDetails
+      plan_details: planDetails,
+      mode: useLiveMode ? "live" : "test"
     });
     
   } catch (error) {

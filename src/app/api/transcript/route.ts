@@ -70,19 +70,25 @@ export async function POST(req : NextRequest){
 
   // Check user access before processing video
         const accessStatus = await checkUserAccess(userId);
-        // Only allow premium users to create transcripts
-        if (!accessStatus.isPremium) {
+        
+        // Block if user cannot create video
+        if (!accessStatus.canCreateVideo) {
             return NextResponse.json(
                 {
-                    message: "Premium subscription required",
+                    message: accessStatus.reason || "You don't have access to create videos",
                     requiresPremium: true,
-                    isPremium: false
+                    isPremium: accessStatus.isPremium,
+                    hasUsedTrial: accessStatus.hasUsedTrial,
+                    canCreateVideo: false
                 },
                 { status: 403 }
             );
         }
 
- 
+        // Update trial usage for new users (only if they're not premium or don't have free access)
+        if (accessStatus.isNewUser && !accessStatus.isPremium && !accessStatus.hasFreeAccess) {
+            await updateTrialUsage(userId);
+        }
        
         console.log('Fetching transcript for:', ytUrl);
 

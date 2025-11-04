@@ -6,6 +6,7 @@ import YouTube, { YouTubeProps } from "react-youtube";
 import { Clock, ChevronDown, ChevronUp } from "lucide-react";
 import React, { use, useEffect, useRef, useState } from "react";
 import { useVideoStore } from "@/store/videoStore";
+import { useRouter } from "next/navigation";
 
 type Chapters = {
   created_at: string;
@@ -22,12 +23,16 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
   const { id } = use(params);
 
   const setVideoId = useVideoStore((state) => state.setVideoId);
+  const router = useRouter();
   
   // State for controlling highlight visibility
   const [showHighlights, setShowHighlights] = useState(true);
   
   // State for responsive layout
   const [isDesktopLayout, setIsDesktopLayout] = useState(false);
+  
+  // State for premium modal
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -45,7 +50,17 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
     setVideoId(id);
   }, [id, setVideoId]);
 
-  const { isLoading, isError, data } = useFetchChapters(id);
+  const { isLoading, isError, data, error } = useFetchChapters(id);
+
+  // Check if error is a 403 (premium required)
+  useEffect(() => {
+    if (isError && error) {
+      const axiosError = error as any;
+      if (axiosError?.response?.status === 403) {
+        setShowPremiumModal(true);
+      }
+    }
+  }, [isError, error]);
 
   //if (isLoading) console.log("load ho raha hai!!");
 
@@ -208,6 +223,90 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
       }`}>
         <FloatingDockDemo />
       </div>
+
+      {/* Premium Modal */}
+      {showPremiumModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 backdrop-blur-sm">
+          <div className="relative bg-white/10 backdrop-blur-md border border-lime-400/50 rounded-2xl p-6 max-w-lg mx-4 text-center shadow-2xl ring-2 ring-lime-400/30">
+            {/* Badge */}
+            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+              <div className="bg-red-500 text-white px-4 py-1 rounded-full text-sm font-bold">
+                PREMIUM REQUIRED
+              </div>
+            </div>
+
+            <div className="mb-4 mt-3">
+              {/* Icon */}
+              <div className="w-16 h-16 mx-auto bg-gradient-to-br from-lime-400 to-lime-600 rounded-full flex items-center justify-center mb-4 shadow-lg shadow-lime-400/25">
+                <svg className="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              
+              <h2 className="text-2xl font-bold text-lime-400 mb-3">
+                Unlock Premium Power
+              </h2>
+              
+              <p className="text-gray-300 text-base mb-4 leading-relaxed">
+                You&apos;ve used your free trial! Upgrade to premium for unlimited access to all features.
+              </p>
+              
+              {/* Premium Benefits */}
+              <div className="bg-lime-500/10 border border-lime-500/20 rounded-xl p-4 mb-4">
+                <div className="flex items-center justify-center gap-2 mb-3">
+                  <svg className="w-5 h-5 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  <h3 className="text-lime-400 font-bold text-base">Premium Features</h3>
+                </div>
+                <div className="grid grid-cols-1 gap-1 text-sm">
+                  <div className="flex items-center gap-2 text-gray-300">
+                    <span className="text-lime-400">✓</span>
+                    <span>Unlimited Video Summaries</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-gray-300">
+                    <span className="text-lime-400">✓</span>
+                    <span>Advanced AI Chat & Analysis</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-gray-300">
+                    <span className="text-lime-400">✓</span>
+                    <span>Smart Flashcard Generation</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-gray-300">
+                    <span className="text-lime-400">✓</span>
+                    <span>Interactive Quiz Creation</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-gray-300">
+                    <span className="text-lime-400">✓</span>
+                    <span>Priority Support & Updates</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={() => {
+                  setShowPremiumModal(false);
+                  router.push('/premium');
+                }}
+                className="w-full bg-lime-400 hover:bg-lime-300 cursor-pointer text-black font-bold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg hover:shadow-lime-400/25 transform hover:scale-102"
+              >
+                Upgrade to Premium
+              </button>
+              <button
+                onClick={() => {
+                  setShowPremiumModal(false);
+                  router.push('/home');
+                }}
+                className="w-full bg-white/10 cursor-pointer hover:bg-white/20 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-300 border border-white/20 hover:border-white/40"
+              >
+                Go Back Home
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

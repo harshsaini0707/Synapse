@@ -7,7 +7,7 @@ import { summarizeNoChapters, generateHighlightsFromTranscript } from "@/lib/gem
 import { getInfoFromVideo } from "@/lib/scrapVideo/scrapVideo";
 import { ScrapedVideoItem } from "@/types/scrapeType";
 import { getChaptersFromDescription } from "@/lib/scrapVideo/getVideoChaptersFromDescription";
-import { checkUserAccess, updateTrialUsage } from "@/lib/userAccess";
+import { checkUserAccess } from "@/lib/userAccess";
 
 export async function POST(req : NextRequest){
     try {
@@ -75,19 +75,14 @@ export async function POST(req : NextRequest){
         if (!accessStatus.canCreateVideo) {
             return NextResponse.json(
                 {
-                    message: accessStatus.reason || "You don't have access to create videos",
+                    message: accessStatus.reason || "Premium subscription or free access required to create videos",
                     requiresPremium: true,
                     isPremium: accessStatus.isPremium,
-                    hasUsedTrial: accessStatus.hasUsedTrial,
+                    hasFreeAccess: accessStatus.hasFreeAccess,
                     canCreateVideo: false
                 },
                 { status: 403 }
             );
-        }
-
-        // Update trial usage for new users (only if they're not premium or don't have free access)
-        if (accessStatus.isNewUser && !accessStatus.isPremium && !accessStatus.hasFreeAccess) {
-            await updateTrialUsage(userId);
         }
        
         console.log('Fetching transcript for:', ytUrl);

@@ -182,7 +182,7 @@ const Home = () => {
               </h2>
               
               <p className="text-gray-300 text-base mb-4 leading-relaxed poppins-regular">
-                You&apos;ve experienced the magic! Now unlock unlimited access to all premium features.
+                Get premium access to unlock all features and start transforming YouTube videos into interactive learning experiences.
               </p>
               
               {/* Premium Benefits */}

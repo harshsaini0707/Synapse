@@ -16,10 +16,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       canCreateVideo: accessStatus.canCreateVideo,
       isPremium: accessStatus.isPremium,
-      hasUsedTrial: accessStatus.hasUsedTrial,
-      trialVideosCount: accessStatus.trialVideosCount,
-      reason: accessStatus.reason,
-      isNewUser: accessStatus.isNewUser
+      hasFreeAccess: accessStatus.hasFreeAccess,
+      reason: accessStatus.reason
     });
 
   } catch (error) {

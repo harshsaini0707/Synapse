@@ -248,7 +248,7 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
               </h2>
               
               <p className="text-gray-300 text-base mb-4 leading-relaxed">
-                You&apos;ve used your free trial! Upgrade to premium for unlimited access to all features.
+                Get premium access to unlock all features and start transforming YouTube videos into interactive learning experiences.
               </p>
               
               {/* Premium Benefits */}

@@ -52,13 +52,16 @@ const Home = () => {
       });
 
       const accessData = response.data;
-      // Allow premium users OR users with free access
-      if (!accessData.canCreateVideo) {
-        setShowPremiumModal(true);
-        return false;
+      
+      // If user CAN create video, allow them to proceed
+      if (accessData.canCreateVideo) {
+        return true;
       }
-
-      return true;
+      
+      // If user CANNOT create video, show premium modal
+      setShowPremiumModal(true);
+      return false;
+      
     } catch (error) {
       console.error('Error checking user access:', error);
       alert('Error checking access. Please try again.');

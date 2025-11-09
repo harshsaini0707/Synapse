@@ -73,9 +73,9 @@ const FloatingDockMobile = ({
                   }}
                   key={item.title}
                   title={item.title}
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 dark:bg-neutral-900 hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors"
+                  className="flex h-10 w-12 items-center justify-center rounded-full bg-gray-200 dark:bg-neutral-900 hover:bg-gray-400 dark:hover:bg-neutral-800 transition-colors"
                 >
-                  <div className="h-4 w-4">{item.icon}</div>
+                  <div className="h-4 w-4 text-black font-black">{item.icon}</div>
                 </button>
               </motion.div>
             ))}
@@ -85,9 +85,9 @@ const FloatingDockMobile = ({
       <button
         onClick={() => setOpen(!open)}
         title="Toggle menu"
-        className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 dark:bg-neutral-800"
+        className="flex h-10 w-12 items-center justify-center rounded-full bg-gray-300 dark:bg-neutral-800"
       >
-        <IconLayoutNavbarCollapse className="h-5 w-5 text-black dark:text-neutral-400" />
+        <IconLayoutNavbarCollapse className="h-7 w-7 text-black dark:text-neutral-400" />
       </button>
     </div>
   );

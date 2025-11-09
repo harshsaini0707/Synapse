@@ -1,7 +1,7 @@
 import "./globals.css"
 import ClientProviders from "@/components/providers/ClientProviders"
 import type { Metadata } from 'next'
-import Logo from "../../public/logos/logo2.png"
+import { Analytics } from '@vercel/analytics/next';
 export const metadata: Metadata = {
   title: 'Synapse',
   description: 'AI-powered learning platform',
@@ -19,6 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ClientProviders>
           {children}
+            <Analytics />
         </ClientProviders>
       </body>
     </html>

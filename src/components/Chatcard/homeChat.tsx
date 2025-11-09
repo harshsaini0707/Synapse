@@ -24,7 +24,7 @@ const Homechat = () => {
                  </div>
             <div className='flex flex-col gap-2 items-center justify-center'>
                 <h1 className='poppins-bold  text-3xl text-green-600'>{`Hello, ${username || " "}`}</h1>
-                <h1 className='text-neutral-400 text-md'>Ask me Anything about this video ans clear your all doubts...</h1>
+                <h1 className='text-neutral-400 text-md'>Ask me Anything about this video and clear your all doubts...</h1>
             </div>
         </div>
 

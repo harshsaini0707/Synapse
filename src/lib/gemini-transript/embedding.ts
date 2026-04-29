@@ -30,7 +30,7 @@ try {
 
     //embedding
     const embeddingModel  = new GoogleGenerativeAIEmbeddings({
-        model : "text-embedding-004",
+        model : "gemini-embedding-001",
         apiKey : process.env.GEMINI_API_KEY!,
         taskType : TaskType.RETRIEVAL_DOCUMENT,
         title:"Transcript"

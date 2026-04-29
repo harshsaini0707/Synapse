@@ -13,7 +13,7 @@ timeStamp :  string
 export async  function hasChapterEmbeddingAndHighlights(chapaters : chapters[] ,  viedoId : string){
 
    const embeddingModel =  new GoogleGenerativeAIEmbeddings({
-    model: "text-embedding-004",
+    model: "gemini-embedding-001",
     apiKey: process.env.GEMINI_API_KEY!,
     taskType: TaskType.RETRIEVAL_QUERY,
    })

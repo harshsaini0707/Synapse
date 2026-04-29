@@ -2,18 +2,6 @@
 import React from "react";
 import Image from "next/image";
 
-// Import all logo images
-import chitkaraLogo from "/public/logos/chitkara.png";
-import harvardLogo from "/public/logos/harvard.png";
-import hydrabadLogo from "/public/logos/hydrabad.jpeg";
-import iiscLogo from "/public/logos/iisc.png";
-import iitBombayLogo from "/public/logos/iit-bombay.png";
-import iitDelhiLogo from "/public/logos/iit-delhi.png";
-import iitMadrasLogo from "/public/logos/iit-madras.png";
-import mitLogo from "/public/logos/mit.png";
-import nitLogo from "/public/logos/nit.png";
-import tokyoLogo from "/public/logos/tokyo.png";
-
 interface University {
   name: string;
   logo: any;
@@ -22,17 +10,17 @@ interface University {
 
 const universities: University[] = [
  
-  { name: "IIT Bombay", logo: iitBombayLogo, country: "India" },
-  { name: "IIT Delhi", logo: iitDelhiLogo, country: "India" },
-  { name: "IIT Madras", logo: iitMadrasLogo, country: "India" },
-  { name: "IISc Bangalore", logo: iiscLogo, country: "India" },
-  { name: "NIT", logo: nitLogo, country: "India" },
-  { name: "Chitkara University", logo: chitkaraLogo, country: "India" },
-  { name: "University of Hyderabad", logo: hydrabadLogo, country: "India" },
+  { name: "IIT Bombay", logo: "/logos/iit-bombay.png", country: "India" },
+  { name: "IIT Delhi", logo: "/logos/iit-delhi.png", country: "India" },
+  { name: "IIT Madras", logo: "/logos/iit-madras.png", country: "India" },
+  { name: "IISc Bangalore", logo: "/logos/iisc.png", country: "India" },
+  { name: "NIT", logo: "/logos/nit.png", country: "India" },
+  { name: "Chitkara University", logo: "/logos/chitkara.png", country: "India" },
+  { name: "University of Hyderabad", logo: "/logos/hydrabad.jpeg", country: "India" },
   
-  { name: "Harvard", logo: harvardLogo, country: "USA" },
-  { name: "MIT", logo: mitLogo, country: "USA" },
-  { name: "University of Tokyo", logo: tokyoLogo, country: "Japan" },
+  { name: "Harvard", logo: "/logos/harvard.png", country: "USA" },
+  { name: "MIT", logo: "/logos/mit.png", country: "USA" },
+  { name: "University of Tokyo", logo: "/logos/tokyo.png", country: "Japan" },
 ];
 
 export const UniversityLogos = () => {

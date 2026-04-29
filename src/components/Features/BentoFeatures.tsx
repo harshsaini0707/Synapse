@@ -6,13 +6,6 @@ import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-// Import images
-import quizImage from "/public/images/Quiz.png";
-import flashcardImage from "/public/images/Flashcards.png";
-import summaryImage from "/public/images/Summary.png";
-import highlightsImage from "/public/images/Highlights.png";
-import chatImage from "/public/images/Chat.png";
-
 export function BentoFeatures() {
   const { data: session } = useSession();
   const router = useRouter();
@@ -29,31 +22,31 @@ export function BentoFeatures() {
      {
       title: "Smart Highlights",
       description: "Key moments and important concepts are automatically highlighted for quick review and easy navigation.",
-      image: highlightsImage,
+      image: "/images/Highlights.png",
       buttonText: "Start Creating"
     },
     {
       title: "Interactive Quizzes",
       description: "Test your knowledge with AI-generated quizzes from any YouTube video. Track your progress and identify learning gaps.",
-      image: quizImage,
+      image: "/images/Quiz.png",
       buttonText: "Start Creating"
     },
      {
       title: "AI-Powered Chat",
       description: "Ask questions about the video content and get instant, context-aware answers powered by advanced AI.",
-      image: chatImage,
+      image: "/images/Chat.png",
       buttonText: "Start Asking"
     },
     {
       title: "Smart Flashcards",
       description: "Automatically generated flashcards help you memorize key concepts effectively with spaced repetition with proper hint and answer.",
-      image: flashcardImage,
+      image: "/images/Flashcards.png",
       buttonText: "Start Creating"
     },
     {
       title: "Comprehensive Summaries",
       description: "Get detailed and quick summaries of video content in seconds, highlighting key points and main takeaways.",
-      image: summaryImage,
+      image: "/images/Summary.png",
       buttonText: "Start Creating"
     },
    

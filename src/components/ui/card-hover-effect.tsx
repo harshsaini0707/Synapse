@@ -210,13 +210,15 @@ export const HoverEffect = ({
             </AnimatePresence>
 
             {/* Thumbnail */}
-            <Image
-              src={item.thumbnail}
-              alt={item.title}
-              width={330}
-              height={200}
-              className="object-cover w-full h-38 rounded-t-sm"
-            />
+            {item.thumbnail ? (
+              <Image
+                src={item.thumbnail}
+                alt={item.title}
+                width={330}
+                height={200}
+                className="object-cover w-full h-38 rounded-t-sm"
+              />
+            ) : null}
 
             {/* Title */}
             <div className="py-3 px-2 bg-black text-center">

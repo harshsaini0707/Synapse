@@ -17,12 +17,12 @@ const fetchChapters = async (videoId : string , userId : string)=>{
         })
 
       //  console.log(response);
-        return response?.data?.chapters
+        return response?.data?.chapters || [];
         
     } catch (error) {
       console.log("Enable to fetch the chapters!!");
       console.log(error);
-        
+      throw error;
     }
 } 
 

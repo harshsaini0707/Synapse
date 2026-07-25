@@ -8,19 +8,18 @@ const Signin = () => {
   const {data :  session } = useSession();
   const router = useRouter();
   const setUser = useUserStore((state  : UserState)=>state.setUser);
-  if(session){
+  React.useEffect(() => {
+    if(session){
+      router.push('/home');
 
-  router.push('/home');
-
-  setUser({
-  id :  session?.user?.id || " ",
-  name :  session?.user?.name || " " ,
-  email : session?.user?.email || " ",
-  image : session?.user?.image || ""
-  })
-
-   
-  }
+      setUser({
+        id :  session?.user?.id || " ",
+        name :  session?.user?.name || " " ,
+        email : session?.user?.email || " ",
+        image : session?.user?.image || ""
+      })
+    }
+  }, [session, router, setUser]);
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-lime-50 flex items-center justify-center p-4">
       <div className="bg-white/80 backdrop-blur-sm p-6 border-2 border-gray-700 rounded-lg shadow-[4px_4px_0_#374151] flex flex-col items-start justify-center gap-4 w-full max-w-sm">

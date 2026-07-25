@@ -32,9 +32,9 @@ const Firstimpression = () => {
           Learn Beyond the Play Button
         </h1>
 
-        <p className="alan-sans-font text-3xl  text-gray-950 md:text-4xl lg:text-5xl font-semibold mb-6">
+        <div className="alan-sans-font text-3xl  text-gray-950 md:text-4xl lg:text-5xl font-semibold mb-6">
           with  <ContainerTextFlip  words={words} />
-        </p>
+        </div>
 
         <p className="text-lg md:text-xl max-w-4xl mx-auto text-gray-800 dark:text-gray-200 poppins-medium mb-6">
           Stop watching, start mastering. Transform videos into interactive
@@ -91,7 +91,7 @@ const Firstimpression = () => {
               title="Demo Video"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
-              allowTransparency
+              allowtransparency
               
               className="w-full h-90"
             ></iframe>

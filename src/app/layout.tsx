@@ -2,6 +2,7 @@ import "./globals.css"
 import ClientProviders from "@/components/providers/ClientProviders"
 import type { Metadata } from 'next'
 import { Analytics } from '@vercel/analytics/next';
+import { WingifyScript } from 'wingify-smartcode-nextjs';
 export const metadata: Metadata = {
   title: 'Synapse',
   description: 'AI-powered learning platform',
@@ -16,6 +17,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <WingifyScript accountId="1287881" />
+      </head>
       <body>
         <ClientProviders>
           {children}
